@@ -3,10 +3,11 @@ Definition of views.
 """
 
 from django.shortcuts import render
+from fileListView import fileListView
 from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
-from .subViews.fileListView import fileListView
+from fileListView import fileListView
 
 
 def home(request):
