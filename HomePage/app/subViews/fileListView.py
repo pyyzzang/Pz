@@ -3,6 +3,7 @@ import os
 import pathlib
 
 class fileListView(object):
+    @staticmethod
     def getFileList(ext):
         http = "<http>"
         http += "<table border='1'> " 
