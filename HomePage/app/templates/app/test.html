@@ -1,0 +1,36 @@
+﻿<script>
+    $(function () {
+        $("#listButton").click(function ()
+        {
+            $.ajax({
+                type: 'post', url: '', dataType: 'html',
+                beforeSend: function () {
+                    alert("Send");
+                },
+                success: function (data)
+                {
+                    alert("aa");
+                },
+                error: function (request, status, error)
+                {
+                    alert("error");
+                },
+                complate: function () {
+                    alert("Complete");
+                },
+            });
+        })
+    })
+</script>
+
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <input type="button" id="listButton" value="리스트출력" /> <br/> <div id="listDiv"></div>
+</body>
+</html>

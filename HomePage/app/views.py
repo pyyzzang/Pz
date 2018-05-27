@@ -8,6 +8,7 @@ from django.template import RequestContext
 from datetime import datetime
 from .subViews.fileListView import fileListView
 from .subViews.playView import playView
+from .subViews.testView import testView
 
 
 def home(request):
@@ -15,3 +16,6 @@ def home(request):
 
 def play(request):
     return playView.play(request);
+
+def test(request):
+    return testView.test(request);
