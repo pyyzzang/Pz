@@ -21,7 +21,7 @@ class playView(object):
             os.system(osDefine.LocalFilePath() + "\\" + playVideo.GET['file'])
 
         #win32gui.SetWindowPos(int(moviPlayer), win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
-        http += "File : " + playVideo.GET['file']
+        #http += "File : " + playVideo.GET['file']
         
         http += "<script type=\"text/javascript\">"
         http += "$(function(){"

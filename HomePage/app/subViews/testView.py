@@ -11,5 +11,11 @@ import tkinter.messagebox
 
 class testView():
     @staticmethod
-    def test():
-        return render_to_response('app/test.html')
+    def test(arg):
+        return render_to_response("app/test.html")
+
+	#@staticmethod
+ #   def Next(arg):
+ #       return render_to_response('app/test.html')
+
+	

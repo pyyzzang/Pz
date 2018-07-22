@@ -18,5 +18,5 @@ urlpatterns = [
     url(r'^$', app.views.home, name='home'),
     url(r'Play', app.views.play, name='play'),
     url(r'Test', app.views.test, name='test'),
-    
+   
 ]
