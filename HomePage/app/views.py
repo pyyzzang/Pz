@@ -17,6 +17,9 @@ def home(request):
 def play(request):
     return playView.play(request);
 
+def playerMove(request):
+    return playView.playerMove(request);
+
 def test(request):
     return testView.test(request);
 

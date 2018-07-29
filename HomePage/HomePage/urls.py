@@ -16,6 +16,7 @@ import app.views
 
 urlpatterns = [
     url(r'^$', app.views.home, name='home'),
+    url('playerMove', app.views.playerMove, name='playerMove'),
     url(r'Play', app.views.play, name='play'),
     url(r'Test', app.views.test, name='test'),
    

@@ -15,3 +15,11 @@ class osDefine:
             return "http://localhost:8000"
         else:
             return "192.168.219.105:8000"
+
+    @staticmethod
+    def PlayFile(playFileName):
+        #if("nt" == os.Name):
+            exec(playFileName)
+        #else:
+         #   code = 'omxplayer '+ playVideo
+          #  os.system(code) # 터미널에 입력
