@@ -54,9 +54,9 @@ class playView(object):
     @staticmethod
     def playerMove(keyMove):
 
-        moviPlayer = win32gui.FindWindow("ApplicationFrameWindow", "영화 및 TV")
+        moviPlayer = win32gui.FindWindow("KMPlayer Ext", None)
+
+        win32gui.PostMessage(moviPlayer, win32con.WM_KEYDOWN, win32con.VK_RIGHT, 0);
+        win32gui.PostMessage(moviPlayer, win32con.WM_KEYUP, win32con.VK_RIGHT, 0);
         
-        win32gui.SendMessage(moviPlayer, win32con.WM_KEYDOWN, win32con.VK_SPACE, win32con.VK_SPACE);
-        win32gui.SendMessage(moviPlayer, win32con.WM_KEYUP, win32con.VK_SPACE, win32con.VK_SPACE);
-        
-        return HttpResponse("");
+        return HttpResponse(moviPlayer);
