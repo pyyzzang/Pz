@@ -2,11 +2,11 @@ from django.http import HttpResponse
 import os,sys
 import glob
 from .osDefine import osDefine
-import win32gui,win32con, time,sys, win32ui
+#import win32gui,win32con, time,sys, win32ui
 
-from tkinter import*
-import tkinter.messagebox
-import base64
+#from tkinter import*
+#import tkinter.messagebox
+3import base64
 
 class playView(object):
     @staticmethod
@@ -54,9 +54,9 @@ class playView(object):
     @staticmethod
     def playerMove(keyMove):
 
-        moviPlayer = win32gui.FindWindow(osDefine.PlayerName(), None)
+        #moviPlayer = win32gui.FindWindow(osDefine.PlayerName(), None)
 
-        win32gui.PostMessage(moviPlayer, win32con.WM_KEYDOWN, win32con.VK_RIGHT, 0);
-        win32gui.PostMessage(moviPlayer, win32con.WM_KEYUP, win32con.VK_RIGHT, 0);
+        #win32gui.PostMessage(moviPlayer, win32con.WM_KEYDOWN, win32con.VK_RIGHT, 0);
+        #win32gui.PostMessage(moviPlayer, win32con.WM_KEYUP, win32con.VK_RIGHT, 0);
         
-        return HttpResponse(moviPlayer);
+        return HttpResponse("aaaaa");
