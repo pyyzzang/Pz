@@ -54,7 +54,7 @@ class playView(object):
     @staticmethod
     def playerMove(keyMove):
 
-        moviPlayer = win32gui.FindWindow("KMPlayer Ext", None)
+        moviPlayer = win32gui.FindWindow(osDefine.PlayerName(), None)
 
         win32gui.PostMessage(moviPlayer, win32con.WM_KEYDOWN, win32con.VK_RIGHT, 0);
         win32gui.PostMessage(moviPlayer, win32con.WM_KEYUP, win32con.VK_RIGHT, 0);
