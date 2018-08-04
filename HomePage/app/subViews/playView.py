@@ -15,7 +15,7 @@ class playView(object):
         os.system("C:\Temp\\" + playVideo.GET["file"])
         #osDefine.PlayFile(playVideo.GET["file"])
 
-        moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", "영화 및 TV"))
+        moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
         http = "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
 
         if(moviPlayer == "0"):
