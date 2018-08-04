@@ -19,7 +19,7 @@ class playView(object):
         http = "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
 
         if(moviPlayer == "0"):
-            http += "재생중인 미디어가 없습니다.<p>"
+            http += "Not Play Media.<p>"
         else:
             #win32gui.SetWindowPos(int(moviPlayer), win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
             win32gui.SetWindowPos(int(moviPlayer), win32con.HWND_TOPMOST, 0, 0, 0, 0, 0)
@@ -32,10 +32,10 @@ class playView(object):
             http += ", url: 'playerMove'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
-            http += "alert('통신실패!!');"
+            http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
-            http += "alert(\"통신데이터 값 : \" + data) ;"
+            http += "alert(\"value : \" + data) ;"
             http += "$(\"#dataArea\").html(data) ;"
             http += "}"
             http += "});"
@@ -43,10 +43,10 @@ class playView(object):
             http += "})"
             http += "</script>"
 
-            http += "<input type='button' id=\"listButton\" value='앞으로' OnClick='ButtonClick_Event()'/>"
-            http += "<input type='button' value='뒤로'/>"
-            http += "<input type='button' value='소리올리기'/>"
-            http += "<input type='button' value='소리내리기'/>"
+            http += "<input type='button' id=\"listButton\" value='forward' OnClick='ButtonClick_Event()'/>"
+            http += "<input type='button' value='back'/>"
+            http += "<input type='button' value='plus'/>"
+            http += "<input type='button' value='minus'/>"
             http += "</html>"
 
         return HttpResponse(http)
