@@ -12,7 +12,7 @@ from .osDefine import osDefine
 class testView():
     @staticmethod
     def test(arg):
-        return render_to_response("app/test.html")
+        return HttpResponse(osDefine.Ip())
 
 	#@staticmethod
  #   def Next(arg):

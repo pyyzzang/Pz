@@ -1,7 +1,8 @@
 import os
+import socket
 
 class osDefine:
-    
+
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
@@ -11,11 +12,8 @@ class osDefine:
 
     @staticmethod
     def Ip():
-        if("nt" == os.name):
-            return "http://localhost:8000"
-        else:
-            return "192.168.219.105:8000"
-    
+        return socket.gethostbyname(socket.getfqdn()) + ":8000";
+
     @staticmethod
     def PlayerName():
         if("nt" == os.name):
