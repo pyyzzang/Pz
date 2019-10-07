@@ -12,7 +12,10 @@ class osDefine:
 
     @staticmethod
     def Ip():
-        return socket.gethostbyname(socket.getfqdn()) + ":8000";
+        if("nt" == os.name):
+            return socket.gethostbyname(socket.getfqdn()) + ":8000"
+        else:
+            return "192.168.219.102:8000"
 
     @staticmethod
     def PlayerName():
