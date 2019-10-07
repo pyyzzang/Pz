@@ -6,7 +6,7 @@ class osDefine:
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
-            return "C:\Temp"
+            return "E:\Temp"
         else:
             return "/home/pi/Downloads"
 
@@ -27,7 +27,7 @@ class osDefine:
     @staticmethod
     def PlayFile(playFileName):
         if("nt" == os.name):
-            exec(playFileName)
+            exec("\""+osDefine.LocalFilePath()+ "\\" + playFileName + "\"")
         else:
            code = 'omxplayer '+ playVideo
            os.system(code)

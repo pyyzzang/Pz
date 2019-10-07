@@ -11,19 +11,16 @@ from .osDefine import osDefine
 class playView(object):
     @staticmethod
     def play(playVideo):
+        #return HttpResponse(osDefine.LocalFilePath()+ "\\" + playVideo.GET["file"].replace('"',''));
 
-        os.system("C:\Temp\\" + playVideo.GET["file"])
-        #osDefine.PlayFile(playVideo.GET["file"])
+        osDefine.PlayFile(playVideo.GET["file"].replace('"',''))
 
-        moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
+        #moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
         http = "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
 
-        if(moviPlayer == "0"):
+        if(0):
             http += "Not Play Media.<p>"
         else:
-            #win32gui.SetWindowPos(int(moviPlayer), win32con.HWND_TOPMOST, 0, 0, 0, 0, win32con.SWP_NOSIZE | win32con.SWP_NOMOVE)
-            win32gui.SetWindowPos(int(moviPlayer), win32con.HWND_TOPMOST, 0, 0, 0, 0, 0)
-        
             http += "<script type=\"text/javascript\">"
             http += "$(function(){"
             http += "$(\"#listButton\").click(function(){"
