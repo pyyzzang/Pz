@@ -6,7 +6,7 @@ from .osDefine import osDefine
 
 #from tkinter import*
 #import tkinter.messagebox
-3import base64
+#import base64
 
 class playView(object):
     @staticmethod

@@ -15,9 +15,9 @@ import app.views
 # admin.autodiscover()
 
 urlpatterns = [
-    url(r'^$', app.views.home, name='home'),
+    url(r'^$', app.views.home, name='h=Home'),
     url('playerMove', app.views.playerMove, name='playerMove'),
     url(r'Play', app.views.play, name='play'),
     url(r'Test', app.views.test, name='test'),
-   
+    url(r'Home', app.views.home, name='Home'),
 ]
