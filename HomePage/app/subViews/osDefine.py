@@ -1,5 +1,6 @@
 import os
 import socket
+import pyautogui
 
 class osDefine:
 
@@ -26,8 +27,15 @@ class osDefine:
 
     @staticmethod
     def PlayFile(playFileName):
+        executeFilePath = "\""+osDefine.LocalFilePath()+ "\\" + playFileName + "\""
+        if("nt" != os.name):
+           executeFilePath = 'omxplayer '+ executeFilePath;
+        os.popen(executeFilePath)
+
+    @staticmethod
+    def GetPlayerName():
         if("nt" == os.name):
-            exec("\""+osDefine.LocalFilePath()+ "\\" + playFileName + "\"")
+            return '*VLC 미디어 재생기';
         else:
-           code = 'omxplayer '+ playVideo
-           os.system(code)
+            return '*omxplayer';
+

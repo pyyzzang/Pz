@@ -2,6 +2,9 @@ from django.http import HttpResponse
 import os.path
 import os,sys
 from .osDefine import osDefine
+import pyautogui
+import time
+import pywinauto
 #import win32gui,win32con, time,sys
 
 #from tkinter import*
@@ -12,7 +15,11 @@ from .osDefine import osDefine
 class testView():
     @staticmethod
     def test(arg):
-        return HttpResponse(osDefine.Ip())
+        handle = pywinauto.findwindows.find_window(best_match='*VLC 미디어 재생기')
+        app = pywinauto.application.Application().connect(handle=handle)
+        app.window_().TypeKeys('{LEFT}')
+        
+        return HttpResponse("E:\\Temp\\1.mp4")
 
 	#@staticmethod
  #   def Next(arg):
