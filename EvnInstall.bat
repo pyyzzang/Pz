@@ -10,3 +10,5 @@ set PIP_Exe="C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\S
 %PIP_Exe% install pywin32
 
 %PIP_Exe% install pyautogui
+
+%PIP_Exe% install --upgrade pywinauto
