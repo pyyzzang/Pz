@@ -39,6 +39,23 @@ class playView(object):
             http += "})"
             http += "})"
 
+            #Skip
+            http += "$(function(){"
+            http += "$(\"#SkipButton\").click(function(){"
+            http += "$.ajax({"
+            http += "type: 'get'"
+            http += ", url: 'Skip'"
+            http += ", dataType : 'html'"
+            http += ", error : function(){"
+            http += "alert('fail!!');"
+            http += "}"
+            http += ", success : function(data){"
+            http += "}"
+            http += "});"
+            http += "})"
+            http += "})"
+
+            
 
             http += "</script>"
 
