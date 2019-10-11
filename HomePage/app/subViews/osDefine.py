@@ -12,8 +12,6 @@ class osDefine:
         if(0 == osDefine.currentPlayer):
             return 0;
         osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
-
-
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
