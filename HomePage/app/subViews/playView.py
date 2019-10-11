@@ -22,7 +22,6 @@ class playView(object):
             http += "Not Play Media.<p>"
         else:
             http += "<script type=\"text/javascript\">"
-
             #Back
             http += "$(function(){"
             http += "$(\"#BackButton\").click(function(){"
@@ -38,8 +37,10 @@ class playView(object):
             http += "});"
             http += "})"
             http += "})"
+            http += "</script>"
 
             #Skip
+            http += "<script type=\"text/javascript\">"
             http += "$(function(){"
             http += "$(\"#SkipButton\").click(function(){"
             http += "$.ajax({"
@@ -54,9 +55,6 @@ class playView(object):
             http += "});"
             http += "})"
             http += "})"
-
-            
-
             http += "</script>"
 
             http += "<input type='button' id=\"BackButton\" value='Back' />"
