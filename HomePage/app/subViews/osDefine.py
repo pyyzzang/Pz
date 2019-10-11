@@ -2,11 +2,18 @@
 
 import os
 import socket
-
+import base64
 from omxplayer.player import OMXPlayer
 
 class osDefine:
     currentPlayer = 0;
+    @staticmethod
+    def Skip(value):
+        if(0 == osDefine.currentPlayer):
+            return 0;
+        osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
+
+
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
@@ -31,10 +38,13 @@ class osDefine:
     @staticmethod
     def PlayFile(playFileName):
         
+        decodeByte = base64.b64decode(playFileName); 
+        decodeStr = str(decodeByte, "utf-8");
         if(0 != osDefine.currentPlayer):
            return 'False';
-        executeFilePath = "\""+osDefine.LocalFilePath()+ "\\" + playFileName + "\""
-        osDefine.currentPlayer = OMXPlayer('/home/pi/Downloads/1.mp4');
+        executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
+#        return executeFilePath 
+        osDefine.currentPlayer = OMXPlayer(executeFilePath);
         return executeFilePath;
 
     @staticmethod

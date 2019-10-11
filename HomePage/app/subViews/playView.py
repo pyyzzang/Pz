@@ -13,7 +13,7 @@ class playView(object):
     def play(playVideo):
         #return HttpResponse(osDefine.LocalFilePath()+ "\\" + playVideo.GET["file"].replace('"',''));
 
-        http= osDefine.PlayFile(playVideo.GET["file"].replace('"',''))
+        http= osDefine.PlayFile(playVideo.GET["file"])
 
         #moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
         http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
@@ -26,14 +26,12 @@ class playView(object):
             http += "$(\"#listButton\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
-            http += ", url: 'playerMove'"
+            http += ", url: 'Move'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
             http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
-            http += "alert(\"value : \" + data) ;"
-            http += "$(\"#dataArea\").html(data) ;"
             http += "}"
             http += "});"
             http += "})"

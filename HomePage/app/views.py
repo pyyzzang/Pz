@@ -18,8 +18,17 @@ def home(request):
 def play(request):
     return playView.play(request);
 
-def playerMove(request):
-    return playerMove.playerMove(request);
+def Skip(request):
+    return playerMove.Skip(request);
+def Back(request):
+    return playerMove.Back(request);
+
+def VolumeUp(request):
+ return playerMove.VolumeUp(request);
+
+def VolumeDown(request):
+ return playerMove.VolumeDown(request);
+
 
 def test(request):
     return testView.test(request);

@@ -39,11 +39,6 @@ class testView():
         keyboard_button.press(pynput.keyboard.Key.space);
         keyboard_button.release(pynput.keyboard.Key.space);
         
-        player = OMXPlayer("/home/pi/Downloads/봉오동 전투 戰鬪, The Battle Roar to Victory.2019.1080p.FHDRip.H264.AAC.mp4");
-        time.sleep(4);   
-        player.next(); 
-        time.sleep(4); 
-        player.quit(); 
         return HttpResponse(pyautogui.position())
 
 	#@staticmethod

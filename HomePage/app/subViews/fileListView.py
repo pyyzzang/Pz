@@ -2,6 +2,7 @@ from django.http import HttpResponse
 import os
 import pathlib
 from .osDefine import osDefine
+import base64
 
 class fileListView(object):
     @staticmethod
@@ -16,7 +17,10 @@ class fileListView(object):
         for (path, dir, files) in os.walk(localFilePath):
             for file in files:
                 http += "<tr>"
-                http = http + "<td> <a href=Play\?file=\""+file + "\">" +file + "</a></td>"
+ 
+                fileBytes = base64.b64encode(file.encode("utf-8"));
+                fileStr = str(fileBytes, "utf-8");
+                http = http + "<td> <a href=Play\?file="+ fileStr + ">" +file + "</a></td>"
                 http = http + "<td><button width=\"100\" height=\"100\"/>11111</td>"
                 http += "</tr>"
         http += "</table>"
