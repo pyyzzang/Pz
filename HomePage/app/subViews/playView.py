@@ -13,10 +13,10 @@ class playView(object):
     def play(playVideo):
         #return HttpResponse(osDefine.LocalFilePath()+ "\\" + playVideo.GET["file"].replace('"',''));
 
-        osDefine.PlayFile(playVideo.GET["file"].replace('"',''))
+        http= osDefine.PlayFile(playVideo.GET["file"].replace('"',''))
 
         #moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
-        http = "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
+        http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
 
         if(0):
             http += "Not Play Media.<p>"

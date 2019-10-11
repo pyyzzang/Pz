@@ -1,11 +1,12 @@
+# -*- coding: utf-8 -*-
+
 import os
 import socket
-import pyautogui
+
+from omxplayer.player import OMXPlayer
 
 class osDefine:
-
-    currentPlayer;
-
+    currentPlayer = 0;
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
@@ -29,15 +30,17 @@ class osDefine:
 
     @staticmethod
     def PlayFile(playFileName):
+        
+        if(0 != osDefine.currentPlayer):
+           return 'False';
         executeFilePath = "\""+osDefine.LocalFilePath()+ "\\" + playFileName + "\""
-        if("nt" != os.name):
-           executeFilePath = 'omxplayer '+ executeFilePath;
-        os.popen(executeFilePath)
+        osDefine.currentPlayer = OMXPlayer('/home/pi/Downloads/1.mp4');
+        return executeFilePath;
 
     @staticmethod
     def GetPlayerName():
         if("nt" == os.name):
-            return '*VLC 미디어 재생기';
+            return '\*VLC 미디어 재생기';
         else:
             return '*omxplayer';
 
