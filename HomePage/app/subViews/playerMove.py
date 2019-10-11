@@ -4,8 +4,8 @@ from .osDefine import osDefine
 class playerMove():
     @staticmethod
         def Skip(param):
-osDefine.Skip(10);
-return HttpResponse("skip 10s");
+            osDefine.Skip(10);
+            return HttpResponse("skip 10s");
 
 
  @staticmethod
