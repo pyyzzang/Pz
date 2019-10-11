@@ -4,6 +4,8 @@ import pyautogui
 
 class osDefine:
 
+    currentPlayer;
+
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
