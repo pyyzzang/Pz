@@ -14,6 +14,9 @@ from .subViews.testView import testView
 
 def home(request):
     return fileListView.getFileList("");
+
+def VolumeDown(request):
+    return playerMove.VolumeDown(request);
 def play(request):
     return playView.play(request);
 def Skip(request):
@@ -26,4 +29,3 @@ def VolumeDown(request):
     return playerMove.VolumeDown(request);
 def test(request):
     return testView.test(request);
-

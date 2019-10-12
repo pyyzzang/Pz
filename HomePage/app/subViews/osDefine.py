@@ -14,11 +14,10 @@ class osDefine:
         osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
 
     @staticmethod
-    def Volume(value):
+    def Action(value):
         if(0 == osDefine.currentPlayer):
             return 0;
-        osDefine.currentPlayer.set_volume(osDefine.currentPlayer.volume() + value);
-
+        osDefine.currentPlayer.action(value);
     @staticmethod
     def LocalFilePath():
         if("nt" == os.name):
