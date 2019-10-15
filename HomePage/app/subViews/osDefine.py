@@ -7,6 +7,7 @@ from omxplayer.player import OMXPlayer
 
 class osDefine:
     currentPlayer = 0;
+    playFileName = 0;
     @staticmethod
     def Skip(value):
         if(0 == osDefine.currentPlayer):
@@ -38,17 +39,24 @@ class osDefine:
             return "KMPlayer Ext";
         else:
             return "omxplayer"
+    @staticmethod
+    def PlayerInit():
+        osDefine.currentPlayer.quit();
+        osDefine.palyFileName = 0;
+        osDefine.currentPlayer = 0;
 
     @staticmethod
     def PlayFile(playFileName):
         
         decodeByte = base64.b64decode(playFileName); 
         decodeStr = str(decodeByte, "utf-8");
-        if(0 != osDefine.currentPlayer):
-           return 'False';
+        if(0 != osDefine.playFileName):
+           osDefine.PlayerInit(); 
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
 #        return executeFilePath 
         osDefine.currentPlayer = OMXPlayer(executeFilePath);
+        osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
+        osDefine.playFileName = executeFilePath
         return executeFilePath;
 
     @staticmethod
