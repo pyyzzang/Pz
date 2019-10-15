@@ -14,7 +14,8 @@ from .subViews.testView import testView
 
 def home(request):
     return fileListView.getFileList("");
-
+def Delete(request):
+    return fileListView.delete(request);
 def VolumeDown(request):
     return playerMove.VolumeDown(request);
 def play(request):

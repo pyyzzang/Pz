@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'Play/Back', app.views.Back, name='Back'),
     url(r'Play/VolumeUp', app.views.VolumeUp, name='VolumeUp'),
     url(r'Play/VolumeDown', app.views.VolumeDown, name='VolumeDown'),
+
+    url(r'Home/Delete', app.views.Delete, name='Delete'),
     url(r'Play', app.views.play, name='play'),
     url(r'Test', app.views.test, name='test'),
     url(r'Home', app.views.home, name='Home'),

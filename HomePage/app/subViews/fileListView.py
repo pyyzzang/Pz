@@ -26,8 +26,7 @@ class fileListView(object):
                 fileCount = fileCount + 1;
                 http += "<tr>"
  
-                fileBytes = base64.b64encode(file.encode("utf-8"));
-                fileStr = str(fileBytes, "utf-8");
+                fileStr = osDefine.Base64Encoding(file);
                 http = http + "<td> <a href=Play\?file="+ str(fileStr) + ">" +file + "</a></td>"
                 http = http + "<td><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
@@ -37,8 +36,9 @@ class fileListView(object):
                 http += "$(\"#File"+str(fileCount)+"\").click(function(){"
                 http += "$.ajax({"
                 http += "type:'get'"
-                http += ",url:'fileDelete'"
-                http += ", dataType:'html'"
+                http += ",url:'Home/Delete'"
+                http += ",dataType:'html'"
+                http += ",data:{'fileName':'"+fileStr+"'}"
                 http += ",error : function(){"
                 http += "alert('fail')"
                 http += "}"
@@ -47,3 +47,13 @@ class fileListView(object):
         http += "</table>"
         http = http + "</http>"
         return HttpResponse(http)
+
+    @staticmethod
+    def delete(request):
+        deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
+        deleteFullPath = (osDefine.LocalFilePath() + "/" + deleteFile)    
+        if(False == os.path.exists(deleteFullPath)):
+            return HttpResponse("");
+        os.remove(deleteFullPath);
+        return HttpResponse(deleteFullPath);
+

@@ -69,8 +69,6 @@ class playView(object):
 #            http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
-
-            http += "alert(data)"
             http += "}"
             http += "});"
             http += "})"

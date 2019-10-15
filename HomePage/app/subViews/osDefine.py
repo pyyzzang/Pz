@@ -41,15 +41,25 @@ class osDefine:
             return "omxplayer"
     @staticmethod
     def PlayerInit():
-        osDefine.currentPlayer.quit();
+        if(0 != osDefine.currentPlayer):
+            osDefine.currentPlayer.quit();
         osDefine.palyFileName = 0;
         osDefine.currentPlayer = 0;
+    @staticmethod
+    def Base64Encoding(utfString):
+        baseByte = base64.b64encode(utfString.encode("utf-8"));
+        baseStr = str(baseByte, "utf-8");
+        return baseStr;
 
     @staticmethod
+    def Base64Decoding(convString):
+        utfByte = base64.b64decode(convString, ' /');
+        utfStr = str(utfByte, "utf-8");
+        return utfStr;
+ 
+    @staticmethod
     def PlayFile(playFileName):
-        
-        decodeByte = base64.b64decode(playFileName); 
-        decodeStr = str(decodeByte, "utf-8");
+        decodeStr = osDefine.Base64Decoding(playFileName);
         if(0 != osDefine.playFileName):
            osDefine.PlayerInit(); 
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
