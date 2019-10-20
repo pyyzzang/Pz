@@ -20,7 +20,7 @@ class fileListView(object):
             for file in files:
 
                 fileName, ext = os.path.splitext(file);
-                if(".mp4" != ext):
+                if(".mp4" != ext || ".mkv" != ext):
                     continue;
 
                 fileCount = fileCount + 1;
