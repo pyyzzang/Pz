@@ -20,8 +20,11 @@ class fileListView(object):
             for file in files:
 
                 fileName, ext = os.path.splitext(file);
-                if(".mp4" != ext || ".mkv" != ext):
+                if(".mp4" != ext and ".mkv" != ext):
                     continue;
+                if(-1 != path.find(localFilePath)):
+                     file = path.replace(localFilePath,'') + '/' + file;
+
 
                 fileCount = fileCount + 1;
                 http += "<tr>"
