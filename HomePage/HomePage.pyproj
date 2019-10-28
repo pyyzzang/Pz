@@ -38,6 +38,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\subViews\osDefine.py" />
+    <Compile Include="app\subViews\playerMove.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\subViews\playView.py" />
     <Compile Include="app\subViews\testView.py">
       <SubType>Code</SubType>
