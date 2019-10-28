@@ -29,17 +29,32 @@ class testView():
 #        app = pywinauto.application.Application().connect(handle=handle)
 #        app.window_().TypeKeys('{LEFT}')
 #        os.popen('omxplayer "/home/pi/Downloads/봉오동 전투 戰鬪, The Battle Roar to Victory.2019.1080p.FHDRip.H264.AAC.mp4"'); 
-        pyautogui.moveTo(300,300);
-        pyautogui.keyUp('space'); 
-        pyautogui.keyDown('left');
-         
-        keyboard_button = pynput.keyboard.Controller();
-        keyboard_key = pynput.keyboard.Key;
 
-        keyboard_button.press(pynput.keyboard.Key.space);
-        keyboard_button.release(pynput.keyboard.Key.space);
+         localFilePath = osDefine.LocalFilePath()
+         http = "";
+         fileCount = 0;
+         for (path, dir, files) in os.walk(localFilePath):
+            for file in files:
+                if(-1 != path.find(localFilePath)):
+                     file = path.replace(localFilePath,'') + '/' + file;
+                    
+                http += "Path : " + path;
+                http += "file : " + file;
+         return HttpResponse(http); 
+
+
+
+#        pyautogui.moveTo(300,300);
+#        pyautogui.keyUp('space'); 
+#        pyautogui.keyDown('left');
+         
+#        keyboard_button = pynput.keyboard.Controller();
+#        keyboard_key = pynput.keyboard.Key;
+
+#        keyboard_button.press(pynput.keyboard.Key.space);
+#        keyboard_button.release(pynput.keyboard.Key.space);
         
-        return HttpResponse(pyautogui.position())
+#        return HttpResponse(pyautogui.position())
 
 	#@staticmethod
  #   def Next(arg):

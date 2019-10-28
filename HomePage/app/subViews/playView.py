@@ -66,7 +66,7 @@ class playView(object):
             http += ", url: 'VolumeUp'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
-            http += "alert('fail!!');"
+#            http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
             http += "}"

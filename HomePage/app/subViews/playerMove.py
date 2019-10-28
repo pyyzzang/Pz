@@ -14,11 +14,11 @@ class playerMove():
 
  @staticmethod
  def VolumeUp(param):
-  osDefine.Volume(1);
+  osDefine.Action(18);
   return HttpResponse("Volume Up");
 
  @staticmethod 
  def VolumeDown(param):
-  osDefine.Volume(-1);
+  osDefine.Action(17);
   return HttpResponse("Volume Down");
  
