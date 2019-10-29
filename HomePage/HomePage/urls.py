@@ -16,8 +16,13 @@ import app.views
 
 urlpatterns = [
     url(r'^$', app.views.home, name='h=Home'),
-    url(r'Play/Skip', app.views.Skip, name='Skip'),
+
+    url(r'Play/Back600', app.views.Back600, name='Back600'),
     url(r'Play/Back', app.views.Back, name='Back'),
+    url(r'Play/Replay', app.views.Replay, name='Replay'),
+    url(r'Play/Pause', app.views.Pause, name='Pause'),
+    url(r'Play/Skip600', app.views.Skip600, name='Skip600'),
+    url(r'Play/Skip', app.views.Skip, name='Skip'),
     url(r'Play/VolumeUp', app.views.VolumeUp, name='VolumeUp'),
     url(r'Play/VolumeDown', app.views.VolumeDown, name='VolumeDown'),
 

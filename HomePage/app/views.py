@@ -16,14 +16,26 @@ def home(request):
     return fileListView.getFileList("");
 def Delete(request):
     return fileListView.delete(request);
+
+def Back600(request):
+    return playerMove.Back600(request);
+def Back(request):
+    return playerMove.Back(request);
+
+def Replay(request):
+    return playerMove.Replay(request);
+def Pause(request):
+    return playerMove.Pause(request);
+
+def Skip(request):
+    return playerMove.Skip(request);
+def Skip600(request):
+    return playerMove.Skip600(request);
+
 def VolumeDown(request):
     return playerMove.VolumeDown(request);
 def play(request):
     return playView.play(request);
-def Skip(request):
-    return playerMove.Skip(request);
-def Back(request):
-    return playerMove.Back(request);
 def VolumeUp(request):
     return playerMove.VolumeUp(request);
 def VolumeDown(request):

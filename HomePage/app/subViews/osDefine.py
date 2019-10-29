@@ -15,6 +15,19 @@ class osDefine:
         osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
 
     @staticmethod
+    def Replay(value):
+        if(0 == osDefine.currentPlayer):
+            return 0;
+        osDefine.currentPlayer.play();
+        
+    @staticmethod
+    def Pause(value):
+        if(0 == osDefine.currentPlayer):
+            return 0;
+        osDefine.currentPlayer.pause();
+
+
+    @staticmethod
     def Action(value):
         if(0 == osDefine.currentPlayer):
             return 0;

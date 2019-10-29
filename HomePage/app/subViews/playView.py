@@ -30,7 +30,6 @@ class playView(object):
             http += ", url: 'Back600'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
-            http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
             http += "}"
@@ -41,8 +40,9 @@ class playView(object):
 
 
             #Back10
+            http += "<script type=\"text/javascript\">"
             http += "$(function(){"
-            http += "$(\"#Back600Button\").click(function(){"
+            http += "$(\"#Back10Button\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
             http += ", url: 'Back'"
@@ -57,15 +57,15 @@ class playView(object):
             http += "})"
             http += "</script>"
 
-            #Play
+            #RePlay
+            http += "<script type=\"text/javascript\">"
             http += "$(function(){"
-            http += "$(\"#Back600Button\").click(function(){"
+            http += "$(\"#ReplayButton\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
-            http += ", url: 'Play'"
+            http += ", url: 'Replay'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
-            http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
             http += "}"
@@ -75,8 +75,9 @@ class playView(object):
             http += "</script>"
 
             #Pause
+            http += "<script type=\"text/javascript\">"
             http += "$(function(){"
-            http += "$(\"#Back600Button\").click(function(){"
+            http += "$(\"#PauseButton\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
             http += ", url: 'Pause'"
@@ -92,8 +93,9 @@ class playView(object):
             http += "</script>"
 
             #Skip10
+            http += "<script type=\"text/javascript\">"
             http += "$(function(){"
-            http += "$(\"#Back600Button\").click(function(){"
+            http += "$(\"#Skip10Button\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
             http += ", url : 'Skip'"
@@ -114,7 +116,7 @@ class playView(object):
             http += "$(\"#Skip600Button\").click(function(){"
             http += "$.ajax({"
             http += "type: 'get'"
-            http += ", url: 'Skip'"
+            http += ", url: 'Skip600'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
             http += "alert('fail!!');"
@@ -167,7 +169,7 @@ class playView(object):
             http += "<div class='main'>                                                                             ";
             http += "	<div class='buttonDiv'><button id='Back600Button' class='back600'/>	</div>                  ";
             http += "	<div class='buttonDiv'><button id='Back10Button' class='back10'/>	</div>                      ";
-            http += "	<div class='buttonDiv'><button id='PlayerButton' class='play' /> </div>                     ";
+            http += "	<div class='buttonDiv'><button id='ReplayButton' class='play' /> </div>                     ";
             http += "	<div class='buttonDiv'><button id='PauseButton' class='pause'/>	</div>                  ";
             http += "	<div class='buttonDiv'><button id='Skip10Button' class='skip10'/>	</div>                      ";
             http += "	<div class='buttonDiv'><button id='Skip600Button' class='skip600'/>	</div>                  ";
