@@ -1,4 +1,4 @@
-#PlayerButton{
+#Back600Button, #Back10Button, #PlayerButton, #PauseButton, #Skip10Button, #Skip600Button{
 	width : 100%;
 	height : 100%;
 	background-size : 100% 100%;
@@ -19,30 +19,30 @@
 }
 
 .back600{
-	background-image : url("img/back600.png");
+	background-image : url("../Image/Back600.png");
 }
 
 .back10{
-	background-image : url("img/back10.png");
+	background-image : url("../Image/Back10.png");
 }
 
 .play{
-	background-image : url("img/play.png");
+	background-image : url("../Image/Play.png");
 }
 
 .pause{
-	background-image : url("img/pause.png");
+	background-image : url("../Image/Pause.png");
 }
 
 .skip10{
-	background-image : url("img/skip10.png");
+        background-image : url("../Image/Skip10.png");
 }
 
 .skip600{
-	background-image : url("img/skip600.png");
+	background-image : url("../Image/Skip600.png");
 }
 
-#VolumeButton{
+#VolumeUpButton, #VolumeDownButton{
 	width : 100%;
 	height : 100%;
 	background-size : 100% 100%;
@@ -63,11 +63,11 @@
 }
 
 .volumeUp{
-	background-image : url("img/volumeUp.png");
+	background-image : url("../Image/volumeUp.png");
 }
 
 .volumeDown{
-	background-image : url("img/volumeDown.png");
+	background-image : url("../Image/volumeDown.png");
 }
 
 .Empty20{
