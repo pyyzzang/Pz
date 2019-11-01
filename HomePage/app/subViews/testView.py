@@ -16,7 +16,7 @@ import pyautogui
 import time
 #import pywinauto
 #import win32gui,win32con, time,sys
-
+from .strUtil import strUtil
 #from tkinter import*
 #from django.shortcuts import render_to_response
 #import tkinter.messagebox
@@ -38,8 +38,8 @@ class testView():
                 if(-1 != path.find(localFilePath)):
                      file = path.replace(localFilePath,'') + '/' + file;
                     
-                http += "Path : " + path;
-                http += "file : " + file;
+                http += "file : " + str(strUtil.getMatchTitle(file)) + " isTitle : " + file  ;
+                http += "<p>";
          return HttpResponse(http); 
 
 
