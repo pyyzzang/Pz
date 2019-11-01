@@ -15,8 +15,9 @@ class fileListView(object):
         
         localFilePath = osDefine.LocalFilePath()
         ip = osDefine.Ip()
-        fileCount = 0;        
+        fileCount = 0;       
         for (path, dir, files) in os.walk(localFilePath):
+            files.sort();
             for file in files:
 
                 fileName, ext = os.path.splitext(file);
