@@ -4,12 +4,12 @@ class playerMove():
 
  @staticmethod
  def Back600(param):
-  osDefine.Skip(-600);
+  osDefine.Skip(-300);
   return HttpResponse("Back 600s");
 
  @staticmethod
  def Back(param):
-  osDefine.Skip(-10);
+  osDefine.Skip(-30);
   return HttpResponse("back 10s");
 
  @staticmethod
@@ -24,12 +24,12 @@ class playerMove():
 
  @staticmethod
  def Skip(param):
-  osDefine.Skip(10);
+  osDefine.Skip(30);
   return HttpResponse("skip 10s");
 
  @staticmethod
  def Skip600(param):
-  osDefine.Skip(600);
+  osDefine.Skip(300);
   return HttpResponse("Skip 600s");
 
  def VolumeUp(param):
