@@ -2,6 +2,7 @@ from django.http import HttpResponse
 import os
 import pathlib
 from .osDefine import osDefine
+from .strUtil import strUtil
 import base64
 
 class fileListView(object):
@@ -31,7 +32,7 @@ class fileListView(object):
                 http += "<tr>"
  
                 fileStr = osDefine.Base64Encoding(file);
-                http = http + "<td> <a href=Play\?file="+ str(fileStr) + ">" +file + "</a></td>"
+                http = http + "<td> <a href=Play\?file="+ str(fileStr) + ">" + strUtil.getMatchTitle(file) + "</a></td>"
                 http = http + "<td><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
               

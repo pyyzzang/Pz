@@ -4,7 +4,7 @@ import os
 import socket
 import base64
 
-#from omxplayer.player import OMXPlayer
+from omxplayer.player import OMXPlayer
 
 class osDefine:
     currentPlayer = 0;
