@@ -22,7 +22,7 @@ class fileListView(object):
             for file in files:
 
                 fileName, ext = os.path.splitext(file);
-                if(".mp4" != ext and ".mkv" != ext):
+                if(".mp4" != ext and ".mkv" != ext and ".avi" != ext):
                     continue;
                 if(-1 != path.find(localFilePath)):
                      file = path.replace(localFilePath,'') + '/' + file;
