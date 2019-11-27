@@ -35,17 +35,17 @@ class fileListView(object):
                 http = http + "<td> <a href=Play\?file="+ str(fileStr) + ">" + strUtil.getMatchTitle(file) + "</a></td>"
                 http = http + "<td><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
-              
                 http += "<script type=\"text/javascript\">";
                 http += "$(function(){" 
                 http += "$(\"#File"+str(fileCount)+"\").click(function(){"
+                http += "if(false == confirm('"+ strUtil.getMatchTitle(file) + "을 삭제 하시겠습니까?')){return;}"
                 http += "$.ajax({"
                 http += "type:'get'"
                 http += ",url:'Home/Delete'"
                 http += ",dataType:'html'"
                 http += ",data:{'fileName':'"+fileStr+"'}"
-                http += ",error : function(){"
-                http += "alert('fail')"
+                http += ",error : function(data){"
+                http += "alert(data);"
                 http += "}"
                 http += ", success : function (data){"
                 http += "alert(data)}})})})</script>"
@@ -56,7 +56,14 @@ class fileListView(object):
     @staticmethod
     def delete(request):
         deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
+        splitPath = deleteFile.split('/',2);
+        if(3 == len(splitPath)):
+#          os.popen('(sudo chown pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
+          os.system('sudo chown pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
+#          return HttpResponse('sudo chown pi \"' + osDefine.LocalFilePath() + "/" + splitPath[1]+"\"");
+
         deleteFullPath = (osDefine.LocalFilePath() + "/" + deleteFile)    
+#        return HttpResponse(deleteFullPath);
         if(False == os.path.exists(deleteFullPath)):
             return HttpResponse("");
         os.remove(deleteFullPath);
