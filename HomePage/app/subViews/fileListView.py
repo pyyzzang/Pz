@@ -22,7 +22,9 @@ class fileListView(object):
             for file in files:
 
                 fileName, ext = os.path.splitext(file);
-                if(".mp4" != ext and ".mkv" != ext and ".avi" != ext):
+                if(ext in osDefine.SupportExt):
+                    fileName = fileName; 
+                else:
                     continue;
                 if(-1 != path.find(localFilePath)):
                      file = path.replace(localFilePath,'') + '/' + file;
@@ -45,10 +47,9 @@ class fileListView(object):
                 http += ",dataType:'html'"
                 http += ",data:{'fileName':'"+fileStr+"'}"
                 http += ",error : function(data){"
-                http += "alert(data);"
                 http += "}"
                 http += ", success : function (data){"
-                http += "alert(data)}})})})</script>"
+                http += "}})})})</script>"
         http += "</table>"
         http = http + "</http>"
         return HttpResponse(http)
@@ -58,14 +59,22 @@ class fileListView(object):
         deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
         splitPath = deleteFile.split('/',2);
         if(3 == len(splitPath)):
-#          os.popen('(sudo chown pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
           os.system('sudo chown pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
-#          return HttpResponse('sudo chown pi \"' + osDefine.LocalFilePath() + "/" + splitPath[1]+"\"");
 
         deleteFullPath = (osDefine.LocalFilePath() + "/" + deleteFile)    
-#        return HttpResponse(deleteFullPath);
         if(False == os.path.exists(deleteFullPath)):
             return HttpResponse("");
         os.remove(deleteFullPath);
+        
+        deleteEmptyFolder();
         return HttpResponse(deleteFullPath);
+    @staticmethod
+    def deleteEmptyFolder():
+        baseDir = osDefine.LocalFilePath();
 
+        deleteFolder = "";
+        for subItem in os.listdir(baseDir):
+            checkItem = baseDir + "/" + subItem;
+            if(True == os.path.isdir(checkItem)):
+                if(True == osDefine.checkEmpty(checkItem)):
+                    os.system("sudo rm -r \"" + checkItem + "\"");

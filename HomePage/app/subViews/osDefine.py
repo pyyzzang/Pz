@@ -14,7 +14,22 @@ class osDefine:
         if(0 == osDefine.currentPlayer):
             return 0;
         osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
+    
 
+    SupportExt = ['.mp4', '.mkv', '.avi'];
+    NotDeleteExt = SupportExt + ['.part'];
+    @staticmethod
+    def checkEmpty(basePath):
+        for subItem in os.listdir(basePath):
+            subItemPath = basePath + "/" + subItem;
+            if(True == os.path.isdir(subItemPath)):
+                if(False == osDefine.checkEmpty(subItemPath)):
+                    return False;
+            else :
+                path, ext = os.path.splitext(subItemPath);
+                if(True == (ext in osDefine.NotDeleteExt)):
+                    return False;
+        return True;
     @staticmethod
     def Replay(value):
         if(0 == osDefine.currentPlayer):

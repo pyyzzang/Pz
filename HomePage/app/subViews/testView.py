@@ -22,6 +22,8 @@ from .strUtil import strUtil
 #import tkinter.messagebox
 import time 
 
+from .fileListView import fileListView 
+
 class testView():
     @staticmethod
     def test(arg):
@@ -29,8 +31,8 @@ class testView():
 #        app = pywinauto.application.Application().connect(handle=handle)
 #        app.window_().TypeKeys('{LEFT}')
 #        os.popen('omxplayer "/home/pi/Downloads/봉오동 전투 戰鬪, The Battle Roar to Victory.2019.1080p.FHDRip.H264.AAC.mp4"'); 
-
          localFilePath = osDefine.LocalFilePath()
+         return HttpResponse(fileListView.deleteEmptyFolder());
          http = "";
          fileCount = 0;
          files = [  "[tvN] 수요일은 음악프로.E01.191002.450p-MreD.mp4	"
