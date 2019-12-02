@@ -5,6 +5,30 @@ from .osDefine import osDefine
 from .strUtil import strUtil
 import base64
 
+class FileInfo:
+    def __init__(self, filePath, dir):
+        self.filePath = filePath;
+        self.dir = dir;
+        self.fileName, self.ext = os.path.splitext(filePath);
+    def __lt__(self, other):
+        return self.getTitle() < other.getTitle(); 
+    def getFileName(self):
+        return self.fileName;
+
+    def getExt(self):
+        return self.ext;
+
+    def getTitle(self):
+        return strUtil.getMatchTitle(self.filePath);
+    def isVideoFile(self):
+        return self.getExt() in osDefine.SupportExt;
+    def getEncodingFileName(self):
+        return osDefine.Base64Encoding(self.getUrlPath());
+    def getUrlPath(self):
+        if(-1 != self.dir.find(osDefine.LocalFilePath())):
+            return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
+        return self.filePath;
+
 class fileListView(object):
     @staticmethod
     def getFileList(ext):
@@ -16,40 +40,36 @@ class fileListView(object):
         
         localFilePath = osDefine.LocalFilePath()
         ip = osDefine.Ip()
-        fileCount = 0;       
+        fileCount = 0;      
+        fileInfoList = []; 
         for (path, dir, files) in os.walk(localFilePath):
-            files.sort();
             for file in files:
+                info = FileInfo(file, path);
+                if(True == info.isVideoFile()):
+                    fileInfoList.append(info);
 
-                fileName, ext = os.path.splitext(file);
-                if(ext in osDefine.SupportExt):
-                    fileName = fileName; 
-                else:
-                    continue;
-                if(-1 != path.find(localFilePath)):
-                     file = path.replace(localFilePath,'') + '/' + file;
+        fileInfoList.sort();
 
-
-                fileCount = fileCount + 1;
+        for info in fileInfoList:
                 http += "<tr>"
- 
                 fileStr = osDefine.Base64Encoding(file);
-                http = http + "<td> <a href=Play\?file="+ str(fileStr) + ">" + strUtil.getMatchTitle(file) + "</a></td>"
+                http = http + "<td> <a href=Play\?file="+ info.getEncodingFileName() + ">" + info.getTitle() + "</a></td>"
                 http = http + "<td><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
                 http += "<script type=\"text/javascript\">";
                 http += "$(function(){" 
                 http += "$(\"#File"+str(fileCount)+"\").click(function(){"
-                http += "if(false == confirm('"+ strUtil.getMatchTitle(file) + "을 삭제 하시겠습니까?')){return;}"
+                http += "if(false == confirm('"+ info.getTitle() + "을 삭제 하시겠습니까?')){return;}"
                 http += "$.ajax({"
                 http += "type:'get'"
                 http += ",url:'Home/Delete'"
                 http += ",dataType:'html'"
-                http += ",data:{'fileName':'"+fileStr+"'}"
+                http += ",data:{'fileName':'"+info.getEncodingFileName()+"'}"
                 http += ",error : function(data){"
                 http += "}"
                 http += ", success : function (data){"
                 http += "}})})})</script>"
+                fileCount = fileCount + 1;
         http += "</table>"
         http = http + "</http>"
         return HttpResponse(http)
