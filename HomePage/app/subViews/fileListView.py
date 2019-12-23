@@ -4,6 +4,8 @@ import pathlib
 from .osDefine import osDefine
 from .strUtil import strUtil
 import base64
+from .osDefine import PlayMode
+from .YoutubeView import YoutubeView
 
 class FileInfo:
     def __init__(self, filePath, dir):
@@ -31,12 +33,30 @@ class FileInfo:
 
 class fileListView(object):
     @staticmethod
-    def getFileList(ext):
-        http = "<http>"
-
+    def getViewList(ext):
+        http = "<http>";
         http += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
-        http += "<table border='1'> " 
-
+        http += '<body Onload="FormLoad()"/>';
+        http += fileListView.getVideoList('');
+        http += YoutubeView.getVideoList();
+        http += "</body>";
+        http += "<script>";
+        http += "function FormLoad(){";
+        http += "if(FileViewTable.style.visibility == 'collapse')";
+        http += "{";	
+        http += 'YoutubeTable.style.visibility = "collapse";';
+        http += 'FileViewTable.style.visibility = "visible";';
+        http += '}';
+        http += 'else';
+        http += '{';
+        http += 'FileViewTable.style.visibility = "collapse";';
+        http += 'YoutubeTable.style.visibility = "visible";';
+        http += '}}';
+        http += "</script>";
+        http += "</http>";
+        return HttpResponse(http); 
+    @staticmethod
+    def getVideoList(ext):
         
         localFilePath = osDefine.LocalFilePath()
         ip = osDefine.Ip()
@@ -49,7 +69,8 @@ class fileListView(object):
                     fileInfoList.append(info);
 
         fileInfoList.sort();
-
+        http = "";
+        http += "<Table id='FileViewTable' border='1'>";
         for info in fileInfoList:
                 http += "<tr>"
                 fileStr = osDefine.Base64Encoding(file);
@@ -70,9 +91,8 @@ class fileListView(object):
                 http += ", success : function (data){"
                 http += "}})})})</script>"
                 fileCount = fileCount + 1;
-        http += "</table>"
-        http = http + "</http>"
-        return HttpResponse(http)
+        http +="</table>";
+        return http;
 
     @staticmethod
     def delete(request):

@@ -13,7 +13,7 @@ from .subViews.testView import testView
 
 
 def home(request):
-    return fileListView.getFileList("");
+    return fileListView.getViewList(request);
 def Delete(request):
     return fileListView.delete(request);
 

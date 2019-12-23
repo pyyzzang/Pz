@@ -3,8 +3,13 @@
 import os
 import socket
 import base64
+import enum
 
 from omxplayer.player import OMXPlayer
+class PlayMode:
+    File = 0;
+    Youtube = 1;
+    currentMode = File;
 
 class osDefine:
     currentPlayer = 0;
@@ -72,6 +77,8 @@ class osDefine:
     def PlayerInit():
         if(0 != osDefine.currentPlayer):
             osDefine.currentPlayer.quit();
+        os.system("sudo killall -9 omxplayer")
+        os.system("sudo killall -9 omxplayer.bin")
         osDefine.palyFileName = 0;
         osDefine.currentPlayer = 0;
     @staticmethod
@@ -89,8 +96,11 @@ class osDefine:
     @staticmethod
     def PlayFile(playFileName):
         decodeStr = osDefine.Base64Decoding(playFileName);
-        if(0 != osDefine.playFileName):
-           osDefine.PlayerInit(); 
+        if(0 != osDefine.playFileName ):
+           if(osDefine.playFileName != decodeStr):
+               osDefine.PlayerInit();
+           else :
+               return decodeStr;
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
         osDefine.currentPlayer = OMXPlayer(executeFilePath);
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
