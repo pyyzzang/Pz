@@ -12,10 +12,14 @@ class playView(object):
     @staticmethod
     def play(playVideo):
         #return HttpResponse(osDefine.LocalFilePath()+ "\\" + playVideo.GET["file"].replace('"',''));
-
-        http= osDefine.PlayFile(playVideo.GET["file"])
-
-        #moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
+        filePath = playVideo.GET.get("file", "");
+        if (filePath != ""):
+            osDefine.PlayFile(filePath);
+        else :
+            filePath = playVideo.GET.get("youtube", "");
+            osDefine.PlayYoutube(filePath);
+#moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
+        http ="";
         http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";
         if(0):

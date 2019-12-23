@@ -1,7 +1,7 @@
 from typing import List
 from requests import get
 import json
-
+from .osDefine import osDefine
 
 
 
@@ -30,7 +30,7 @@ class YoutubeView:
    retHttp +="<tr>"
    retHttp +="<td><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
    retHttp +="<td>" + videoItem["id"] + "</td>";
-   retHttp +="<td>" + videoItem['snippet']['title'] + "</td>"
+   retHttp +="<td><a href=Play\?youtube="+ osDefine.Base64Encoding(videoItem["id"]) + ">" + videoItem['snippet']['title'] + "</td>"
    
 
 

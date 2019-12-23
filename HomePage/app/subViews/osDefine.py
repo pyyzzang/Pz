@@ -4,8 +4,13 @@ import os
 import socket
 import base64
 import enum
+import re
 
+from requests import get
 from omxplayer.player import OMXPlayer
+from requests import get
+import urllib.parse
+
 class PlayMode:
     File = 0;
     Youtube = 1;
@@ -92,6 +97,26 @@ class osDefine:
         utfByte = base64.b64decode(convString, ' /');
         utfStr = str(utfByte, "utf-8");
         return utfStr;
+
+    @staticmethod
+    def PlayYoutube(youtubeId):
+        id = osDefine.Base64Decoding(youtubeId);
+        searchUrl = "https://www.youtube.com/watch?v=1T9RmTK3dQc";
+        decode_VideoUrl = get(searchUrl);
+        content = decode_VideoUrl.content.decode('utf-8');
+        content = urllib.parse.unquote(content);
+        content = content.replace("\\u0026", "&");
+        reguler = re.compile("&url=https.+&v=");
+        m = reguler.findall(content);
+        videoUrl = "";
+        for url in m[0].split("url="):
+            try:
+                videoUrl = url.split(",")[0];
+                if videoUrl.startswith("http"):
+                   break;
+            except E:
+                print("Error");
+        OMXPlayer(videoUrl); 
  
     @staticmethod
     def PlayFile(playFileName):
