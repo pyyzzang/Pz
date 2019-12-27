@@ -36,14 +36,19 @@ class fileListView(object):
     def getViewList(ext):
         http = "<http>";
         http += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
-        http += '<body Onload="FormLoad()"/>';
+        http += '<body Onload="FormLoad()">';
+        http += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
+        http += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>'
         http += fileListView.getVideoList('');
         http += YoutubeView.getVideoList();
         http += "</body>";
         http += "<script>";
-        http += "function FormLoad(){";
-        http += "if(FileViewTable.style.visibility == 'collapse')";
-        http += "{";	
+        http += "function FormLoad(){"
+        http += "document.getElementById('FileRadio').checked = true;"
+        http += "RadioChecked(document.getElementById('FileRadio'));}";
+        http += "function RadioChecked(radio){";
+        http += "if(radio.value=='File')";
+        http += "{";
         http += 'YoutubeTable.style.visibility = "collapse";';
         http += 'FileViewTable.style.visibility = "visible";';
         http += '}';
