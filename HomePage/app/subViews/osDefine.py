@@ -108,14 +108,14 @@ class osDefine:
         content = content.replace("\\u0026", "&");
         reguler = re.compile("&url=https.+&v=");
         m = reguler.findall(content);
-        videoUrl = "";
-        for url in m[0].split("url="):
-            try:
+        videoUrl = "aa";
+        try:
+            for url in m[0].split("url="):
                 videoUrl = url.split(",")[0];
                 if videoUrl.startswith("http"):
-                   break;
-            except E:
-                print("Error");
+                    break;
+        except:
+            print("Error");
         OMXPlayer(videoUrl); 
  
     @staticmethod
