@@ -7,7 +7,7 @@ class strUtil:
  def init():
   strUtil.tvPattern = '[ ㄱ-ㅎ|가-힣]+.E\d\d'
   strUtil.movePattern = '[ ㄱ-ㅎ|가-힣]+'
- 
+  strUtil.titlePattern = '.+.E\d+' 
  @staticmethod
  def isMatchTitle(title):
   strUtil.init();
@@ -27,7 +27,7 @@ class strUtil:
  def getMatchTitle(title):
   strUtil.init()
   
-  result = strUtil.getRegulaString(title, strUtil.tvPattern);
+  result = strUtil.getRegulaString(title, strUtil.titlePattern);
   length = len(result);
   if(0 != length):
    return result[length - 1];

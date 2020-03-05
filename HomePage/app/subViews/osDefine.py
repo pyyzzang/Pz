@@ -101,14 +101,14 @@ class osDefine:
     @staticmethod
     def PlayYoutube(youtubeId):
         id = osDefine.Base64Decoding(youtubeId);
-        searchUrl = "https://www.youtube.com/watch?v=1T9RmTK3dQc";
+        searchUrl = "https://www.youtube.com/watch?v=" + id;
         decode_VideoUrl = get(searchUrl);
         content = decode_VideoUrl.content.decode('utf-8');
         content = urllib.parse.unquote(content);
         content = content.replace("\\u0026", "&");
         reguler = re.compile("&url=https.+&v=");
         m = reguler.findall(content);
-        videoUrl = "aa";
+        videoUrl = "";
         try:
             for url in m[0].split("url="):
                 videoUrl = url.split(",")[0];
@@ -116,6 +116,7 @@ class osDefine:
                     break;
         except:
             print("Error");
+        print(videoUrl);
         OMXPlayer(videoUrl); 
  
     @staticmethod

@@ -21,7 +21,10 @@ class FileInfo:
         return self.ext;
 
     def getTitle(self):
-        return strUtil.getMatchTitle(self.filePath);
+        title = strUtil.getMatchTitle(self.filePath);
+        if(" " == title):
+            title = self.filePath;
+        return title;
     def isVideoFile(self):
         return self.getExt() in osDefine.SupportExt;
     def getEncodingFileName(self):
