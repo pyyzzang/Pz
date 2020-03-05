@@ -10,6 +10,7 @@ from requests import get
 from omxplayer.player import OMXPlayer
 from requests import get
 import urllib.parse
+import subprocess
 
 class PlayMode:
     File = 0;
@@ -118,12 +119,16 @@ class osDefine:
             print("Error");
         print(videoUrl);
         OMXPlayer(videoUrl); 
- 
+    @staticmethod
+    def getProcessCount(processName):
+        ret = subprocess.check_output('ps -ef | grep ' + processName, shell = True).decode();
+        return ret.count(processName); 
     @staticmethod
     def PlayFile(playFileName):
         decodeStr = osDefine.Base64Decoding(playFileName);
         if(0 != osDefine.playFileName ):
-           if(osDefine.playFileName != decodeStr):
+           if(osDefine.playFileName != decodeStr or 
+              0 == osDefine.getProcessCount("omxplayer")):
                osDefine.PlayerInit();
            else :
                return decodeStr;

@@ -18,8 +18,7 @@ class playView(object):
         else :
             filePath = playVideo.GET.get("youtube", "");
             osDefine.PlayYoutube(filePath);
-#moviPlayer = str(win32gui.FindWindow("ApplicationFrameWindow", None))
-        http ="";
+        http =filePath;
         http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";
         if(0):
