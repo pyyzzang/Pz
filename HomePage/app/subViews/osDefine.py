@@ -130,7 +130,7 @@ class osDefine:
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
         osDefine.currentPlayer = OMXPlayer(executeFilePath);
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
-        osDefine.playFileName = executeFilePath
+        osDefine.playFileName = decodeStr; 
         return executeFilePath;
 
     @staticmethod
