@@ -96,8 +96,10 @@ class fileListView(object):
                 http += ",dataType:'html'"
                 http += ",data:{'fileName':'"+info.getEncodingFileName()+"'}"
                 http += ",error : function(data){"
+                http += "alert(data);"
                 http += "}"
                 http += ", success : function (data){"
+                http += "alert(data);"
                 http += "}})})})</script>"
                 fileCount = fileCount + 1;
         http +="</table>";
@@ -108,13 +110,12 @@ class fileListView(object):
         deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
         splitPath = deleteFile.split('/',2);
         if(3 == len(splitPath)):
-          os.system('sudo chown pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
+          os.system('sudo chown -R pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
 
         deleteFullPath = (osDefine.LocalFilePath() + "/" + deleteFile)    
         if(False == os.path.exists(deleteFullPath)):
             return HttpResponse("");
         os.remove(deleteFullPath);
-        
         deleteEmptyFolder();
         return HttpResponse(deleteFullPath);
     @staticmethod
