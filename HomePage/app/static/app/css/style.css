@@ -4,7 +4,22 @@
 	background-size : 100% 100%;
 	background-color : white;
 	border-radius : 12px;
-	border : 2px solid #0;
+	border : 2px solid;
+}
+
+#thumbnailDir{
+	width : 10%;
+	background-image : url("../Image/Folder.png");
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+#playLink{
+	width : 70%;
+}
+
+#deleteButton{
+	width : 10%;
 }
 
 .main{
