@@ -9,9 +9,7 @@ class strUtil:
  @staticmethod
  def isMatchTitle(title):
   strUtil.init();
-  if(re.search(strUtil.movePattern,title)):
-   return True
-  if(re.search(strUtil.tvPattern, title)):
+  if(re.search(strUtil.titlePattern,title)):
     return True
   return False
 
@@ -29,9 +27,5 @@ class strUtil:
   length = len(result);
   if(0 != length):
    return result[length - 1];
-
-  result = strUtil.getRegulaString(title, strUtil.movePattern)
-  if([] != result):
-   return result[0];
   return title;
 
