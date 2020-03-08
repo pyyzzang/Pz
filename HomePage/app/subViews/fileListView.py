@@ -41,7 +41,7 @@ class FileInfo:
         return self.filePath;
     def getLink(self):
         if("" == self.filePath):
-            return "<a href=Home>Parent</a>";
+            return "<a href=http://192.168.219.102:8000/Home>Parent</a>";
         if True == self.isDirectory() :
             return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
         else:
