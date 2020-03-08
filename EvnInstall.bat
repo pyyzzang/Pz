@@ -12,3 +12,13 @@ set PIP_Exe="C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\S
 %PIP_Exe% install pyautogui
 
 %PIP_Exe% install --upgrade pywinauto
+
+%PIP_Exe% install pathlib
+
+sudo python3 -m pip install --upgrade pip
+
+sudo apt-get install libdbus-1-dev libdbus-glib-1-dev
+
+%pip_Exe% install omxplayer-wrapper
+
+pip3 install psutil

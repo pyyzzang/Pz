@@ -5,8 +5,6 @@ class strUtil:
 
  @staticmethod
  def init():
-  strUtil.tvPattern = '[ ㄱ-ㅎ|가-힣]+.E\d\d'
-  strUtil.movePattern = '[ ㄱ-ㅎ|가-힣]+'
   strUtil.titlePattern = '.+.E\d+' 
  @staticmethod
  def isMatchTitle(title):
@@ -36,4 +34,4 @@ class strUtil:
   if([] != result):
    return result[0];
   return title;
-#  return re.compile('[ㄱ-|가-힣]', title);
+

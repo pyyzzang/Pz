@@ -9,7 +9,6 @@ import re
 from requests import get
 from omxplayer.player import OMXPlayer
 from requests import get
-import urllib.parse
 import subprocess
 
 class PlayMode:
