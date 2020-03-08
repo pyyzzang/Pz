@@ -39,18 +39,27 @@ class FileInfo:
         if(-1 != self.dir.find(osDefine.LocalFilePath())):
             return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
         return self.filePath;
+    def getLink(self):
+        if True == self.isDirectory() :
+            return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
+        else:
+            return "<a href=Play\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
 
 class fileListView(object):
     @staticmethod
-    def getViewList(ext):
+    def getViewList(request):
         fileListView.deleteEmptyFolder();
+        try:
+            deleteFile = osDefine.Base64Decoding(request.GET["file"]);
+        except Exception:
+            deleteFile = "";
         http = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />"
         http += "<http>";
         http += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += '<body Onload="FormLoad()">';
         http += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         http += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>'
-        http += fileListView.getVideoList("");
+        http += fileListView.getVideoList(deleteFile);
         http += YoutubeView.getVideoList();
         http += "</body>";
         http += "<script>";
@@ -90,7 +99,7 @@ class fileListView(object):
                 http += "<tr height=40>"
                 fileStr = osDefine.Base64Encoding(file);
                 http += "<td id='" + info.getThumbNailId() + "'></td>";
-                http += "<td id='playLink'> <a href=Play\?file="+ info.getEncodingFileName() + ">" + info.getTitle() + "</a></td>"
+                http += "<td id='playLink'> " + info.getLink() + "</td>"
                 http += "<td id='deleteButton'><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
                 http += "<script type=\"text/javascript\">";
