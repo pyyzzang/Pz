@@ -14,6 +14,13 @@
 	background-repeat: no-repeat;
 }
 
+#thumbnailFile{
+	width : 10%;
+	background-image : url("../Image/File.png");
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
 #playLink{
 	width : 70%;
 }
