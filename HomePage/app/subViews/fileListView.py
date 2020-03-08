@@ -40,6 +40,8 @@ class FileInfo:
             return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
         return self.filePath;
     def getLink(self):
+        if("" == self.filePath):
+            return "<a href=Home>Parent</a>";
         if True == self.isDirectory() :
             return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
         else:
@@ -95,12 +97,17 @@ class fileListView(object):
         fileInfoList.sort();
         http = "<Head> <link rel='stylesheet' href='/static/app/css/style.css'></Head>";
         http += "<Table id='FileViewTable' border='1'>";
+        if( "" != dirPath):
+            parentInfo = FileInfo("", localFilePath);
+            fileInfoList.insert(0,parentInfo);
         for info in fileInfoList:
                 http += "<tr height=40>"
                 fileStr = osDefine.Base64Encoding(file);
                 http += "<td id='" + info.getThumbNailId() + "'></td>";
                 http += "<td id='playLink'> " + info.getLink() + "</td>"
-                http += "<td id='deleteButton'><button id=File" + str(fileCount) + " >삭제</button>"
+                http += "<td id='deleteButton'>";
+                if( info.getTitle() != ""):
+                    http += "<button id=File" + str(fileCount) + " >삭제</button>";
                 http += "</tr>"
                 http += "<script type=\"text/javascript\">";
                 http += "$(function(){" 
