@@ -17,7 +17,8 @@ class FileInfo:
         return self.getTitle() < other.getTitle(); 
     def getFileName(self):
         return self.fileName;
-
+    def getFullName(self):
+        return self.dir + "/" + self.filePath;
     def getExt(self):
         return self.ext;
 
@@ -28,6 +29,10 @@ class FileInfo:
         return title;
     def isVideoFile(self):
         return self.getExt() in osDefine.SupportExt;
+    def isDirectory(self):
+        return os.path.isdir(self.getFullName());
+    def getThumbNailId(self):
+        return "Thumbnail" + (self.isDirectory() and "Dir" or "File");
     def getEncodingFileName(self):
         return osDefine.Base64Encoding(self.getUrlPath());
     def getUrlPath(self):
@@ -45,7 +50,7 @@ class fileListView(object):
         http += '<body Onload="FormLoad()">';
         http += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         http += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>'
-        http += fileListView.getVideoList('');
+        http += fileListView.getVideoList("");
         http += YoutubeView.getVideoList();
         http += "</body>";
         http += "<script>";
@@ -67,26 +72,26 @@ class fileListView(object):
         http += "</http>";
         return HttpResponse(http); 
     @staticmethod
-    def getVideoList(ext):
-        
+    def getVideoList(dirPath):
         localFilePath = osDefine.LocalFilePath()
         ip = osDefine.Ip()
         fileCount = 0;      
         fileInfoList = []; 
-        for (path, dir, files) in os.walk(localFilePath):
-            for file in files:
-                info = FileInfo(file, path);
-                if(True == info.isVideoFile()):
+        findDir = localFilePath + "/" + dirPath;
+        for file in os.listdir(findDir):
+                info = FileInfo(file, findDir);
+                if(True == info.isVideoFile() or True == info.isDirectory()):
                     fileInfoList.append(info);
 
         fileInfoList.sort();
-        http = "";
+        http = "<Head> <link rel='stylesheet' href='/static/app/css/style.css'></Head>";
         http += "<Table id='FileViewTable' border='1'>";
         for info in fileInfoList:
-                http += "<tr>"
+                http += "<tr height=40>"
                 fileStr = osDefine.Base64Encoding(file);
-                http = http + "<td> <a href=Play\?file="+ info.getEncodingFileName() + ">" + info.getTitle() + "</a></td>"
-                http = http + "<td><button id=File" + str(fileCount) + " >삭제</button>"
+                http += "<td id='" + info.getThumbNailId() + "'></td>";
+                http += "<td id='playLink'> <a href=Play\?file="+ info.getEncodingFileName() + ">" + info.getTitle() + "</a></td>"
+                http += "<td id='deleteButton'><button id=File" + str(fileCount) + " >삭제</button>"
                 http += "</tr>"
                 http += "<script type=\"text/javascript\">";
                 http += "$(function(){" 
