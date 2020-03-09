@@ -2,8 +2,10 @@ from django.http import HttpResponse
 
 from ..module.auzerConnect import Auzer;
 from enum import Enum;
-import datetime
-import base64
+import datetime;
+import base64;
+import os;
+import subprocess;
 
 class RowEnum(Enum):
     Title = 0
@@ -48,16 +50,21 @@ class torrent:
 
         try:
             fileBinary = request.FILES["torrent_files"];
-            
-            Binary= ""
+            tmpTorrentFile = "/home/pi/Pz/HomePage/app/static/Tmp/LastUpload.Torrent";
+            f = open(tmpTorrentFile, 'wb+');
+            for chunk in fileBinary.chunks():
+                f.write(chunk)
+            f.close();
+            torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
+            Binary= subprocess.check_output(torrentUrl, shell = True);
+            #Binary = Binary.replace("b'","").replace("b'","\n'");
         except :
             Binary = "";
         
         if "" == Binary:
-            Binary = request.POST.get("torrent_upload_url", "");
+            Binary = request.POST.get("magnetUrl", "");
         
-        query = "insert into Torrent values('%s', ' ', '%s', GETDATE(), 6)" % (Title, Binary);
-        #query= "insert into Torrent values('1111', ' ', '11', GETDATE(), 7)";
+        query = "insert into Torrent values('%s', ' ', '%s', GETDATE(), 6)" % (Title, Binary.decode("utf-8"));
         Auzer.InsertQueryExecute(query);
         return HttpResponse(query);
 
@@ -85,7 +92,7 @@ class torrent:
         ret += "<label\">제목을 입력하세요(*) : </label>";
         ret += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\"/>";
         ret += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
-        ret += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_upload_file\" multiple=\"multiple\" />";
+        ret += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
         ret += "<p><label for=\"torrent_upload_url\">Or enter a URL:</label>";
         ret += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\"/>";
         ret +=  "</div>"
