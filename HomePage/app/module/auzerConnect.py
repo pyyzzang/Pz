@@ -14,3 +14,8 @@ class Auzer:
         cursor.execute(query);
         rows = cursor.fetchall();
         return rows; 
+    @staticmethod 
+    def ConvetHangul(encodeStr):
+        encodeStr = encodeStr;
+        encodeStr = encodeStr.encode('ISO-8859-1')
+        return encodeStr.decode('euc-kr');
