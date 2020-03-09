@@ -9,6 +9,7 @@ from datetime import datetime
 from .subViews.fileListView import fileListView
 from .subViews.playView import playView
 from .subViews.playerMove import playerMove
+from .subViews.torrent import torrent
 from .subViews.testView import testView
 
 
@@ -42,3 +43,5 @@ def VolumeDown(request):
     return playerMove.VolumeDown(request);
 def test(request):
     return testView.test(request);
+def Torrent(request):
+    return torrent.getTorrent(request);
