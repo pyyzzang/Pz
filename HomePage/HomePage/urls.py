@@ -30,5 +30,7 @@ urlpatterns = [
     url(r'Play', app.views.play, name='play'),
     url(r'Test', app.views.test, name='test'),
     url(r'Home', app.views.home, name='Home'),
+    url(r'Torrent/Upload', app.views.TorrentUpload, name='TorrentUpload'),
     url(r'Torrent', app.views.Torrent, name='Torrent'),
+    
 ]

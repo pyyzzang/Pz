@@ -45,3 +45,5 @@ def test(request):
     return testView.test(request);
 def Torrent(request):
     return torrent.getTorrent(request);
+def TorrentUpload(request):
+    return torrent.torrentUpload(request);
