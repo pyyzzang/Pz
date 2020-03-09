@@ -2,10 +2,10 @@
 from django.http import HttpResponse
 import os
 import pathlib
-from .osDefine import osDefine
-from .strUtil import strUtil
+from ..module.osDefine import osDefine
+from ..module.strUtil import strUtil
 import base64
-from .osDefine import PlayMode
+from ..module.osDefine import PlayMode
 from .YoutubeView import YoutubeView
 
 class FileInfo:

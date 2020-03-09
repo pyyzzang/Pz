@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from .osDefine import osDefine
+from ..module.osDefine import osDefine
 class playerMove():
 
  @staticmethod

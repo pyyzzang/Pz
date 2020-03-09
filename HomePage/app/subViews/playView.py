@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 import os,sys
 import glob
-from .osDefine import osDefine
+from ..module.osDefine import osDefine
 #import win32gui,win32con, time,sys, win32ui
 
 #from tkinter import*

@@ -1,7 +1,7 @@
 from typing import List
 from requests import get
 import json
-from .osDefine import osDefine
+from ..module.osDefine import osDefine
 
 
 

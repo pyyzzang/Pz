@@ -11,12 +11,12 @@ os.environ['DISPLAY'] = ':0'
 from django.http import HttpResponse
 import os.path
 import os,sys
-from .osDefine import osDefine
+from ..module.osDefine import osDefine
 import pyautogui
 import time
 #import pywinauto
 #import win32gui,win32con, time,sys
-from .strUtil import strUtil
+from ..module.strUtil import strUtil
 #from tkinter import*
 #from django.shortcuts import render_to_response
 #import tkinter.messagebox
