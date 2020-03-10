@@ -1,3 +1,4 @@
+#-*- coding:utf-8 -*-
 from django.http import HttpResponse
 
 from ..module.auzerConnect import Auzer;
@@ -6,64 +7,88 @@ import datetime;
 import base64;
 import os;
 import subprocess;
+from ..module.osDefine import osDefine;
 
 class RowEnum(Enum):
     Title = 0
-    AlisaTitle = Title + 1;
-    MagnetUrl = AlisaTitle + 1;
+    MagnetUrl = Title + 1;
     ModifyDate = MagnetUrl + 1;
     idx = ModifyDate + 1;
 
 class TorrentData:
-    def __init__(self, title, aliasTitle, modifyDate):
+    def __init__(self, title, magnetUrl, modifyDate, idx):
         self.title = title;
-        self.aliasTitle = aliasTitle;
+        self.magnetUrl = magnetUrl;
         self.modifyDate = modifyDate;
-        self.magnetUrl = "";
+        self.idx = idx;
 
     def getTitle(self):
-        if(0 == len(self.aliasTitle.strip())):
-            return self.title;
-        return self.aliasTitle;
+        return self.title;
+        
     def getModifyDate(self):
         return self.modifyDate.strftime("%Y년 %m월 %d일");
     def getMagnetUrl(self):
         return self.magnetUrl;
+    def getIdx(self):
+        return self.idx;
+    def getStrIdx(self):
+        return str(self.getIdx());
+
+    def getAjaxScript(self):
+        ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
+        return ret;
 
     def getHttpRow(self):
-        ret = "<td>" + self.getTitle() + "</td>";
+        ret = "<tr><td>" + self.getTitle() + "</td>";
         ret += "<td>" + self.getModifyDate() + "</td>";
+        ret += "<td>" + self.getMagnetUrl() + "</td>";
+        ret += "<td><input type=\"Button\" id=\"AddRow" + self.getStrIdx() + "\" Value=\"토렌트 추가\"></input></td>";
+        ret += self.getAjaxScript();
+        ret += "</tr>";
         return ret;
     
     @staticmethod
     def createTorrenData(row):
         retData = TorrentData(
         Auzer.ConvetHangul(row[RowEnum.Title.value]),
-        Auzer.ConvetHangul(row[RowEnum.AlisaTitle.value]),
-        row[RowEnum.ModifyDate.value]);
+        row[RowEnum.MagnetUrl.value],
+        row[RowEnum.ModifyDate.value],
+        row[RowEnum.idx.value]);
         return retData;
 
 class torrent:
+    @staticmethod
+    def torrentAdd(request):
+        #magnetUrl = request.Post.get("magnetUrl");
+        #magnetUrl = osDefine.Base64Decoding(magnetUrl);
+        addCmd = "sudo transmission-remote -a \"magnet:?xt=urn:btih:6b9cb6c23abcfa4833a946bb23596ff14257859e\" -n \"pi\":\"cndwn5069()\"";
+        os.system(addCmd);
+        return HttpResponse(addCmd);
     @staticmethod
     def torrentUpload(request):
         Title = request.POST.get("torrentTitle");
 
         try:
-            fileBinary = request.FILES["torrent_files"];
             tmpTorrentFile = "/home/pi/Pz/HomePage/app/static/Tmp/LastUpload.Torrent";
+            fileBinary = request.FILES["torrent_files"];
             f = open(tmpTorrentFile, 'wb+');
             for chunk in fileBinary.chunks():
                 f.write(chunk)
             f.close();
+            
             torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
-            Binary= subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
-        except :
-            Binary = "";
+            magnetUrl = subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
+            Binary = magnetUrl.replace("\n", "");
+            base64Magnet = osDefine.Base64Encoding(magnetUrl);
+            if( True == os.path.isfile(tmpTorrentFile)):
+                os.system("sudo rm " + tmpTorrentFile);
+
+        except Exception as ex:
+            return HttpResponse(ex);
         
         if "" == Binary:
             Binary = request.POST.get("torrent_upload_url", "");
-        
-        query = "insert into Torrent values('%s', ' ', '%s', GETDATE(), 6)" % (Title, Binary);
+        query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
         Auzer.InsertQueryExecute(query);
         return HttpResponse(query);
 
@@ -92,16 +117,17 @@ class torrent:
     @staticmethod
     def getTorrent(request):
         ret = "<script type=\"text/javascript\" src=\"/static/app/scripts/Torrent.js\"></script>";
+        ret += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>";
         ret += torrent.getTorrentAddDiv();
 
         ret += "<div style=\"position: relative;\">";
-        ret += "<Table><tr>";
-        rows = Auzer.QueryExecute("select title, AliasTitle, '', modifyDate from Torrent");
+        ret += "<Table>";
+        rows = Auzer.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
         for row in rows:
             data = TorrentData.createTorrenData(row);
             ret += data.getHttpRow();
 
-        ret += "</tr></table>"
+        ret += "</table>"
         ret += "</div>"
 
         

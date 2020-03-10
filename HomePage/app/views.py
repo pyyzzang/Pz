@@ -47,3 +47,5 @@ def Torrent(request):
     return torrent.getTorrent(request);
 def TorrentUpload(request):
     return torrent.torrentUpload(request);
+def TorrentAdd(request):
+    return torrent.torrentAdd(request);
