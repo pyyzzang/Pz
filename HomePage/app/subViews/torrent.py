@@ -59,9 +59,9 @@ class TorrentData:
 class torrent:
     @staticmethod
     def torrentAdd(request):
-        #magnetUrl = request.Post.get("magnetUrl");
-        #magnetUrl = osDefine.Base64Decoding(magnetUrl);
-        addCmd = "sudo transmission-remote -a \"magnet:?xt=urn:btih:6b9cb6c23abcfa4833a946bb23596ff14257859e\" -n \"pi\":\"cndwn5069()\"";
+        magnetUrl = request.POST.get("magnetUrl");
+        magnetUrl = osDefine.Base64Decoding(magnetUrl);
+        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\"";
         os.system(addCmd);
         return HttpResponse(addCmd);
     @staticmethod
