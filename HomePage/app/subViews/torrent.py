@@ -56,38 +56,25 @@ class torrent:
                 f.write(chunk)
             f.close();
             torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
-            Binary= subprocess.check_output(torrentUrl, shell = True);
-            #Binary = Binary.replace("b'","").replace("b'","\n'");
+            Binary= subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
         except :
             Binary = "";
         
         if "" == Binary:
-            Binary = request.POST.get("magnetUrl", "");
+            Binary = request.POST.get("torrent_upload_url", "");
         
-        query = "insert into Torrent values('%s', ' ', '%s', GETDATE(), 6)" % (Title, Binary.decode("utf-8"));
+        query = "insert into Torrent values('%s', ' ', '%s', GETDATE(), 6)" % (Title, Binary);
         Auzer.InsertQueryExecute(query);
         return HttpResponse(query);
 
-    @staticmethod
-    def getTorrent(request):
-        ret = "<script type=\"text/javascript\" src=\"/static/app/scripts/Torrent.js\"></script>";
-        ret += "<div style=\"position: relative;\">";
-        ret += "<Table><tr>";
-
-#        rows = Auzer.QueryExecute("select title, AliasTitle, '', modifyDate from Torrent");
-#        for row in rows:
-#            data = TorrentData.createTorrenData(row);
-#            ret += data.getHttpRow();
-
-        ret += "</tr></table>"
-        ret += "</div>"
-
-        ret += "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
+    @staticmethod 
+    def getTorrentAddDiv():
+        ret = "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
         ret += "<div class=\"dialog_window\" id=\"dialog_Window\">";
         ret += "<div class=\"dialog_logo\" id=\"upload_dialog_logo\"></div>";
         ret += "<h2 class=\"dialog_heading\">Upload Torrent Files</h2>";
         ret += "<form action=\"/Torrent/Upload\" method=\"post\" id=\"torrent_upload_form\"";
-        ret += "enctype=\"multipart/form-data\" target=\"torrent_upload_frame\">";
+        ret += "enctype=\"multipart/form-data\">";
         ret += "<div class=\"dialog_message\">";
         ret += "<label\">제목을 입력하세요(*) : </label>";
         ret += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\"/>";
@@ -100,4 +87,22 @@ class torrent:
         ret += "</form>"
         ret += "</div>"
         ret += "</div>"
+        return ret;
+
+    @staticmethod
+    def getTorrent(request):
+        ret = "<script type=\"text/javascript\" src=\"/static/app/scripts/Torrent.js\"></script>";
+        ret += torrent.getTorrentAddDiv();
+
+        ret += "<div style=\"position: relative;\">";
+        ret += "<Table><tr>";
+        rows = Auzer.QueryExecute("select title, AliasTitle, '', modifyDate from Torrent");
+        for row in rows:
+            data = TorrentData.createTorrenData(row);
+            ret += data.getHttpRow();
+
+        ret += "</tr></table>"
+        ret += "</div>"
+
+        
         return HttpResponse(ret);
