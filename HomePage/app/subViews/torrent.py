@@ -1,13 +1,16 @@
 #-*- coding:utf-8 -*-
 from django.http import HttpResponse
 
-from ..module.auzerConnect import Auzer;
+from ..module.DBExecute import DBExecute;
 from enum import Enum;
 import datetime;
 import base64;
 import os;
 import subprocess;
 from ..module.osDefine import osDefine;
+
+from ..module.DBExecute import SQLalchemy;
+
 
 class RowEnum(Enum):
     Title = 0
@@ -50,7 +53,7 @@ class TorrentData:
     @staticmethod
     def createTorrenData(row):
         retData = TorrentData(
-        Auzer.ConvetHangul(row[RowEnum.Title.value]),
+        DBExecute.ConvetHangul(row[RowEnum.Title.value]),
         row[RowEnum.MagnetUrl.value],
         row[RowEnum.ModifyDate.value],
         row[RowEnum.idx.value]);
@@ -89,7 +92,7 @@ class torrent:
         if "" == Binary:
             Binary = request.POST.get("torrent_upload_url", "");
         query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
-        Auzer.InsertQueryExecute(query);
+        DBExecute.InsertQueryExecute(query);
         return HttpResponse(query);
 
     @staticmethod 
@@ -122,7 +125,9 @@ class torrent:
 
         ret += "<div style=\"position: relative;\">";
         ret += "<Table>";
-        rows = Auzer.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        #ret += DBExecute.GetDBConnection();
+        session = DBExecute.GetDBConnection();
+        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
         for row in rows:
             data = TorrentData.createTorrenData(row);
             ret += data.getHttpRow();
