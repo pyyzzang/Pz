@@ -947,3 +947,6 @@ HomePage/app/templates/app/login.html
 HomePage/app/templates/app/loginpartial.html
 HomePage/app/templates/app/test.html
 HomePage/app/module/__pycache__/osDefine.cpython-37.pyc
+HomePage/app/module/__pycache__/DBExecute.cpython-37.pyc
+HomePage/app/module/__pycache__/osDefine.cpython-37.pyc
+HomePage/app/module/__pycache__/osDefine.cpython-37.pyc
