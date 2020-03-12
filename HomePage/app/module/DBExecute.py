@@ -31,7 +31,7 @@ class DBExecute():
         if("" != DBExecute.dbConnection):
             return DBExecute.dbConnection;
 
-        dbMode = db;
+        DBExecute.dbMode = db;
         if( DBExecute.PYODBC == db):
             DBExecute.dbConnection = PyODBC();
         elif(DBExecute.SQLALCHEMY == db):
@@ -46,6 +46,7 @@ class SQLalchemy(DBExecute):
         Session = sessionmaker(bind=self.engine)
         session = Session();
         session.execute(query);
+        session.commit();
         
     def QueryExecute(self, query):
         Session = sessionmaker(bind=self.engine)

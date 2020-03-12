@@ -8,7 +8,6 @@ import base64;
 import os;
 import subprocess;
 from ..module.osDefine import osDefine;
-
 from ..module.DBExecute import SQLalchemy;
 
 
@@ -82,7 +81,7 @@ class torrent:
             torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
             magnetUrl = subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
             Binary = magnetUrl.replace("\n", "");
-            base64Magnet = osDefine.Base64Encoding(magnetUrl);
+            base64Magnet = osDefine.Base64Encoding(Binary);
             if( True == os.path.isfile(tmpTorrentFile)):
                 os.system("sudo rm " + tmpTorrentFile);
 
@@ -91,8 +90,10 @@ class torrent:
         
         if "" == Binary:
             Binary = request.POST.get("torrent_upload_url", "");
+
         query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
-        DBExecute.InsertQueryExecute(query);
+        session = DBExecute.GetDBConnection();
+        session.InsertQueryExecute(query);
         return HttpResponse(query);
 
     @staticmethod 
