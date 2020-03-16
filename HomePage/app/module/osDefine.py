@@ -127,7 +127,7 @@ class osDefine:
         decodeStr = osDefine.Base64Decoding(playFileName);
         if(0 != osDefine.playFileName ):
            if(osDefine.playFileName != decodeStr or 
-              0 == osDefine.getProcessCount("omxplayer")):
+              2 >= osDefine.getProcessCount("omxplayer")):
                osDefine.PlayerInit();
            else :
                return decodeStr;
