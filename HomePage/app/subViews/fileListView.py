@@ -5,8 +5,8 @@ import pathlib
 from ..module.osDefine import osDefine
 from ..module.strUtil import strUtil
 import base64
-from ..module.osDefine import PlayMode
-from .YoutubeView import YoutubeView
+from ..module.osDefine import PlayMode;
+from .YoutubeView import YoutubeView;
 
 class FileInfo:
     def __init__(self, filePath, dir):

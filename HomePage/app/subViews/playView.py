@@ -2,6 +2,7 @@ from django.http import HttpResponse
 import os,sys
 import glob
 from ..module.osDefine import osDefine
+from .YoutubeView import YoutubeView;
 #import win32gui,win32con, time,sys, win32ui
 
 #from tkinter import*
@@ -17,7 +18,7 @@ class playView(object):
             osDefine.PlayFile(filePath);
         else :
             filePath = playVideo.GET.get("youtube", "");
-            osDefine.PlayYoutube(filePath);
+            YoutubeView.play(filePath);
         http =filePath;
         http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";

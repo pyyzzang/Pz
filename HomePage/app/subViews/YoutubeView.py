@@ -7,6 +7,89 @@ from  requests import get;
 import json;
 import re;
 
+class Thumbnail:
+    def __init__(self, url, width, height):
+        self.url = url;
+        self.width = width;
+        self.height = height
+
+class Image:
+    def __init__(self, thumbnails):
+        self.thumbnails = thumbnails
+
+class VideoDuration:
+    def __init__(self, simpleText):
+        self.simpleText = simpleText;
+
+class AccessibilityData:
+    def __init__(self, label):
+        self.label = label
+
+class Accessibility:
+    def __init__(self, accessibilityData):
+        self.accessibilityData = accessibilityData;
+
+class Title:
+    def __init__(self, accessibility, simpleText):
+        self.accessibility = accessibility;
+        self.simpleText = simpleText;
+
+class Metadata:
+    def __init__(self, simpleText):
+        self.simpleText = simpleText;
+
+class WebCommandMetadata:
+    def __init__(self, url, webPageType, rootVe):
+        self.url = url;
+        self.webPageType = webPageType;
+        self.rootVe = rootVe;
+
+class CommandMetadata:
+    def __init__(self, webCommandMetadata):
+        self.webCommandMetadata = webCommandMetadata
+
+class WatchEndpoint:
+    def __init__(self, videoId):
+        self.videoId = videoId;
+
+class Endpoint:
+    def __init__(self, clickTrackingParams, commandMetadata, watchEndpoint):
+        self.clickTrackingParams = clickTrackingParams;
+        self.commandMetadata = commandMetadata;
+        self.watchEndpoint = watchEndpoint;
+
+class EndscreenElementRenderer:
+    def __init__(self, style, image, videoDuration, left, width, top, aspectRatio, 
+    startMs, endMs, title, metadata, endpoint, trackingParams, id):
+        self.style = style;
+        self.image = image;
+        self.videoDuration = videoDuration;
+        self.left = left;
+        self.width = width;
+        self.top = top;
+        self.aspectRatio = aspectRatio;
+        self.startMs = startMs;
+        self.endMs = endMs;
+        self.title = title;
+        self.metadata = metadata;
+        self.endpoint = endpoint;
+        self.trackingParams = trackingParams;
+        self.id = id;
+
+class Element:
+    def __init__(self, endscreenElementRenderer):
+        self.endscreenElementRenderer = endscreenElementRenderer;
+
+class EndscreenRenderer:
+    def __init__(self, elements, startMs, trackingParams):
+        self.elements = elements;
+        self.startMs = startMs;
+        self.trackingParams = trackingParams;
+
+class Endscreen:
+    def __init__(self, endscreenRenderer):
+        self.endscreenRenderer = endscreenRenderer;
+
 
 class Format():
     def __init__(self, itag, url, mimeType, bitrate, width, height, lastModified,
@@ -1062,9 +1145,9 @@ class PlayabilityStatus():
 		self.contextParams = contextParams;
 
 class PlayerResponse():
-    def __init__(self, playabilityStatus, streamingData, playerAds, playbackTracking,
-    captions, videoDetails, annotations, playerConfig, storyboards, microformat,
-    cards, trackingParams, attestation, videoQualityPromoSupportedRenderers, messages, adPlacements):
+    def __init__(self, playabilityStatus = "", streamingData = "", playerAds = "", playbackTracking = "",
+    captions = "", videoDetails = "", annotations = "", playerConfig = "", storyboards = "", microformat = "",
+    cards = "", trackingParams = "", attestation = "", videoQualityPromoSupportedRenderers = "", messages = "", adPlacements = "", endscreen = ""):
         #public PlayabilityStatus playabilityStatus { get; set; }
         self.playabilityStatus = playabilityStatus;
         #public StreamingData streamingData { get; set; }
@@ -1096,6 +1179,7 @@ class PlayerResponse():
         self.messages = messages;
         #public List<AdPlacement> adPlacements { get; set; }
         self.adPlacements = adPlacements;
+        self.endscreen = endscreen;
 
 class RootObject():
     def __init__(self, player_response):
@@ -1149,56 +1233,92 @@ class YoutubeRoot(object):
         self.attrs = attrs;
         self.args = args;
 
-def Test():
-  youtubeStr = get("https://www.youtube.com/watch?v=2hafAgIlR1Y");
-  baseYoutube = youtubeStr.text.encode("utf-8");
-  scripts = baseYoutube.split("ytplayer.config =");
-  config = scripts[1].split(";ytplayer.load =")[0];
+    def Test():
+        youtubeStr = get("https://www.youtube.com/watch?v=2hafAgIlR1Y");
+        baseYoutube = youtubeStr.text.encode("utf-8");
+        scripts = baseYoutube.split("ytplayer.config =");
+        config = scripts[1].split(";ytplayer.load =")[0];
   
-  jsonString = YoutubeRoot(**json.loads(config.decode('utf-8')));
-  print(jsonString.args["player_response"]);
-  root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
-  print(root);
+        jsonString = YoutubeRoot(**json.loads(config.decode('utf-8')));
+        print(jsonString.args["player_response"]);
+        root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
+        print(root);
 
 class pageInfo(object):
- def __init__(self, totalResults:str, resultsPerPage:str):
-  self.totalResults = totalResults;
-  self.resultsPerPage = resultsPerPage;
+    def __init__(self, totalResults, resultsPerPage):
+        self.totalResults = totalResults;
+        self.resultsPerPage = resultsPerPage;
 
 class Item(object):
- def __init__(self, kind:str):
-  self.kind = kind;
+        def __init__(self, kind):
+            self.kind = kind;
 
 class videos(object):
- def __init__(self, kind:str, etag:str, nextPageToken:str, pageInfo:List[
-pageInfo], items:List[Item]):
-  self.kind = kind;
-  self.etag = etag;
-  self.items = items;
+    def __init__(self, kind, etag, nextPageToken, pageInfo, items):
+        self.kind = kind;
+        self.etag = etag;
+        self.items = items;
+
+YoutubeMp4_itag = [18	,# mp4	audio/video	360p	-	-	-		
+                        22	,# mp4	audio/video	720p	-	-	-       
+                        37	,# mp4	audio/video	1080p	-	-	-       
+                        38	,# mp4	audio/video	3072p	-	-	-       
+                        82	,# mp4	audio/video	360p	-	-	3D      
+                        83	,# mp4	audio/video	480p	-	-	3D      
+                        84	,# mp4	audio/video	720p	-	-	3D      
+                        85	,# mp4	audio/video	1080p	-	-	3D      
+                        133	,# mp4	video		240p	-	-	        
+                        134	,# mp4	video		360p	-	-	        
+                        135	,# mp4	video		480p	-	-	        
+                        136	,# mp4	video		720p	-	-	        
+                        137	,# mp4	video		1080p	-	-	        
+                        138	,# mp4	video		2160p60	-	-	        
+                        160	,# mp4	video		144p	-	-	        
+                        264	,# mp4	video		1440p	-	-	        
+                        266	,# mp4	video		2160p60	-	-	        
+                        298	,# mp4	video		720p60	-	-	        
+                        299	,# mp4	video		1080p60	-	-	        
+                        ];
 
 class YoutubeView:
- @staticmethod
- def getVideoList():
-  retHttp = "";
-  retHttp = "<Table id='YoutubeTable' border='1'>";
-  for (videoItem) in YoutubeView.getYoutubeVideos():
-   retHttp +="<tr>"
-   retHttp +="<td><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
-   retHttp +="<td>" + videoItem["id"] + "</td>";
-   retHttp +="<td><a href=Play\?youtube="+ osDefine.Base64Encoding(videoItem["id"]) + ">" + videoItem['snippet']['title'] + "</td>"
-   
+    @staticmethod
+    def getVideoList():
+        retHttp = "";
+        retHttp = "<Table id='YoutubeTable' border='1'>";
+        for (videoItem) in YoutubeView.getYoutubeVideos():
+            retHttp +="<tr>"
+            retHttp +="<td><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
+            retHttp +="<td>" + videoItem["id"] + "</td>";
+            retHttp +="<td><a href=Play\?youtube="+ osDefine.Base64Encoding(videoItem["id"]) + ">" + videoItem['snippet']['title'] + "</td>"
+            retHttp +="</tr>";
+        retHttp +="</table>";
+        return retHttp;
+    
+    @staticmethod
+    def getYoutubeVideos():
+        searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr";
 
-
-   retHttp +="</tr>";
-  retHttp +="</table>";
-  return retHttp;
-
- @staticmethod
- def getYoutubeVideos():
-  searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr";
-
-  downloadString = get(searchUrl);
-  decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
-  return decoded_videos.items;
-
-
+        downloadString = get(searchUrl);
+        decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
+        return decoded_videos.items;
+    @staticmethod
+    def play(youtubeId):
+        youtubeId = osDefine.Base64Decoding(youtubeId);
+        playFormat = YoutubeView.getPlayUrl(youtubeId);
+        osDefine.PlayYoutube(playFormat["url"]);
+    
+    @staticmethod
+    def getPlayUrl(youtubeId):
+        youtubeStr = get("https://www.youtube.com/watch?v=" + youtubeId);
+        baseYoutube = youtubeStr.text;
+        scripts = baseYoutube.split("ytplayer.config =");
+        config = scripts[1].split(";ytplayer.load =")[0];
+  
+        jsonString = YoutubeRoot(**json.loads(config));
+        root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
+        retFormat = "";
+        for format in root.streamingData["adaptiveFormats"]:
+            if((format["itag"] in YoutubeMp4_itag)):
+                if("" == retFormat or retFormat["itag"] < format["itag"]):
+                    retFormat = format;
+        return retFormat;

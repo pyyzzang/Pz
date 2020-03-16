@@ -99,25 +99,19 @@ class osDefine:
         return utfStr;
 
     @staticmethod
-    def PlayYoutube(youtubeId):
-        id = osDefine.Base64Decoding(youtubeId);
-        searchUrl = "https://www.youtube.com/watch?v=" + id;
-        decode_VideoUrl = get(searchUrl);
-        content = decode_VideoUrl.content.decode('utf-8');
-        content = urllib.parse.unquote(content);
-        content = content.replace("\\u0026", "&");
-        reguler = re.compile("&url=https.+&v=");
-        m = reguler.findall(content);
-        videoUrl = "";
-        try:
-            for url in m[0].split("url="):
-                videoUrl = url.split(",")[0];
-                if videoUrl.startswith("http"):
-                    break;
-        except:
-            print("Error");
-        print(videoUrl);
-        OMXPlayer(videoUrl); 
+    def PlayYoutube(playUrl):
+        if(0 != osDefine.playFileName ):
+           if(osDefine.playFileName != playUrl or 
+              2 >= osDefine.getProcessCount("omxplayer")):
+               osDefine.PlayerInit();
+           else :
+               return playUrl;
+        executeFilePath = playUrl; 
+        osDefine.currentPlayer = OMXPlayer(playUrl); 
+        osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
+        osDefine.playFileName = playUrl; 
+        return executeFilePath;
+        
     @staticmethod
     def getProcessCount(processName):
         ret = subprocess.check_output('ps -ef | grep ' + processName, shell = True).decode();
