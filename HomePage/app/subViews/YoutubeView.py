@@ -1259,26 +1259,26 @@ class videos(object):
         self.etag = etag;
         self.items = items;
 
-YoutubeMp4_itag = [18	,# mp4	audio/video	360p	-	-	-		
-                        22	,# mp4	audio/video	720p	-	-	-       
-                        37	,# mp4	audio/video	1080p	-	-	-       
-                        38	,# mp4	audio/video	3072p	-	-	-       
-                        82	,# mp4	audio/video	360p	-	-	3D      
-                        83	,# mp4	audio/video	480p	-	-	3D      
-                        84	,# mp4	audio/video	720p	-	-	3D      
-                        85	,# mp4	audio/video	1080p	-	-	3D      
-                        133	,# mp4	video		240p	-	-	        
-                        134	,# mp4	video		360p	-	-	        
-                        135	,# mp4	video		480p	-	-	        
-                        136	,# mp4	video		720p	-	-	        
-                        137	,# mp4	video		1080p	-	-	        
-                        138	,# mp4	video		2160p60	-	-	        
-                        160	,# mp4	video		144p	-	-	        
-                        264	,# mp4	video		1440p	-	-	        
-                        266	,# mp4	video		2160p60	-	-	        
-                        298	,# mp4	video		720p60	-	-	        
-                        299	,# mp4	video		1080p60	-	-	        
-                        ];
+YoutubeMp4_itag = {18 : 360	,# mp4	audio/video	360p	-	-	-		
+                        22	: 720 ,# mp4	audio/video	720p	-	-	-       
+                        37	: 1080,# mp4	audio/video	1080p	-	-	-       
+                        38	: 3072,# mp4	audio/video	3072p	-	-	-       
+                        82	: 360 ,# mp4	audio/video	360p	-	-	3D      
+                        83	: 480 ,# mp4	audio/video	480p	-	-	3D      
+                        84	: 720 ,# mp4	audio/video	720p	-	-	3D      
+                        85	: 1080,# mp4	audio/video	1080p	-	-	3D      
+                        133	: 240 ,# mp4	video		240p	-	-	        
+                        134	: 360 ,# mp4	video		360p	-	-	        
+                        135	: 480 ,# mp4	video		480p	-	-	        
+                        136	: 720 ,# mp4	video		720p	-	-	        
+                        137	: 1080,# mp4	video		1080p	-	-	        
+                        138	: 2160,# mp4	video		2160p60	-	-	        
+                        160	: 144 ,# mp4	video		144p	-	-	        
+                        264	: 1440,# mp4	video		1440p	-	-	        
+                        266	: 2160,# mp4	video		2160p60	-	-	        
+                        298	: 720 ,# mp4	video		720p60	-	-	        
+                        299	: 1080,# mp4	video		1080p60	-	-	        
+                        };
 
 class YoutubeView:
     @staticmethod
@@ -1319,6 +1319,6 @@ class YoutubeView:
         retFormat = "";
         for format in root.streamingData["adaptiveFormats"]:
             if((format["itag"] in YoutubeMp4_itag)):
-                if("" == retFormat or retFormat["itag"] < format["itag"]):
+                if("" == retFormat or YoutubeMp4_itag[retFormat["itag"]] < YoutubeMp4_itag[format["itag"]]):
                     retFormat = format;
         return retFormat;
