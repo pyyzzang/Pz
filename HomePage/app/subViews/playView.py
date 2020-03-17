@@ -72,6 +72,10 @@ class playView(object):
             http += ", error : function(){"
             http += "}"
             http += ", success : function(data){"
+            http += "replayDiv = document.getElementById('Replay');"
+            http += "pauseDiv = document.getElementById('Pause');"
+            http += "replayDiv.style.visibility='hidden';"
+            http += "pauseDiv.style.visibility='visible';"
             http += "}"
             http += "});"
             http += "})"
@@ -85,6 +89,28 @@ class playView(object):
             http += "$.ajax({"
             http += "type: 'get'"
             http += ", url: 'Pause'"
+            http += ", dataType : 'html'"
+            http += ", error : function(){"
+            http += "alert('fail!!');"
+            http += "}"
+            http += ", success : function(data){"
+            http += "replayDiv = document.getElementById('Replay');"
+            http += "pauseDiv = document.getElementById('Pause');"
+            http += "replayDiv.style.visibility='visible';"
+            http += "pauseDiv.style.visibility='hidden';"
+            http += "}"
+            http += "});"
+            http += "})"
+            http += "})"
+            http += "</script>"
+            
+            #Stop
+            http += "<script type=\"text/javascript\">"
+            http += "$(function(){"
+            http += "$(\"#StopButton\").click(function(){"
+            http += "$.ajax({"
+            http += "type: 'get'"
+            http += ", url: 'Stop'"
             http += ", dataType : 'html'"
             http += ", error : function(){"
             http += "alert('fail!!');"
@@ -170,11 +196,14 @@ class playView(object):
 
             http += "<body>"
 
-            http += "<div class='main'>                                                                             ";
+            http += "<div class='main' style='top:-100'>                                                                             ";
             http += "	<div class='buttonDiv'><button id='Back600Button' class='back600'/>	</div>                  ";
             http += "	<div class='buttonDiv'><button id='Back10Button' class='back10'/>	</div>                      ";
-            http += "	<div class='buttonDiv'><button id='ReplayButton' class='play' /> </div>                     ";
-            http += "	<div class='buttonDiv'><button id='PauseButton' class='pause'/>	</div>                  ";
+            http += "   <div class='buttonDiv' style='position: relative;height=15%;width=15%'>"
+            http += "	    <div id='Replay' class='buttonFullDiv' style='position: relative;left:0px; top: 100%'><button id='ReplayButton' class='play' /> </div>                     ";
+            http += "	    <div id='Pause' class='buttonFullDiv' style='position: relative; left:0px; top: 0%; visibility:hidden'><button id='PauseButton' class='pause' />	</div>                  ";
+            http += "   </div>"
+            http += "	<div class='buttonDiv'><button id='StopButton' class='stop'/>	</div>                  ";
             http += "	<div class='buttonDiv'><button id='Skip10Button' class='skip10'/>	</div>                      ";
             http += "	<div class='buttonDiv'><button id='Skip600Button' class='skip600'/>	</div>                  ";
             http += "</div>                                                                                         ";
