@@ -10,6 +10,7 @@ from requests import get
 from omxplayer.player import OMXPlayer
 from requests import get
 import subprocess
+import logging
 
 class PlayMode:
     File = 0;
@@ -137,4 +138,7 @@ class osDefine:
             return '\*VLC 미디어 재생기';
         else:
             return '*omxplayer';
+    @staticmethod
+    def Logger(msg):
+        return logging.getLogger("HomePage").info(msg);
 

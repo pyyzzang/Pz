@@ -136,3 +136,70 @@ SILENCED_SYSTEM_CHECKS = [
 	'admin.E410',
 ]
 
+LOG_FILE = os.path.join('/home/pi/Pz/log','django.log')
+LOG_DJANGO_FILE = os.path.join('/home/pi/Pz/log','django.log')
+LOG_DJANGO_REQUEST_FILE = os.path.join('/home/pi/Pz/log','django_request.log')
+LOG_DJANGO_Home = os.path.join('/home/pi/Pz/log','HomePage.log')
+LOGGING = {
+	'version': 1, 
+	'disable_existing_loggers': False, 
+	'formatters': {
+		'verbose': {		
+			'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+			'datefmt' : "%d/%b/%Y %H:%M:%S" 
+		},
+		'simple': {
+			'format': '%(levelname)s %(message)s' 
+		},
+	},
+	'handlers': {
+		'file': {
+			'level': 'INFO', 
+			'class': 'logging.handlers.RotatingFileHandler', 
+			'filename': LOG_FILE, 
+			'formatter': 'verbose', 
+			'maxBytes':1024*1024*10, 
+			'backupCount':5, 
+		},
+        'django': {
+			'level': 'INFO', 
+			'class': 'logging.handlers.RotatingFileHandler', 
+			'filename': LOG_DJANGO_FILE, 
+			'formatter': 'verbose', 
+			'maxBytes':1024*1024*10, 
+			'backupCount':5, 
+		},
+        'django_request': {
+			'level': 'INFO', 
+			'class': 'logging.handlers.RotatingFileHandler', 
+			'filename': LOG_DJANGO_REQUEST_FILE, 
+			'formatter': 'verbose', 
+			'maxBytes':1024*1024*10, 
+			'backupCount':5, 
+		},
+        'homepage': {
+			'level': 'INFO', 
+			'class': 'logging.handlers.RotatingFileHandler', 
+			'filename': LOG_DJANGO_Home, 
+			'formatter': 'verbose', 
+			'maxBytes':1024*1024*10, 
+			'backupCount':5, 
+		},
+	}, 
+	'loggers': {
+		'django': {
+			'handlers':['django'], 
+			'propagate': True,
+			'level':'INFO',
+		},
+		'django.request': {
+			'handlers':['django_request'], 
+			'propagate': False, 
+			'level':'INFO',
+		}, 
+	    'HomePage': {
+		    'handlers': ['homepage'], 'level': 'INFO', 
+	    },
+    }
+}
+
