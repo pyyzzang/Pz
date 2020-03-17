@@ -185,6 +185,9 @@ LOGGING = {
 			'maxBytes':1024*1024*10, 
 			'backupCount':5, 
 		},
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
 	}, 
 	'loggers': {
 		'django': {
@@ -198,7 +201,7 @@ LOGGING = {
 			'level':'INFO',
 		}, 
 	    'HomePage': {
-		    'handlers': ['homepage'], 'level': 'INFO', 
+		    'handlers': ['homepage', 'console'], 'level': 'INFO', 
 	    },
     }
 }
