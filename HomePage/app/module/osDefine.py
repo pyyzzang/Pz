@@ -142,3 +142,7 @@ class osDefine:
     def Logger(msg):
         return logging.getLogger("HomePage").info(msg);
 
+    @staticmethod
+    def Stop(request):
+        return "";
+

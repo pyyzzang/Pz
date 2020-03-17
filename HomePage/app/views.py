@@ -28,6 +28,9 @@ def Replay(request):
 def Pause(request):
     return playerMove.Pause(request);
 
+def Stop(request):
+    return playerMove.Stop(request);
+
 def Skip(request):
     return playerMove.Skip(request);
 def Skip600(request):

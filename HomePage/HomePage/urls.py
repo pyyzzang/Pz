@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'Play/Back', app.views.Back, name='Back'),
     url(r'Play/Replay', app.views.Replay, name='Replay'),
     url(r'Play/Pause', app.views.Pause, name='Pause'),
+    url(r'Play/Stop', app.views.Stop, name='Stop'),
     url(r'Play/Skip600', app.views.Skip600, name='Skip600'),
     url(r'Play/Skip', app.views.Skip, name='Skip'),
     url(r'Play/VolumeUp', app.views.VolumeUp, name='VolumeUp'),
