@@ -19,7 +19,7 @@ class playView(object):
         else :
             filePath = playVideo.GET.get("youtube", "");
             YoutubeView.play(filePath);
-        http =filePath;
+        http = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />"
         http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";
         if(0):
