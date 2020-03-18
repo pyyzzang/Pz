@@ -954,5 +954,4 @@ HomePage/app/module/__pycache__/osDefine.cpython-37.pyc
 log/django_request.log
 log/django.log
 log/HomePage.log
-
-.gitignore
+Data/UserInfo
