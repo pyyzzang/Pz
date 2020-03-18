@@ -116,6 +116,7 @@ class playView(object):
             http += "alert('fail!!');"
             http += "}"
             http += ", success : function(data){"
+            http += "window.location.href = '/Home';";
             http += "}"
             http += "});"
             http += "})"

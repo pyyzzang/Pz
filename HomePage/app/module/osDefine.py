@@ -166,5 +166,6 @@ class osDefine:
         findInfo.setVolume(osDefine.currentPlayer.volume());
 
         saveInfos.saveFile();
+        osDefine.PlayerInit();
         return "";
 
