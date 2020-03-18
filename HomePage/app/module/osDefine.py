@@ -11,6 +11,9 @@ from omxplayer.player import OMXPlayer
 from requests import get
 import subprocess
 import logging
+from ..Data.PlayInfo import PlayInfo
+from ..Data.PlayInfo import PlayInfos
+import json
 
 class PlayMode:
     File = 0;
@@ -18,6 +21,8 @@ class PlayMode:
     currentMode = File;
 
 class osDefine:
+    DataPath = '/home/pi/Pz/Data';
+    UserInfo = os.path.join(DataPath, "UserInfo");
     currentPlayer = 0;
     playFileName = 0;
     @staticmethod
@@ -144,5 +149,30 @@ class osDefine:
 
     @staticmethod
     def Stop(request):
+
+        osDefine.Logger("playFileName : " + str(osDefine.playFileName));
+        osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
+        osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
+
+        saveInfos = PlayInfos([]);
+        if (True == os.path.isfile(osDefine.UserInfo)):
+            with open(osDefine.UserInfo, "r") as filePlayInfo:
+                saveInfos = PlayInfos.from_json(json.load(filePlayInfo));
+            
+        findInfo = "";
+        for info in saveInfos.playInfos:
+            if(info.getTitle() == osDefine.playFileName):
+                findInfo = info;
+                break;
+        if("" == findInfo):
+            findInfo = PlayInfo(osDefine.playFileName);
+            saveInfos.playInfos.append(findInfo);
+
+        findInfo.setPosition(osDefine.currentPlayer.position());
+        findInfo.setDuration(osDefine.currentPlayer.duration());
+        findInfo.setVolume(osDefine.currentPlayer.volume());
+        
+        with open(osDefine.UserInfo, "w") as filePlayInfo:
+            json.dump(saveInfos, filePlayInfo, default=lambda o: o.__dict__);
         return "";
 
