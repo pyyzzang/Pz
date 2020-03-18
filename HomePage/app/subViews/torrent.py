@@ -11,6 +11,7 @@ from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
 
 
+
 class RowEnum(Enum):
     Title = 0
     MagnetUrl = Title + 1;
@@ -43,7 +44,7 @@ class TorrentData:
     def getHttpRow(self):
         ret = "<tr><td>" + self.getTitle() + "</td>";
         ret += "<td>" + self.getModifyDate() + "</td>";
-        ret += "<td>" + self.getMagnetUrl() + "</td>";
+        ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>";
         ret += "<td><input type=\"Button\" id=\"AddRow" + self.getStrIdx() + "\" Value=\"토렌트 추가\"></input></td>";
         ret += self.getAjaxScript();
         ret += "</tr>";
@@ -69,6 +70,9 @@ class torrent:
     @staticmethod
     def torrentUpload(request):
         Title = request.POST.get("torrentTitle");
+        magnet = request.POST.get("torrent_upload_url")
+
+        osDefine.Logger("torrentUpload_magnet : " + magnet);
 
         try:
             tmpTorrentFile = "/home/pi/Pz/HomePage/app/static/Tmp/LastUpload.Torrent";
@@ -86,12 +90,14 @@ class torrent:
                 os.system("sudo rm " + tmpTorrentFile);
 
         except Exception as ex:
-            return HttpResponse(ex);
+            Binary = "";
         
         if "" == Binary:
             Binary = request.POST.get("torrent_upload_url", "");
+            base64Magnet = osDefine.Base64Encoding(Binary);
 
         query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
+        osDefine.Logger(query);
         session = DBExecute.GetDBConnection();
         session.InsertQueryExecute(query);
         return HttpResponse(query);
@@ -106,11 +112,11 @@ class torrent:
         ret += "enctype=\"multipart/form-data\">";
         ret += "<div class=\"dialog_message\">";
         ret += "<label\">제목을 입력하세요(*) : </label>";
-        ret += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\"/>";
+        ret += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\" autocomplete=\"off\"/>";
         ret += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
         ret += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
-        ret += "<p><label for=\"torrent_upload_url\">Or enter a URL:</label>";
-        ret += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\"/>";
+        ret += "<p><label for=\"torrent_upload_url\" >Or enter a URL:</label>";
+        ret += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\" autocomplete=\"off\"/>";
         ret +=  "</div>"
         ret += "<button id=\"upload_confirm_button\">Upload</button>";
         ret += "</form>"
@@ -125,10 +131,11 @@ class torrent:
         ret += torrent.getTorrentAddDiv();
 
         ret += "<div style=\"position: relative;\">";
-        ret += "<Table>";
+        ret += "<Table width:'100%' border='1'>";
         #ret += DBExecute.GetDBConnection();
         session = DBExecute.GetDBConnection();
         rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        ret += "<tr><td>제목</td><td>업로드 날짜</td><td></td></tr>"
         for row in rows:
             data = TorrentData.createTorrenData(row);
             ret += data.getHttpRow();
