@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -206,3 +207,8 @@ LOGGING = {
     }
 }
 
+CRONJOBS = [
+    ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
+    ('* 18 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
+    ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
+]
