@@ -955,3 +955,9 @@ log/django_request.log
 log/django.log
 log/HomePage.log
 Data/UserInfo
+HomePage/__pycache__/manage.cpython-37.pyc
+HomePage/app/Data/__pycache__/PlayInfo.cpython-37.pyc
+HomePage/app/__pycache__/TorrentAllStart.cpython-37.pyc
+HomePage/app/cron/__pycache__/TorrentAllStart.cpython-37.pyc
+HomePage/app/module/__pycache__/strUtil.cpython-37.pyc
+.gitignore
