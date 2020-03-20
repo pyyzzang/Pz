@@ -80,30 +80,40 @@ class fileListView(object):
         except Exception:
             deleteFile = "";
         http = fileListView.getHeader();
-        http += '<body Onload="FormLoad()">';
-        http += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
-        http += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>'
+        http += fileListView.getTitleHead();
+
+        http += fileListView.getBodyHead();
+
         http += fileListView.getVideoList(deleteFile);
         http += YoutubeView.getVideoList();
+
+        http += fileListView.getBodyTail();
         http += "</body>";
-        http += "<script>";
-        http += "function FormLoad(){"
-        http += "document.getElementById('FileRadio').checked = true;"
-        http += "RadioChecked(document.getElementById('FileRadio'));}";
-        http += "function RadioChecked(radio){";
-        http += "if(radio.value=='File')";
-        http += "{";
-        http += 'YoutubeTable.style.visibility = "collapse";';
-        http += 'FileViewTable.style.visibility = "visible";';
-        http += '}';
-        http += 'else';
-        http += '{';
-        http += 'FileViewTable.style.visibility = "collapse";';
-        http += 'YoutubeTable.style.visibility = "visible";';
-        http += '}}';
-        http += "</script>";
-        http += "</http>";
         return HttpResponse(http); 
+    @staticmethod
+    def getTitleHead():
+        retHttp  = '<body Onload="FormLoad()">';
+        retHttp += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
+        retHttp += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
+        retHttp += "<script>";
+        retHttp += "function FormLoad(){"
+        retHttp += "    document.getElementById('FileRadio').checked = true;"
+        retHttp += "    RadioChecked(document.getElementById('FileRadio'));}";
+        
+        retHttp += "function RadioChecked(radio){";
+        retHttp += "if(radio.value=='File')";
+        retHttp += "{";
+        retHttp += '    YoutubeTable.style.visibility = "collapse";';
+        retHttp += '    FileViewTable.style.visibility = "visible";';
+        retHttp += '}';
+        retHttp += 'else';
+        retHttp += '{';
+        retHttp += '    FileViewTable.style.visibility = "collapse";';
+        retHttp += '    YoutubeTable.style.visibility = "visible";';
+        retHttp += '}}';
+        retHttp += "</script>";
+        return retHttp;
+
 
     @staticmethod
     def getHeader():
@@ -144,13 +154,24 @@ class fileListView(object):
         return retHttp;
 
     @staticmethod
-    def getTableHead():
-        retHttp  = '<body>																			';
-        retHttp += '<div class="limiter">                                                           ';
+    def getBodyHead():
+        retHttp = '<div class="limiter">                                                           ';
         retHttp += '	<div class="container-table100">                                            ';
         retHttp += '		<div class="wrap-table100">                                             ';
         retHttp += '			<div class="table100">                                              ';
-        retHttp += '				<table>                                                         ';
+        return retHttp;
+
+    @staticmethod
+    def getBodyTail():
+        retHttp  = '			</div class="table100">                                              ';
+        retHttp += '		</div class="wrap-table100">                                             ';
+        retHttp += '	</div class="container-table100">                                            ';
+        retHttp += '</div class="limiter">                                                           ';
+        return retHttp;
+
+    @staticmethod
+    def getTableHead():
+        retHttp  = '				<table id="FileViewTable">                                                         ';
         retHttp += '					<thead>                                                     ';
         retHttp += '						<tr class="table100-head">                              ';
         retHttp += '							<th class="column1"></th>                       ';
@@ -160,6 +181,9 @@ class fileListView(object):
         retHttp += '					</thead>                                                    ';
         retHttp += '                    <tbody>                                                     ';
         return retHttp;
+    @staticmethod
+    def getTableTail():
+        return "</tbody></table>";
 
     @staticmethod
     def getVideoList(dirPath):
@@ -181,7 +205,8 @@ class fileListView(object):
         for info in fileInfoList:
             http += info.getTr(fileCount);
             fileCount = fileCount + 1;
-        http +="</tbody></table>";
+        http += fileListView.getTableTail();
+        
         return http;
 
     @staticmethod
