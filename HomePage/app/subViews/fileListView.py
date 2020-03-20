@@ -7,6 +7,7 @@ from ..module.strUtil import strUtil
 import base64
 from ..module.osDefine import PlayMode;
 from .YoutubeView import YoutubeView;
+from ..module.HtmlUtil import HtmlUtil;
 
 class FileInfo:
     def __init__(self, filePath, dir):
@@ -79,15 +80,15 @@ class fileListView(object):
             deleteFile = osDefine.Base64Decoding(request.GET["file"]);
         except Exception:
             deleteFile = "";
-        http = fileListView.getHeader();
+        http = HtmlUtil.getHeader();
         http += fileListView.getTitleHead();
 
-        http += fileListView.getBodyHead();
+        http += HtmlUtil.getBodyHead();
 
         http += fileListView.getVideoList(deleteFile);
         http += YoutubeView.getVideoList();
 
-        http += fileListView.getBodyTail();
+        http += HtmlUtil.getBodyTail();
         http += "</body>";
         return HttpResponse(http); 
     @staticmethod
@@ -112,61 +113,6 @@ class fileListView(object):
         retHttp += '    YoutubeTable.style.visibility = "visible";';
         retHttp += '}}';
         retHttp += "</script>";
-        return retHttp;
-
-
-    @staticmethod
-    def getHeader():
-        retHttp = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />";
-        retHttp += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
-        retHttp += ' <head>																												';
-        retHttp += ' 	<meta charset="UTF-8">                                                                                          ';
-        retHttp += ' 	<meta name="viewport" content="width=device-width, initial-scale=1">                                            ';
-        retHttp += ' <!--===============================================================================================-->	            ';
-        retHttp += ' 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>                                             ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">                           ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">                ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">                                       ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">                                   ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">                   ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/util.css">                                                     ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">                                                     ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/style.css">                                                     ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += '                                                                                                                     ';
-        retHttp += ' <!--===============================================================================================-->	            ';
-        retHttp += ' 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>                                                       ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<script src="vendor/bootstrap/js/popper.js"></script>                                                           ';
-        retHttp += ' 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>                                                    ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<script src="vendor/select2/select2.min.js"></script>                                                           ';
-        retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<script src="js/main.js"></script>                                                                              ';
-        retHttp += '                                                                                                                     ';
-        retHttp += ' </head>                                                                                                             ';
-        return retHttp;
-
-    @staticmethod
-    def getBodyHead():
-        retHttp = '<div class="limiter">                                                           ';
-        retHttp += '	<div class="container-table100">                                            ';
-        retHttp += '		<div class="wrap-table100">                                             ';
-        retHttp += '			<div class="table100">                                              ';
-        return retHttp;
-
-    @staticmethod
-    def getBodyTail():
-        retHttp  = '			</div class="table100">                                              ';
-        retHttp += '		</div class="wrap-table100">                                             ';
-        retHttp += '	</div class="container-table100">                                            ';
-        retHttp += '</div class="limiter">                                                           ';
         return retHttp;
 
     @staticmethod

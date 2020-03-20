@@ -9,7 +9,7 @@ import os;
 import subprocess;
 from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
-
+from ..module.HtmlUtil import HtmlUtil;
 
 
 class RowEnum(Enum):
@@ -125,23 +125,34 @@ class torrent:
         return ret;
 
     @staticmethod
+    def getTableHead():
+        retHttp  = '				<table id="TorrenViewTable">                                                         ';
+        retHttp += '					<thead>                                                     ';
+        retHttp += '						<tr class="table100-head">                              ';
+        retHttp += '							<th class="column1">제목</th>                       ';
+        retHttp += '							<th class="column2"></th>                           ';
+        retHttp += '							<th class="column3"></th>                           ';
+        retHttp += '						</tr>                                                   ';
+        retHttp += '					</thead>                                                    ';
+        retHttp += '                    <tbody>                                                     ';
+        return retHttp;
+
+    @staticmethod
     def getTorrent(request):
-        ret = "<script type=\"text/javascript\" src=\"/static/app/scripts/Torrent.js\"></script>";
-        ret += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>";
+        ret = HtmlUtil.getHeader();
         ret += torrent.getTorrentAddDiv();
 
-        ret += "<div style=\"position: relative;\">";
+        ret += HtmlUtil.getBodyHead();
         ret += "<Table width:'100%' border='1'>";
-        #ret += DBExecute.GetDBConnection();
         session = DBExecute.GetDBConnection();
         rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
-        ret += "<tr><td>제목</td><td>업로드 날짜</td><td></td></tr>"
+        ret += torrent.getTableHead();
         for row in rows:
             data = TorrentData.createTorrenData(row);
             ret += data.getHttpRow();
-
-        ret += "</table>"
-        ret += "</div>"
+        ret += "</tbody></table>"
+        ret += HtmlUtil.getBodyTail();
+        ret += "</html>"
 
         
         return HttpResponse(ret);
