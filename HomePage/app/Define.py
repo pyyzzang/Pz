@@ -1,2 +1,4 @@
+import os;
+
 class Define():
-    BASE_DIR = "/home/pi/Pz/HomePage";
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)));
