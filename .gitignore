@@ -961,3 +961,8 @@ HomePage/app/__pycache__/TorrentAllStart.cpython-37.pyc
 HomePage/app/cron/__pycache__/TorrentAllStart.cpython-37.pyc
 HomePage/app/module/__pycache__/strUtil.cpython-37.pyc
 .gitignore
+HomePage/Data/UserInfo
+HomePage/app/__pycache__/Define.cpython-37.pyc
+HomePage/log/django_request.log
+HomePage/log/django.log
+HomePage/log/HomePage.log
