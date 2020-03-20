@@ -113,9 +113,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ko-kr'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
@@ -137,10 +137,12 @@ SILENCED_SYSTEM_CHECKS = [
 	'admin.E410',
 ]
 
-LOG_FILE = os.path.join('/home/pi/Pz/log','django.log')
-LOG_DJANGO_FILE = os.path.join('/home/pi/Pz/log','django.log')
-LOG_DJANGO_REQUEST_FILE = os.path.join('/home/pi/Pz/log','django_request.log')
-LOG_DJANGO_Home = os.path.join('/home/pi/Pz/log','HomePage.log')
+
+
+LOG_FILE = os.path.join(BASE_DIR,'log/django.log')
+LOG_DJANGO_FILE = os.path.join(BASE_DIR,'log/django.log')
+LOG_DJANGO_REQUEST_FILE = os.path.join(BASE_DIR,'log/django_request.log')
+LOG_DJANGO_Home = os.path.join(BASE_DIR,'log/HomePage.log')
 LOGGING = {
 	'version': 1, 
 	'disable_existing_loggers': False, 
