@@ -181,7 +181,7 @@ class fileListView(object):
         for info in fileInfoList:
             http += info.getTr(fileCount);
             fileCount = fileCount + 1;
-        http +="</table>";
+        http +="</tbody></table>";
         return http;
 
     @staticmethod
