@@ -1,6 +1,7 @@
 import os;
 import json;
 import logging
+from ..Define import Define;
 
 infoLogger = logging.getLogger("HomePage");
 
@@ -37,7 +38,7 @@ class PlayInfo(object):
         return cls(**data);
 
 class PlayInfos(object):
-    DataPath = '/home/pi/Pz/Data';
+    DataPath = os.path.join(Define.BASE_DIR, 'Data');
     UserInfo = os.path.join(DataPath, "UserInfo");
 
     def __init__(self, playInfos):
@@ -46,7 +47,7 @@ class PlayInfos(object):
     def getPlayInfo(self, playFileName, isCreate = False):
         retPlayInfo = "";
         for playInfo in self.playInfos:
-            if("//a.mp4" == playInfo.getTitle()):
+            if(playFileName == playInfo.getTitle()):
                 return playInfo;
 
         if(True == isCreate):
@@ -55,6 +56,7 @@ class PlayInfos(object):
         return retPlayInfo;
     
     def saveFile(self):
+        infoLogger.info("saveFile : " + PlayInfos.UserInfo);
         with open(PlayInfos.UserInfo, "w") as filePlayInfo:
             json.dump(self, filePlayInfo, default=lambda o: o.__dict__);
 
