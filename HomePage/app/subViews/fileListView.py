@@ -47,6 +47,30 @@ class FileInfo:
         else:
             return "<a href=Play\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
 
+    def getTr(self, fileCount):
+        retHttp  = "<tr>";
+        retHttp += "<td class='column1' id='" + self.getThumbNailId() + "'></td>";
+        retHttp += "<td class='column2' id='" + self.getLink() + "'>" + self.getLink() + "</td>";
+        retHttp += "<td class='column2' id='deleteButton'>" + "<button id=File" + str(fileCount) + " >삭제</button>" + " </td>";
+        retHttp += "</tr>";
+        retHttp += "<script type=\"text/javascript\">";
+        retHttp += "$(function(){" 
+        retHttp += "$(\"#File"+str(fileCount)+"\").click(function(){"
+        retHttp += "if(false == confirm('"+ self.getTitle() + "을 삭제 하시겠습니까?')){return;}"
+        retHttp += "$.ajax({"
+        retHttp += "type:'get'"
+        retHttp += ",url:'Home/Delete'"
+        retHttp += ",dataType:'html'"
+        retHttp += ",data:{'fileName':'"+self.getEncodingFileName()+"'}"
+        retHttp += ",error : function(data){"
+        retHttp += "alert(data);"
+        retHttp += "}"
+        retHttp += ", success : function (data){"
+        retHttp += "alert(data);"
+        retHttp += "}})})})</script>"
+
+        return retHttp;
+
 class fileListView(object):
     @staticmethod
     def getViewList(request):
@@ -55,9 +79,7 @@ class fileListView(object):
             deleteFile = osDefine.Base64Decoding(request.GET["file"]);
         except Exception:
             deleteFile = "";
-        http = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />"
-        http += "<http>";
-        http += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
+        http = fileListView.getHeader();
         http += '<body Onload="FormLoad()">';
         http += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         http += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>'
@@ -82,6 +104,63 @@ class fileListView(object):
         http += "</script>";
         http += "</http>";
         return HttpResponse(http); 
+
+    @staticmethod
+    def getHeader():
+        retHttp = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />";
+        retHttp += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
+        retHttp += ' <head>																												';
+        retHttp += ' 	<meta charset="UTF-8">                                                                                          ';
+        retHttp += ' 	<meta name="viewport" content="width=device-width, initial-scale=1">                                            ';
+        retHttp += ' <!--===============================================================================================-->	            ';
+        retHttp += ' 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>                                             ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">                           ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">                ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">                                       ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">                                   ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">                   ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/util.css">                                                     ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">                                                     ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/style.css">                                                     ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += '                                                                                                                     ';
+        retHttp += ' <!--===============================================================================================-->	            ';
+        retHttp += ' 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>                                                       ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<script src="vendor/bootstrap/js/popper.js"></script>                                                           ';
+        retHttp += ' 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>                                                    ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<script src="vendor/select2/select2.min.js"></script>                                                           ';
+        retHttp += ' <!--===============================================================================================-->              ';
+        retHttp += ' 	<script src="js/main.js"></script>                                                                              ';
+        retHttp += '                                                                                                                     ';
+        retHttp += ' </head>                                                                                                             ';
+        return retHttp;
+
+    @staticmethod
+    def getTableHead():
+        retHttp  = '<body>																			';
+        retHttp += '<div class="limiter">                                                           ';
+        retHttp += '	<div class="container-table100">                                            ';
+        retHttp += '		<div class="wrap-table100">                                             ';
+        retHttp += '			<div class="table100">                                              ';
+        retHttp += '				<table>                                                         ';
+        retHttp += '					<thead>                                                     ';
+        retHttp += '						<tr class="table100-head">                              ';
+        retHttp += '							<th class="column1"></th>                       ';
+        retHttp += '							<th class="column2">제목</th>                   ';
+        retHttp += '							<th class="column3"></th>                       ';
+        retHttp += '						</tr>                                                   ';
+        retHttp += '					</thead>                                                    ';
+        retHttp += '                    <tbody>                                                     ';
+        return retHttp;
+
     @staticmethod
     def getVideoList(dirPath):
         localFilePath = osDefine.LocalFilePath()
@@ -95,36 +174,13 @@ class fileListView(object):
                     fileInfoList.append(info);
 
         fileInfoList.sort();
-        http = "<Head> <link rel='stylesheet' href='/static/app/css/style.css'></Head>";
-        http += "<Table id='FileViewTable' border='1'>";
+        http = fileListView.getTableHead();
         if( "" != dirPath):
             parentInfo = FileInfo("", localFilePath);
             fileInfoList.insert(0,parentInfo);
         for info in fileInfoList:
-                http += "<tr height=40>"
-                fileStr = osDefine.Base64Encoding(file);
-                http += "<td id='" + info.getThumbNailId() + "'></td>";
-                http += "<td id='playLink'> " + info.getLink() + "</td>"
-                http += "<td id='deleteButton'>";
-                if( info.getTitle() != ""):
-                    http += "<button id=File" + str(fileCount) + " >삭제</button>";
-                http += "</tr>"
-                http += "<script type=\"text/javascript\">";
-                http += "$(function(){" 
-                http += "$(\"#File"+str(fileCount)+"\").click(function(){"
-                http += "if(false == confirm('"+ info.getTitle() + "을 삭제 하시겠습니까?')){return;}"
-                http += "$.ajax({"
-                http += "type:'get'"
-                http += ",url:'Home/Delete'"
-                http += ",dataType:'html'"
-                http += ",data:{'fileName':'"+info.getEncodingFileName()+"'}"
-                http += ",error : function(data){"
-                http += "alert(data);"
-                http += "}"
-                http += ", success : function (data){"
-                http += "alert(data);"
-                http += "}})})})</script>"
-                fileCount = fileCount + 1;
+            http += info.getTr(fileCount);
+            fileCount = fileCount + 1;
         http +="</table>";
         return http;
 
