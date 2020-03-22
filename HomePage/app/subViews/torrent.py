@@ -97,10 +97,10 @@ class torrent:
             base64Magnet = osDefine.Base64Encoding(Binary);
 
         query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
-        osDefine.Logger(query);
+        osDefine.Logger("Torrent : " + query);
         session = DBExecute.GetDBConnection();
         session.InsertQueryExecute(query);
-        return HttpResponse(query);
+        return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
     @staticmethod 
     def getTorrentAddDiv():
