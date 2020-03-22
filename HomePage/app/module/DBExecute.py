@@ -79,4 +79,7 @@ class PyODBC(DBExecute):
         cursor.execute(query);
         rows = cursor.fetchall();
         return rows; 
-    
+
+import os;
+if '/home/pi/Pz/HomePage' != os.getcwd() : 
+    DBExecute.GetDBConnection();
