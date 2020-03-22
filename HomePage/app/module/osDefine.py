@@ -67,7 +67,7 @@ class osDefine:
         if("nt" == os.name):
             return "E:\Temp"
         else:
-            return "/home/pi/Downloads"
+            return "/home/pi/Downloads/"
 
     @staticmethod
     def Ip():
@@ -168,4 +168,16 @@ class osDefine:
         saveInfos.saveFile();
         osDefine.PlayerInit();
         return "";
+    
+    @staticmethod
+    def getIsDev():
+        if '/home/pi/Pz/HomePage' == os.getcwd() : 
+            return True;
+        return False;
+
+    @staticmethod
+    def getRunIp():
+        if(True == osDefine.getIsDev()):
+            return "http://192.168.219.102:8000"
+        return "http://192.168.219.102:8080"
 

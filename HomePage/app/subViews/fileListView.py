@@ -42,7 +42,15 @@ class FileInfo:
         return self.filePath;
     def getLink(self):
         if("" == self.filePath):
-            return "<a href=http://192.168.219.102:8000/Home>Parent</a>";
+            localFilePath = osDefine.LocalFilePath();
+            parentPath = self.dir.replace(localFilePath, "");
+            splitParentPath = os.path.split(parentPath)[0];
+            osDefine.Logger("splitParentPath : " + splitParentPath);
+            
+            osPath = osDefine.Base64Encoding(splitParentPath);
+            if("/" != splitParentPath):
+                return "<a href=" + osDefine.getRunIp() + "/Home?file=" + osPath + ">Parent</a>";
+            return '<a href="' + osDefine.getRunIp() + '/Home">Parent</a>';
         if True == self.isDirectory() :
             return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
         else:
@@ -77,15 +85,16 @@ class fileListView(object):
     def getViewList(request):
         fileListView.deleteEmptyFolder();
         try:
-            deleteFile = osDefine.Base64Decoding(request.GET["file"]);
+            requestFile = osDefine.Base64Decoding(request.GET["file"]);
+            osDefine.Logger("requestFile : " + requestFile);
         except Exception:
-            deleteFile = "";
+            requestFile = "";
         http = HtmlUtil.getHeader();
         http += fileListView.getTitleHead();
 
         http += HtmlUtil.getBodyHead();
 
-        http += fileListView.getVideoList(deleteFile);
+        http += fileListView.getVideoList(requestFile);
         http += YoutubeView.getVideoList();
 
         http += HtmlUtil.getBodyTail();
@@ -137,7 +146,7 @@ class fileListView(object):
         ip = osDefine.Ip()
         fileCount = 0;      
         fileInfoList = []; 
-        findDir = localFilePath + "/" + dirPath;
+        findDir = localFilePath + dirPath;
         for file in os.listdir(findDir):
                 info = FileInfo(file, findDir);
                 if(True == info.isVideoFile() or True == info.isDirectory()):
@@ -146,7 +155,8 @@ class fileListView(object):
         fileInfoList.sort();
         http = fileListView.getTableHead();
         if( "" != dirPath):
-            parentInfo = FileInfo("", localFilePath);
+            osDefine.Logger("DirPath : " + dirPath);
+            parentInfo = FileInfo("", findDir);
             fileInfoList.insert(0,parentInfo);
         for info in fileInfoList:
             http += info.getTr(fileCount);
@@ -160,9 +170,9 @@ class fileListView(object):
         deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
         splitPath = deleteFile.split('/',2);
         if(3 == len(splitPath)):
-          os.system('sudo chown -R pi "' + osDefine.LocalFilePath() + "/" + splitPath[1] +"\"");
+          os.system('sudo chown -R pi "' + osDefine.LocalFilePath() + splitPath[1] +"\"");
 
-        deleteFullPath = (osDefine.LocalFilePath() + "/" + deleteFile)    
+        deleteFullPath = (osDefine.LocalFilePath() + deleteFile)    
         if(False == os.path.exists(deleteFullPath)):
             return HttpResponse("");
         os.remove(deleteFullPath);
@@ -174,7 +184,7 @@ class fileListView(object):
 
         deleteFolder = "";
         for subItem in os.listdir(baseDir):
-            checkItem = baseDir + "/" + subItem;
+            checkItem = baseDir + subItem;
             if(True == os.path.isdir(checkItem)):
                 if(True == osDefine.checkEmpty(checkItem)):
                     os.system("sudo rm -r \"" + checkItem + "\"");
