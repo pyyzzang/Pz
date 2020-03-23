@@ -969,3 +969,4 @@ HomePage/log/HomePage.log
 HomePage/app/Data/__pycache__/YoutubeVideo.cpython-37.pyc
 HomePage/app/module/__pycache__/HtmlUtil.cpython-37.pyc
 *.pyc
+HomePage/app/static/app/Thumbnail/*.jpg
