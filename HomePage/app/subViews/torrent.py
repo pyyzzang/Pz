@@ -17,6 +17,7 @@ class RowEnum(Enum):
     MagnetUrl = Title + 1;
     ModifyDate = MagnetUrl + 1;
     idx = ModifyDate + 1;
+    ThumbnailImage = idx + 1;
 
 class TorrentData:
     def __init__(self, title, magnetUrl, modifyDate, idx):
