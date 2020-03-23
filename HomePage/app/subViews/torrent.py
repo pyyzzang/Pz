@@ -96,7 +96,7 @@ class torrent:
             Binary = request.POST.get("torrent_upload_url", "");
             base64Magnet = osDefine.Base64Encoding(Binary);
 
-        query = "insert into Torrent values('%s', '%s', GETDATE())" % (Title, base64Magnet);
+        query = "insert into Torrent values('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
         session = DBExecute.GetDBConnection();
         session.InsertQueryExecute(query);
