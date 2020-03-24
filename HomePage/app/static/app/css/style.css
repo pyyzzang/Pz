@@ -8,14 +8,12 @@
 }
 
 #thumbnailDir{
-	width : 10%;
 	background-image : url("../Image/Folder.png");
 	background-position: center;
 	background-repeat: no-repeat;
 }
 
 #thumbnailFile{
-	width : 10%;
 	background-image : url("../Image/File.png");
 	background-position: center;
 	background-repeat: no-repeat;
@@ -38,6 +36,37 @@
 	display: inline-block;
 	width : 15%;
 	height : 15%;
+}
+
+.ListView{
+	width : 100%;
+	border: 1px solid #444444;
+}
+
+table{
+	border-collapse:collapse;
+	table-layout:fixed;
+}
+
+td, th{
+	height : 45px;
+	border-top:1px solid #8693ca;
+}
+
+.column_Thumbnail{
+	width: 25px;
+}
+
+.column_Title{
+	width : 40%;
+	cursor : hand;
+	overflow:hidden;
+	white-space:nowrap;
+	text-overflow:ellipsis;
+}
+
+.column_Delete{
+	width : 20px;
 }
 
 .buttonFullDiv{

@@ -20,7 +20,6 @@ class HtmlUtil:
         retHttp += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         retHttp += ' <head>																												';
         retHttp += ' 	<meta charset="UTF-8">                                                                                          ';
-        retHttp += ' 	<meta name="viewport" content="width=device-width, initial-scale=1">                                            ';
         retHttp += ' <!--===============================================================================================-->	            ';
         retHttp += ' 	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>                                             ';
         retHttp += ' <!--===============================================================================================-->              ';
@@ -34,9 +33,9 @@ class HtmlUtil:
         retHttp += ' <!--===============================================================================================-->              ';
         retHttp += ' 	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">                   ';
         retHttp += ' <!--===============================================================================================-->              ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/util.css">                                                     ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">                                                     ';
-        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/style.css">                                                     ';
+        #retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/util.css">                                                     ';
+        #retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">                                                     ';
+        retHttp += ' 	<link rel="stylesheet" type="text/css" href="/static/app/css/style.css?version=1.2">                                                     ';
         retHttp += ' <!--===============================================================================================-->              ';
         retHttp += '                                                                                                                     ';
         retHttp += ' <!--===============================================================================================-->	            ';

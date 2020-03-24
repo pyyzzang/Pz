@@ -54,13 +54,13 @@ class FileInfo:
         if True == self.isDirectory() :
             return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
         else:
-            return "<a href=Play\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
+            return "location.href='" + osDefine.getRunIp() + "/Play?file=" + self.getEncodingFileName() + "'";
 
     def getTr(self, fileCount):
-        retHttp  = "<tr>";
-        retHttp += "<td class='column1' id='" + self.getThumbNailId() + "'></td>";
-        retHttp += "<td class='column2' id='" + self.getLink() + "'>" + self.getLink() + "</td>";
-        retHttp += "<td class='column2' id='deleteButton'>" + "<button id=File" + str(fileCount) + " >삭제</button>" + " </td>";
+        retHttp  = '<tr class="TableRow">';
+        retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
+        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" + self.getTitle() + "</td>";
+        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " >삭제</button>" + " </td>";
         retHttp += "</tr>";
         retHttp += "<script type=\"text/javascript\">";
         retHttp += "$(function(){" 
@@ -126,12 +126,12 @@ class fileListView(object):
 
     @staticmethod
     def getTableHead():
-        retHttp  = '				<table id="FileViewTable">                                                         ';
+        retHttp  = '				<table class="ListView" id="FileViewTable">                                                         ';
         retHttp += '					<thead>                                                     ';
-        retHttp += '						<tr class="table100-head">                              ';
-        retHttp += '							<th class="column1"></th>                       ';
-        retHttp += '							<th class="column2">제목</th>                   ';
-        retHttp += '							<th class="column3"></th>                       ';
+        retHttp += '						<tr class="TableRow">                              ';
+        retHttp += '							<th class="column_Thumbnail"></th>                       ';
+        retHttp += '							<th class="column_Title">제목</th>                   ';
+        retHttp += '							<th class="column_Delete"></th>                       ';
         retHttp += '						</tr>                                                   ';
         retHttp += '					</thead>                                                    ';
         retHttp += '                    <tbody>                                                     ';
