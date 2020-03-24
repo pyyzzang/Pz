@@ -65,6 +65,14 @@ td, th{
 	text-overflow:ellipsis;
 }
 
+.column_Date{
+	width : 10%;
+}
+
+.column_Add{
+	width : 10%;
+}
+
 .column_Delete{
 	width : 20px;
 }
