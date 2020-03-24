@@ -63,8 +63,11 @@ class TorrentData:
 class torrent:
     @staticmethod
     def torrentAdd(request):
-        magnetUrl = request.POST.get("magnetUrl");
+        magnetUrl = request.POST.get("magnetUrl").strip();
+        osDefine.Logger("MagnetUrl : " + magnetUrl);
         magnetUrl = osDefine.Base64Decoding(magnetUrl);
+        osDefine.Logger("MagnetUrl : " + magnetUrl);
+        addCmd = "sudo transmission-remote -t --start-paused -n \"pi\":\"cndwn5069()\"";
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\"";
         os.system(addCmd);
         return HttpResponse(addCmd);
@@ -127,12 +130,12 @@ class torrent:
 
     @staticmethod
     def getTableHead():
-        retHttp  = '				<table id="TorrenViewTable">                                                         ';
+        retHttp  = '				<table class="ListView">                                                         ';
         retHttp += '					<thead>                                                     ';
         retHttp += '						<tr class="table100-head">                              ';
-        retHttp += '							<th class="column1">제목</th>                       ';
-        retHttp += '							<th class="column2"></th>                           ';
-        retHttp += '							<th class="column3"></th>                           ';
+        retHttp += '							<th class="column_Title">제목</th>                       ';
+        retHttp += '							<th class="column_Date"></th>                           ';
+        retHttp += '							<th class="column_Add"></th>                           ';
         retHttp += '						</tr>                                                   ';
         retHttp += '					</thead>                                                    ';
         retHttp += '                    <tbody>                                                     ';
