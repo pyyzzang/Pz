@@ -32,6 +32,8 @@ class FileInfo:
         return self.getExt() in osDefine.SupportExt;
     def isDirectory(self):
         return os.path.isdir(self.getFullName());
+    def visibleDeleteButton(self):
+        return self.isDirectory() and "Hidden" or "Visible";
     def getThumbNailId(self):
         return "Thumbnail" + (self.isDirectory() and "Dir" or "File");
     def getEncodingFileName(self):
@@ -49,10 +51,10 @@ class FileInfo:
             
             osPath = osDefine.Base64Encoding(splitParentPath);
             if("/" != splitParentPath):
-                return "<a href=" + osDefine.getRunIp() + "/Home?file=" + osPath + ">Parent</a>";
-            return '<a href="' + osDefine.getRunIp() + '/Home">Parent</a>';
+                return "location.href='" + osDefine.getRunIp() + "/Home?file=" + osPath + "'";
+            return "location.href='" + osDefine.getRunIp() + "/Home'";
         if True == self.isDirectory() :
-            return "<a href=Home\?file="+ self.getEncodingFileName() + ">" + self.getTitle() + "</a>";
+            return "location.href='" + osDefine.getRunIp() + "/Home?file="+ self.getEncodingFileName() + "'";
         else:
             return "location.href='" + osDefine.getRunIp() + "/Play?file=" + self.getEncodingFileName() + "'";
 
@@ -60,7 +62,7 @@ class FileInfo:
         retHttp  = '<tr class="TableRow">';
         retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
         retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" + self.getTitle() + "</td>";
-        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " >삭제</button>" + " </td>";
+        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
         retHttp += "</tr>";
         retHttp += "<script type=\"text/javascript\">";
         retHttp += "$(function(){" 
@@ -72,10 +74,9 @@ class FileInfo:
         retHttp += ",dataType:'html'"
         retHttp += ",data:{'fileName':'"+self.getEncodingFileName()+"'}"
         retHttp += ",error : function(data){"
-        retHttp += "alert(data);"
         retHttp += "}"
         retHttp += ", success : function (data){"
-        retHttp += "alert(data);"
+        retHttp += "window.location.reload();"
         retHttp += "}})})})</script>"
 
         return retHttp;
