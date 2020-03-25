@@ -130,10 +130,17 @@ class torrent:
         if "" == Binary:
             Binary = request.POST.get("torrent_upload_url", "");
             base64Magnet = osDefine.Base64Encoding(Binary);
+        
+        session = DBExecute.GetDBConnection();
+        query = "select * from Torrent where magnetUrl='%s'" % (base64Magnet);
+        osDefine.Logger("selectQuery : " + query);
+        rows = session.QueryExecute(query);
+        if 0 < rows.cursor.arraysize:
+            return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
         query = "insert into Torrent values('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
-        session = DBExecute.GetDBConnection();
+        
         session.InsertQueryExecute(query);
         return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
