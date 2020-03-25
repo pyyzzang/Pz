@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'Home', app.views.home, name='Home'),
     url(r'Torrent/Upload', app.views.TorrentUpload, name='TorrentUpload'),
     url(r'Torrent/TorrentAdd', app.views.TorrentAdd, name='TorrentAdd'),
+    url(r'Torrent/TorrentUpdate', app.views.TorrentUpdate, name='TorrentUpdate'),
     url(r'Torrent', app.views.Torrent, name='Torrent'),
     
 ]

@@ -54,8 +54,8 @@ class TorrentData:
         ret += "'Title' : document.getElementById('" +self.getMagnetUrl() + "').textContent},";
         ret += "url: 'Torrent/TorrentUpdate',";
         ret += "dataType : 'html',"
-        ret += "error : function(){	alert();},";
-        ret += "success : function(data){alert('토렌트 추가 하였습니다.');}";
+        ret += "error : function(){},";
+        ret += "success : function(data){}";
         ret += "});}";
         ret += "</script>";
 
@@ -191,3 +191,17 @@ class torrent:
 
         
         return HttpResponse(ret);
+
+    @staticmethod
+    def torrentUpdate(request):
+        magnetUrl = request.POST.get("magnetUrl");
+        title = request.POST.get("Title");
+
+        osDefine.Logger("magnetUrl : " + magnetUrl);
+        osDefine.Logger("title : " + title);
+
+        session = DBExecute.GetDBConnection();
+        updateQuery = "update Torrent set title='" + title + "' where magnetUrl='" + magnetUrl +"'";
+        osDefine.Logger("UpdateQuery : " + updateQuery);
+        session.InsertQueryExecute(updateQuery);
+        return HttpResponse("");
