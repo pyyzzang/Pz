@@ -22,7 +22,7 @@ class RowEnum(Enum):
 class TorrentData:
     def __init__(self, title, magnetUrl, modifyDate, idx):
         self.title = title;
-        self.magnetUrl = magnetUrl;
+        self.magnetUrl = magnetUrl.strip();
         self.modifyDate = modifyDate;
         self.idx = idx;
 
@@ -42,13 +42,44 @@ class TorrentData:
         ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
         return ret;
 
+    def getHttpScript(self):
+
+        focusFunc = "FocusOut" + self.getMagnetUrl();
+        ret = "<script>";
+        ret += "function " +focusFunc + "(){";
+        ret += "$.ajax({";
+        ret += "type: 'post', "
+        ret += "data:{"
+        ret += "'magnetUrl' : '"+ self.getMagnetUrl() + "',";
+        ret += "'Title' : document.getElementById('" +self.getMagnetUrl() + "').textContent},";
+        ret += "url: 'Torrent/TorrentUpdate',";
+        ret += "dataType : 'html',"
+        ret += "error : function(){	alert();},";
+        ret += "success : function(data){alert('토렌트 추가 하였습니다.');}";
+        ret += "});}";
+        ret += "</script>";
+
+
+        
+        ret += "<script>";
+        ret += "$(function(){$(\"#" + self.getMagnetUrl() + "\").dblclick(function(){";
+        ret += "var pPanel = document.getElementById(\"" + self.getMagnetUrl() + "\");";
+        ret += "pPanel.contentEditable = true;";
+        ret += "pPanel.removeEventListener('focusout', " + focusFunc + ");";
+        ret += "pPanel.addEventListener('focusout', " + focusFunc + ");";
+        ret += "})})";
+        ret += "</script>";
+
+        return ret;
+
     def getHttpRow(self):
-        ret = "<tr><td>" + self.getTitle() + "</td>";
+        ret = "<tr><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
         ret += "<td>" + self.getModifyDate() + "</td>";
         ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>";
         ret += "<td><input type=\"Button\" id=\"AddRow" + self.getStrIdx() + "\" Value=\"토렌트 추가\"></input></td>";
         ret += self.getAjaxScript();
         ret += "</tr>";
+        ret += self.getHttpScript();
         return ret;
     
     @staticmethod
