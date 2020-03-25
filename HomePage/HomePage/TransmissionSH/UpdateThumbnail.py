@@ -4,7 +4,7 @@ import base64;
 import pyodbc;
 from urllib.parse import unquote
 #parent 이상 경로 참조가 불가 함으로 상위폴더의 module폴더를 참조에 추가함.
-modulePath = os.path.join(os.path.split(os.getcwd())[0], "module");
+modulePath = os.path.join(os.path.split(os.path.split(os.getcwd())[0])[0], "app/module");
 sys.path.insert(0, modulePath);
 
 from DBExecute import DBExecute;
