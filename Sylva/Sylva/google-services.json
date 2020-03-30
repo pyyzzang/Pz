@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "456241762082",
+    "firebase_url": "https://macro-aurora-227313.firebaseio.com",
+    "project_id": "macro-aurora-227313",
+    "storage_bucket": "macro-aurora-227313.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:456241762082:android:b3ca2972d411fa48705f7b",
+        "android_client_info": {
+          "package_name": "com.PzCompany.sylva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "456241762082-7v6bgih9l3r21r49kh9t7ihjr0i3u9at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSnmEdcGIR4O71iMKNrGKCQOl8_edVL_E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "456241762082-7v6bgih9l3r21r49kh9t7ihjr0i3u9at.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
