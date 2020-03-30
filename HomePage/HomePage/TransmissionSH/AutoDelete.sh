@@ -7,7 +7,7 @@ do
     STATE_STOPPED=`transmission-remote $SERVER --torrent $TORRENTID --info | grep "State: Seeding\|Stopped\|Finished\|Idle"`
     if [ "$DL_COMPLETED" ] && [ "$STATE_STOPPED" ]; then
 
-        CompleteMagnet=`transmission-remote $SERVER --torrent 1 --info | grep -e Magnet:`
+        CompleteMagnet=`transmission-remote $SERVER --torrent $TORRENTID --info | grep -e Magnet:`
         if [ "$CompleteMagnet" ]; then
             python3 UpdateThumbnail.py $CompleteMagnet
         fi
