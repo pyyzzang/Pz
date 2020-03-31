@@ -971,3 +971,7 @@ HomePage/app/module/__pycache__/HtmlUtil.cpython-37.pyc
 *.pyc
 HomePage/app/static/app/Thumbnail/*.jpg
 FireBase/firebase-debug.log
+/Sylva/Sylva/bin
+/Sylva/Sylva/obj
+*.user
+/Sylva/.vs/Sylva/v16
