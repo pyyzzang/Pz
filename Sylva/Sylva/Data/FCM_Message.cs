@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Sylva.Data
 {
-    public class FCM_Message
+    public class FCM_Message: Java.Lang.Object
     {
         public string Title { get; set; }
         public string Body { get; set; }

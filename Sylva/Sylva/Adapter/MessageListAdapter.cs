@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Firebase.Messaging;
 
 namespace Sylva.Data
 {
     public class MessageListAdapter: ArrayAdapter
     {
         private ObservableCollection<FCM_Message> _FCM_List = null;
-        public ObservableCollection<FCM_Message> FCM_List
+        private ObservableCollection<FCM_Message> FCM_List
         {
             get
             {
@@ -25,6 +19,35 @@ namespace Sylva.Data
                 return _FCM_List;
             }
             set { }
+        }
+
+        Handler _MainHandler = null;
+        Handler MainHandler
+        {
+            get
+            {
+                if(null == _MainHandler)
+                    _MainHandler = new Handler(Looper.MainLooper);
+                return _MainHandler;
+            }
+        }
+
+        public void AddReceiveMsg(RemoteMessage __remoteMsg)
+        {
+            this.AddReceiveMsg(new FCM_Message(__remoteMsg.GetNotification().Title, __remoteMsg.GetNotification().Body));
+        }
+
+        public void AddReceiveMsg(FCM_Message __addMsg)
+        {
+            FCM_List.Add(__addMsg);
+            MainHandler.Post(new System.Action(Update));
+        }
+
+        public void Update()
+        {
+            this.Clear();
+            this.AddAll(FCM_List);
+            this.NotifyDataSetChanged();
         }
 
         public MessageListAdapter(MainActivity __mainActivity): base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
@@ -58,10 +81,6 @@ namespace Sylva.Data
             }
             return v;
         }
-
         private MainActivity mainActivity = null;
-
-        private List<string> list;
-        
     }
 }
