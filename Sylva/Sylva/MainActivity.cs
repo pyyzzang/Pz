@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using Android.App;
 using Android.Content;
@@ -10,13 +12,16 @@ using Android.Support.V7.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using Sylva.Data;
+using Sylva.Util;
 
 namespace Sylva
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme.NoActionBar", MainLauncher = true)]
     public class MainActivity : AppCompatActivity
     {
+        public static string TAG { get { return "MainActivity"; } }
         public static MainActivity CurrentMainActivity = null;
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -58,6 +63,6 @@ namespace Sylva
 
             return base.OnOptionsItemSelected(item);
         }
-	}
+    }
 }
 

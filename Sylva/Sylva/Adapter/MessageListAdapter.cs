@@ -47,13 +47,7 @@ namespace Sylva.Data
         public MessageListAdapter(MainActivity __mainActivity): base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
         {
             mainActivity = __mainActivity;
-            _FCM_List.Add(new FCM_Message("Title_ 1", "Body _ 1"));
-            _FCM_List.Add(new FCM_Message("Title_ 2", "Body _ 2"));
-            _FCM_List.Add(new FCM_Message("Title_ 3", "Body _ 3"));
-            _FCM_List.Add(new FCM_Message("Title_ 4", "Body _ 4"));
             this.AddAll(_FCM_List);
-
-            
         }
 
         public override View GetView(int position, View convertView, ViewGroup parent)

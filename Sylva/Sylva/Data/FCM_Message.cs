@@ -13,16 +13,20 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Newtonsoft.Json;
 using Sylva.Util;
 
 namespace Sylva.Data
 {
-    [Serializable]
-    public class FCM_Message: Java.Lang.Object
+    public class FCM_Message
     {
+        
         private string _Title = string.Empty;
+        private string _Body = string.Empty;
+
+        [JsonProperty(PropertyName = "Title")]
         public string Title { get { return _Title; } set { _Title = value; } }
-        public string _Body = string.Empty;
+        [JsonProperty(PropertyName = "Body")]
         public string Body { get { return _Body; } set { _Body = value; } }
         public FCM_Message(string __title, string __body)
         {
@@ -31,10 +35,8 @@ namespace Sylva.Data
         }
     }
 
-    [Serializable]
     public class FCM_List : ObservableCollection<FCM_Message>
     {
-        [System.ComponentModel.Localizable(false)]
         private static FCM_List _fcm_List= null;
         public static FCM_List GetFCMList()
         {
@@ -46,9 +48,12 @@ namespace Sylva.Data
                     {
                         try
                         {
-                            BinaryFormatter serializer = new BinaryFormatter();
-                            _fcm_List = (FCM_List)serializer.Deserialize(sw.BaseStream);
-                        }catch(Exception e)
+                            string readJsonString = sw.ReadLine();
+                            Newtonsoft.Json.Linq.JArray jArray = (Newtonsoft.Json.Linq.JArray)JsonConvert.DeserializeObject(readJsonString);
+                            FCM_List._fcm_List = jArray.ToObject<FCM_List>();
+
+                        }
+                        catch(Exception e)
                         {
                             _fcm_List = new FCM_List();
                         }
@@ -66,8 +71,8 @@ namespace Sylva.Data
         {
             using (StreamWriter sw = new StreamWriter(FileHelper.MsgListFilePath))
             {
-                BinaryFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(sw.BaseStream, _fcm_List);
+                string saveJsonString = JsonConvert.SerializeObject(FCM_List._fcm_List);
+                sw.WriteLine(saveJsonString);
             }
         }
     }
