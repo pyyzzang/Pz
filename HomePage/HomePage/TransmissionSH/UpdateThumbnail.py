@@ -1,48 +1,29 @@
 import sys;
-import os;
 import base64;
-import pyodbc;
+import os;
 from urllib.parse import unquote
-#parent 이상 경로 참조가 불가 함으로 상위폴더의 module폴더를 참조에 추가함.
-modulePath = os.path.join(os.path.split(os.path.split(os.getcwd())[0])[0], "app/module");
-sys.path.insert(0, modulePath);
+import urllib.parse
+import urllib.request
 
-from DBExecute import DBExecute;
 
-import firebase_admin
-from firebase_admin import credentials
-from firebase_admin import messaging
+
+def getIsDev():
+    if True == os.getcwd().startswith('/home/pi/Pz/HomePage') : 
+        return True;
+    return False;
+
+def getRunIp():
+    if(True == getIsDev()):
+        return "http://192.168.219.102:8000"
+    return "http://192.168.219.102:8080"
 
 def Base64Encoding(utfString):
-        baseByte = base64.b64encode(utfString.encode("utf-8"));
-        baseStr = str(baseByte, "utf-8");
-        return baseStr;
+    baseByte = base64.b64encode(utfString.encode("utf-8"));
+    baseStr = str(baseByte, "utf-8");
+    return baseStr;
 
-class SendCompleteMessage:
-    @staticmethod
-    def SendFireBase(sendmessage):
-        cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
-        firebase_admin.initialize_app(cred)
-
-        # This registration token comes from the client FCM SDKs.
-        registration_token = 'eIy_nFNUkhc:APA91bGlblPjjRsRgwz2Ez2GF07wNt5P9UpiBEvDIiKxR2tWXpJucausB4fk_skuEBBXi3NM_S19LufFRfg8KWMNUuFaokhcCb4HP_o2MgIK_r43T08vJg2NA6O-QqAcKTb3VJNkA1-B'
-
-        # See documentation on defining a message payload.
-        message = messaging.Message(
-            token=registration_token,
-            notification = messaging.Notification(
-                title = "다운로드 완료",
-                body = sendmessage + "다운로드가 종료되었습니다.",
-            )
-        )
-    
-        # Send a message to the device corresponding to the provided
-        # registration token.
-        response = messaging.send(message)
-        # Response is a message ID string.
-        print('Successfully sent message:', response)
-
-
+def Write(log):
+    os.system("echo " + log + " >> Bach.log");
 
 if __name__ =='__main__':
     splitArg = sys.argv[2].split('&');
@@ -55,20 +36,14 @@ if __name__ =='__main__':
         elif(True == arg.startswith("dn=")):
             name = arg.replace("dn=", "");
 
-    print("magnetUrl : " + magnetUrl);
-    print("Name : " + name);
+    Write("echo magnetUrl : " + magnetUrl);
+    Write("Name : " + name);
     baseUsMagnetUrl = Base64Encoding(magnetUrl);
     name = unquote(name);
 
-    fileName, ext = os.path.splitext(name);
-
- 
-    SendCompleteMessage.SendFireBase(name);
-
-
-        
+    test_url = getRunIp() + "/Torrent/TorrentDownloadComplete";
+    data = urllib.parse.urlencode({"name" : name, "MagnetUrl" : baseUsMagnetUrl});
+    req = urllib.request.Request(test_url, data=data.encode("utf-8"))
+    response = urllib.request.urlopen(req)
+    result =  response.read().decode("utf-8")
     
-    
-
-        
-

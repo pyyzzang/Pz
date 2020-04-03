@@ -9,9 +9,10 @@ do
 
         CompleteMagnet=`transmission-remote $SERVER --torrent $TORRENTID --info | grep -e Magnet:`
         if [ "$CompleteMagnet" ]; then
-            python3 UpdateThumbnail.py $CompleteMagnet
+            python3 "UpdateThumbnail.py" $CompleteMagnet
         fi
         
         transmission-remote $SERVER --torrent $TORRENTID --remove
     fi
 done 
+

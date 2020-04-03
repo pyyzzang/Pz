@@ -10,6 +10,8 @@ import subprocess;
 from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
 from ..module.HtmlUtil import HtmlUtil;
+from ..FCM.FCM import FCM;
+from urllib.parse import unquote
 
 
 class RowEnum(Enum):
@@ -211,4 +213,48 @@ class torrent:
         updateQuery = "update Torrent set title='" + title + "' where magnetUrl='" + magnetUrl +"'";
         osDefine.Logger("UpdateQuery : " + updateQuery);
         session.InsertQueryExecute(updateQuery);
+        return HttpResponse("");
+
+    @staticmethod
+    def MakeFile(fileName, name, baseUsMagnetUrl):
+        
+        dbConnection = DBExecute.GetDBConnection();
+        #제목 업데이트
+        #dbConnection.InsertQueryExecute("update Torrent set Title = '" + name + "' where Title='' and magnetUrl = '" + baseUsMagnetUrl + "'");
+
+        #이미지 업데이트
+        downloadPath = "/home/pi/Downloads";
+        tmpPath = os.path.join(os.getcwd(), "app/static/app/Thumbnail");
+        
+        tmpThumbnailPath = os.path.join(tmpPath, fileName + ".jpg");
+        osDefine.Logger("tmpThumbnailPath : " + tmpThumbnailPath);
+        downloadFilePath = os.path.join(downloadPath, name);
+    
+        if(os.path.isfile(downloadFilePath)):
+            makeThumbnail = "ffmpeg -y -i '" + downloadFilePath + "' -ss 00:00:20 -vframes 1 '" + tmpThumbnailPath + "'";
+            osDefine.Logger(makeThumbnail);
+            #os.system(makeThumbnail);
+            with open(tmpThumbnailPath, "rb") as f:
+                bindata = f.read();
+                utfData = osDefine.Base64Encoding(bindata);
+                updateQuery = "update Torrent set ThumbnailImage = '" + utfData + "' where DataLength(ThumbnailImage)=0 and magnetUrl = '" + baseUsMagnetUrl + "'";
+                osDefine.Logger(updateQuery)
+                dbConnection.InsertQueryExecute(updateQuery);
+
+    @staticmethod
+    def torrentDownloadComplete(request):
+        osDefine.Logger("torrentDownloadComplete (+) " + os.getcwd());
+        name = request.POST.get("name");
+        magnetUrl = request.POST.get("MagnetUrl");
+
+        osDefine.Logger("Name : " + name);
+        osDefine.Logger("echo magnetUrl : " + magnetUrl);
+
+        fileName, ext = os.path.splitext(name);
+        try :
+            torrent.MakeFile(fileName, name, magnetUrl);
+        except:
+            osDefine.Logger("Thumbnail Create Exception");
+
+        FCM.SendFireBase(name);
         return HttpResponse("");

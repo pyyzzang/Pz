@@ -11,6 +11,7 @@ from .subViews.playView import playView
 from .subViews.playerMove import playerMove
 from .subViews.torrent import torrent
 from .subViews.testView import testView
+from .FCM.FCM import FCM
 
 
 def home(request):
@@ -50,7 +51,11 @@ def Torrent(request):
     return torrent.getTorrent(request);
 def TorrentUpload(request):
     return torrent.torrentUpload(request);
+def TorrentDownloadComplete(request):
+    return torrent.torrentDownloadComplete(request);
 def TorrentAdd(request):
     return torrent.torrentAdd(request);
 def TorrentUpdate(request):
     return torrent.torrentUpdate(request);
+def RegisterToken(request):
+    return FCM.RegisterToken(request);
