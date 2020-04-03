@@ -233,10 +233,10 @@ class torrent:
         if(os.path.isfile(downloadFilePath)):
             makeThumbnail = "ffmpeg -y -i '" + downloadFilePath + "' -ss 00:00:20 -vframes 1 '" + tmpThumbnailPath + "'";
             osDefine.Logger(makeThumbnail);
-            #os.system(makeThumbnail);
+            os.system(makeThumbnail);
             with open(tmpThumbnailPath, "rb") as f:
                 bindata = f.read();
-                utfData = osDefine.Base64Encoding(bindata);
+                utfData = base64.b64encode(bindata);
                 updateQuery = "update Torrent set ThumbnailImage = '" + utfData + "' where DataLength(ThumbnailImage)=0 and magnetUrl = '" + baseUsMagnetUrl + "'";
                 osDefine.Logger(updateQuery)
                 dbConnection.InsertQueryExecute(updateQuery);
