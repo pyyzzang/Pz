@@ -137,10 +137,12 @@ class torrent:
         query = "select * from Torrent where magnetUrl='%s'" % (base64Magnet);
         osDefine.Logger("selectQuery : " + query);
         rows = session.QueryExecute(query);
-        if 0 < rows.cursor.arraysize:
+        if None != rows.fetchone():
+            osDefine.Logger("rows.cursor.arraysize : " + str(rows.cursor.arraysize));
+            osDefine.Logger("Equals Torrent Exists " + rows.fetchone()[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
-        query = "insert into Torrent values('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
+        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
         
         session.InsertQueryExecute(query);
