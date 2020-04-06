@@ -38,6 +38,7 @@ class FCM:
         osDefine.Logger(query);
         rows = connection.QueryExecute(query);
         registration_token = str(rows.fetchone()[0]);
+        osDefine.Logger('sent message Token :', registration_token)
         registration_token = registration_token.strip();
         # See documentation on defining a message payload.
         message = messaging.Message(
