@@ -13,14 +13,15 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Firebase.Messaging;
 using Newtonsoft.Json;
 using Sylva.Util;
 
 namespace Sylva.Data
 {
-    public class FCM_Message
+
+    public class Notification
     {
-        
         private string _Title = string.Empty;
         private string _Body = string.Empty;
 
@@ -28,11 +29,51 @@ namespace Sylva.Data
         public string Title { get { return _Title; } set { _Title = value; } }
         [JsonProperty(PropertyName = "Body")]
         public string Body { get { return _Body; } set { _Body = value; } }
-        public FCM_Message(string __title, string __body)
+        public Notification(string __title, string __body)
         {
             Title = __title;
             Body = __body;
         }
+    }
+
+    public class Data
+    {
+        public Data(IDictionary<string,string> __data)
+        {
+            _Data = __data;
+        }
+        private IDictionary<string, string> _Data = null;
+
+        [JsonProperty(PropertyName = "Title")]
+        public string Title
+        {
+            get
+            {
+                return _Data["Title"];
+            }
+        }
+        [JsonProperty(PropertyName = "Body")]
+        public string Body
+        {
+            get
+            {
+                return _Data["Body"];
+            }
+        }
+    }
+
+    public class FCM_Message
+    {
+        public FCM_Message(RemoteMessage __remoteMessage) 
+        {
+            //Notification = new Notification(__remoteMessage.GetNotification().Title, __remoteMessage.GetNotification().Body);
+            Data = new Data(__remoteMessage.Data);
+        }
+        
+        [JsonProperty(PropertyName = "Notification")]
+        public Notification Notification { get; set; }
+        [JsonProperty(PropertyName = "Data")]
+        public Data Data { get; set; }
     }
 
     public class FCM_List : ObservableCollection<FCM_Message>

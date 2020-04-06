@@ -103,6 +103,7 @@
     <Compile Include="Service\SylvaFirebaseIIDService.cs" />
     <Compile Include="Service\SylvaFirebaseMessagingService.cs" />
     <Compile Include="Util\FileHelper.cs" />
+    <Compile Include="Util\HttpUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <GoogleServicesJson Include="google-services.json" />

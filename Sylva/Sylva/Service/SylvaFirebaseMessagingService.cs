@@ -21,8 +21,6 @@ namespace Sylva.Service
         const string TAG = "MyFirebaseMsgService";
         public override void OnMessageReceived(RemoteMessage message)
         {
-            Log.Debug(TAG, "From: " + message.From);
-            Log.Debug(TAG, "Notification Message Body: " + message.GetNotification().Body);
             MainActivity.CurrentMainActivity.MsgListAdapter.AddReceiveMsg(message);
         }
     }
