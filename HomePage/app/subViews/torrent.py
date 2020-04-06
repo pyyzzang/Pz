@@ -191,7 +191,7 @@ class torrent:
         ret += HtmlUtil.getBodyHead();
         ret += "<Table width:'100%' border='1'>";
         session = DBExecute.GetDBConnection();
-        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent  order by modifyDate desc");
         ret += torrent.getTableHead();
         for row in rows:
             data = TorrentData.createTorrenData(row);
