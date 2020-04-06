@@ -1,43 +1,49 @@
 import sys;
-import os;
 import base64;
-import pyodbc;
+import os;
 from urllib.parse import unquote
-#parent 이상 경로 참조가 불가 함으로 상위폴더의 module폴더를 참조에 추가함.
-modulePath = os.path.join(os.path.split(os.path.split(os.getcwd())[0])[0], "app/module");
-sys.path.insert(0, modulePath);
+import urllib.parse
+import urllib.request
 
-from DBExecute import DBExecute;
+
+
+def getIsDev():
+    if True == os.getcwd().startswith('/home/pi/Pz/HomePage') : 
+        return True;
+    return False;
+
+def getRunIp():
+    if(True == getIsDev()):
+        return "http://192.168.219.102:8000"
+    return "http://192.168.219.102:8080"
 
 def Base64Encoding(utfString):
-        baseByte = base64.b64encode(utfString.encode("utf-8"));
-        baseStr = str(baseByte, "utf-8");
-        return baseStr;
+    baseByte = base64.b64encode(utfString.encode("utf-8"));
+    baseStr = str(baseByte, "utf-8");
+    return baseStr;
+
+def Write(log):
+    os.system("echo " + log + " >> Bach.log");
 
 if __name__ =='__main__':
-    magnetUrl, name = sys.argv[2].split('&dn=');
-    print(magnetUrl);
+    splitArg = sys.argv[2].split('&');
+
+    magnetUrl = "";
+    name = "";
+    for arg in splitArg:
+        if(True == arg.startswith("magnet:?")):
+            magnetUrl = arg;
+        elif(True == arg.startswith("dn=")):
+            name = arg.replace("dn=", "");
+
+    Write("echo magnetUrl : " + magnetUrl);
+    Write("Name : " + name);
     baseUsMagnetUrl = Base64Encoding(magnetUrl);
     name = unquote(name);
 
-    fileName, ext = os.path.splitext(name);
-
-    dbConnection = DBExecute.GetDBConnection();
-
-    #제목 업데이트
-    #dbConnection.InsertQueryExecute("update Torrent set Title = '" + name + "' where Title='' and magnetUrl = '" + baseUsMagnetUrl + "'");
+    test_url = getRunIp() + "/Torrent/TorrentDownloadComplete";
+    data = urllib.parse.urlencode({"name" : name, "MagnetUrl" : baseUsMagnetUrl});
+    req = urllib.request.Request(test_url, data=data.encode("utf-8"))
+    response = urllib.request.urlopen(req)
+    result =  response.read().decode("utf-8")
     
-    #이미지 업데이트
-    downloadPath = "/home/pi/Downloads";
-    tmpPath = os.path.join(os.path.split(os.getcwd())[0], "static/app/Thumbnail");
-    tmpThumbnailPath = os.path.join(tmpPath, fileName + ".jpg");
-    downloadFilePath = os.path.join(downloadPath, name);
-    if(os.path.isfile(downloadFilePath)):
-        makeThumbnail = "ffmpeg -i '" + downloadFilePath + "' -ss 00:00:20 -vframes 1 '" + tmpThumbnailPath + "'";
-        print(makeThumbnail);
-        #os.system(makeThumbnail);
-        with open(tmpThumbnailPath, "rb") as f:
-            bindata = f.read();
-            utfData = str(base64.b64encode(bindata), "utf-8");
-            dbConnection.InsertQueryExecute("update Torrent set ThumbnailImage = '" + utfData + "' where DataLength(ThumbnailImage)=0 and magnetUrl = '" + baseUsMagnetUrl + "'");
-

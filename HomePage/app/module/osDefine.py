@@ -84,6 +84,7 @@ class osDefine:
             return "omxplayer"
     @staticmethod
     def PlayerInit():
+        osDefine.Logger("PlayerInit");
         if(0 != osDefine.currentPlayer):
             osDefine.currentPlayer.quit();
         os.system("sudo killall -9 omxplayer")

@@ -10,6 +10,8 @@ import subprocess;
 from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
 from ..module.HtmlUtil import HtmlUtil;
+from ..FCM.FCM import FCM;
+from urllib.parse import unquote
 
 
 class RowEnum(Enum):
@@ -135,10 +137,12 @@ class torrent:
         query = "select * from Torrent where magnetUrl='%s'" % (base64Magnet);
         osDefine.Logger("selectQuery : " + query);
         rows = session.QueryExecute(query);
-        if 0 < rows.cursor.arraysize:
+        if None != rows.fetchone():
+            osDefine.Logger("rows.cursor.arraysize : " + str(rows.cursor.arraysize));
+            osDefine.Logger("Equals Torrent Exists " + rows.fetchone()[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
-        query = "insert into Torrent values('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
+        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
         
         session.InsertQueryExecute(query);
@@ -187,7 +191,7 @@ class torrent:
         ret += HtmlUtil.getBodyHead();
         ret += "<Table width:'100%' border='1'>";
         session = DBExecute.GetDBConnection();
-        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent  order by modifyDate desc");
         ret += torrent.getTableHead();
         for row in rows:
             data = TorrentData.createTorrenData(row);
@@ -211,4 +215,49 @@ class torrent:
         updateQuery = "update Torrent set title='" + title + "' where magnetUrl='" + magnetUrl +"'";
         osDefine.Logger("UpdateQuery : " + updateQuery);
         session.InsertQueryExecute(updateQuery);
+        return HttpResponse("");
+
+    @staticmethod
+    def MakeFile(fileName, name, baseUsMagnetUrl):
+        
+        dbConnection = DBExecute.GetDBConnection();
+        #제목 업데이트
+        #dbConnection.InsertQueryExecute("update Torrent set Title = '" + name + "' where Title='' and magnetUrl = '" + baseUsMagnetUrl + "'");
+
+        #이미지 업데이트
+        downloadPath = "/home/pi/Downloads";
+        tmpPath = os.path.join(os.getcwd(), "app/static/app/Thumbnail");
+        
+        tmpThumbnailPath = os.path.join(tmpPath, fileName + ".jpg");
+        osDefine.Logger("tmpThumbnailPath : " + tmpThumbnailPath);
+        downloadFilePath = os.path.join(downloadPath, name);
+    
+        if(os.path.isfile(downloadFilePath)):
+            makeThumbnail = "ffmpeg -y -i '" + downloadFilePath + "' -ss 00:00:20 -vframes 1 '" + tmpThumbnailPath + "'";
+            osDefine.Logger(makeThumbnail);
+            os.system(makeThumbnail);
+            with open(tmpThumbnailPath, "rb") as f:
+                bindata = f.read();
+                utfData = str(base64.b64encode(bindata));
+                updateQuery = "update Torrent set ThumbnailImage = '" + utfData + "' where DataLength(ThumbnailImage)=0 and magnetUrl = '" + baseUsMagnetUrl + "'";
+                osDefine.Logger(updateQuery)
+                dbConnection.InsertQueryExecute(updateQuery);
+
+    @staticmethod
+    def torrentDownloadComplete(request):
+        osDefine.Logger("torrentDownloadComplete (+) " + os.getcwd());
+        name = request.POST.get("name");
+        magnetUrl = request.POST.get("MagnetUrl");
+
+        osDefine.Logger("Name : " + name);
+        osDefine.Logger("echo magnetUrl : " + magnetUrl);
+
+        fileName, ext = os.path.splitext(name);
+        try :
+            torrent.MakeFile(fileName, name, magnetUrl);
+        except Exception as e:
+            osDefine.Logger("Thumbnail Create Exception");
+            osDefine.Logger(e);
+        osDefine.Logger("FCM.SendFireBase(name)");
+        FCM.SendFireBase(name);
         return HttpResponse("");
