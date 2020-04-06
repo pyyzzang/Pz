@@ -10,7 +10,7 @@ do
 
         CompleteMagnet=`transmission-remote $SERVER --torrent $TORRENTID --info | grep -e Magnet:`
         if [ "$CompleteMagnet" ]; then
-            cd "/home/pi/Pz/HomePage/HomePage/TransmissionSH"
+            cd "/home/pi/Sylva/Pz/HomePage/HomePage/TransmissionSH"
             SHELL_PATH=`pwd -P`
             python3 "UpdateThumbnail.py" $CompleteMagnet
         fi
