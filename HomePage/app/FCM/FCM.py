@@ -32,22 +32,31 @@ class FCM:
         cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
         firebase_admin.initialize_app(cred)
 
-        # This registration token comes from the client FCM SDKs.
-        connection = SQLalchemy.GetDBConnection();
-        query = "select token from UserInfo where id='1'";
-        osDefine.Logger(query);
-        rows = connection.QueryExecute(query);
-        registration_token = str(rows.fetchone()[0]);
-        osDefine.Logger('sent message Token :', registration_token)
-        registration_token = registration_token.strip();
-        # See documentation on defining a message payload.
-        message = messaging.Message(
-            token=registration_token,
-            notification = messaging.Notification(
-                title = "다운로드 완료",
-                body = sendmessage + "다운로드가 종료되었습니다.",
+        try:
+
+            # This registration token comes from the client FCM SDKs.
+            connection = SQLalchemy.GetDBConnection();
+            query = "select token from UserInfo where id='1'";
+            osDefine.Logger(query);
+            rows = connection.QueryExecute(query);
+            registration_token = str(rows.fetchone()[0]);
+            osDefine.Logger('sent message Token :' + registration_token)
+            registration_token = registration_token.strip();
+            
+            # See documentation on defining a message payload.
+            message = messaging.Message(
+                token=registration_token,
+                notification = messaging.Notification(
+                    title = "다운로드 완료",
+                    body = sendmessage + "다운로드가 완료되었습니다.",
+                ),
+                data={
+                    "Title" : "다운로드 완료",
+                    "Content" : sendmessage + "다운로드가 완료되었습니다.",
+                },
             )
-        )
+        except Exception as e:
+            osDefine.Logger(e);
     
         # Send a message to the device corresponding to the provided
         # registration token.

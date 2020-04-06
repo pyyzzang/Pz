@@ -235,10 +235,10 @@ class torrent:
         if(os.path.isfile(downloadFilePath)):
             makeThumbnail = "ffmpeg -y -i '" + downloadFilePath + "' -ss 00:00:20 -vframes 1 '" + tmpThumbnailPath + "'";
             osDefine.Logger(makeThumbnail);
-            os.system(makeThumbnail);
+            #os.system(makeThumbnail);
             with open(tmpThumbnailPath, "rb") as f:
                 bindata = f.read();
-                utfData = base64.b64encode(bindata);
+                utfData = str(base64.b64encode(bindata));
                 updateQuery = "update Torrent set ThumbnailImage = '" + utfData + "' where DataLength(ThumbnailImage)=0 and magnetUrl = '" + baseUsMagnetUrl + "'";
                 osDefine.Logger(updateQuery)
                 dbConnection.InsertQueryExecute(updateQuery);
@@ -255,8 +255,9 @@ class torrent:
         fileName, ext = os.path.splitext(name);
         try :
             torrent.MakeFile(fileName, name, magnetUrl);
-        except:
+        except Exception as e:
             osDefine.Logger("Thumbnail Create Exception");
+            osDefine.Logger(e);
 
         FCM.SendFireBase(name);
         return HttpResponse("");
