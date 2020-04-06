@@ -90,16 +90,21 @@ class fileListView(object):
             osDefine.Logger("requestFile : " + requestFile);
         except Exception:
             requestFile = "";
-        http = HtmlUtil.getHeader();
-        http += fileListView.getTitleHead();
 
-        http += HtmlUtil.getBodyHead();
+        try:
+            http = HtmlUtil.getHeader();
+            http += fileListView.getTitleHead();
 
-        http += fileListView.getVideoList(requestFile);
-        http += YoutubeView.getVideoList();
+            http += HtmlUtil.getBodyHead();
 
-        http += HtmlUtil.getBodyTail();
-        http += "</body>";
+            http += fileListView.getVideoList(requestFile);
+            http += YoutubeView.getVideoList();
+
+            http += HtmlUtil.getBodyTail();
+            http += "</body>";
+        except Exception as e:
+            osDefine.Logger(e);
+            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home;</script>";
         return HttpResponse(http); 
     @staticmethod
     def getTitleHead():
