@@ -29,11 +29,9 @@ class FCM:
     
     @staticmethod
     def SendFireBase(sendmessage):
-        cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
-        firebase_admin.initialize_app(cred)
-
         try:
-
+            cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
+            firebase_admin.initialize_app(cred)
             # This registration token comes from the client FCM SDKs.
             connection = SQLalchemy.GetDBConnection();
             query = "select token from UserInfo where id='1'";

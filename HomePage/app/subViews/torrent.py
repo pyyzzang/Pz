@@ -258,6 +258,6 @@ class torrent:
         except Exception as e:
             osDefine.Logger("Thumbnail Create Exception");
             osDefine.Logger(e);
-
+        osDefine.Logger("FCM.SendFireBase(name)");
         FCM.SendFireBase(name);
         return HttpResponse("");
