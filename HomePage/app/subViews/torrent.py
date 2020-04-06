@@ -42,6 +42,7 @@ class TorrentData:
 
     def getAjaxScript(self):
         ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
+        ret += "<script type=\"text/javascript\">$(function(){$(\"#Delete"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_" +self.getMagnetUrl() + "').style.display = \"none\";}});})})</script>";
         return ret;
 
     def getHttpScript(self):
@@ -75,10 +76,13 @@ class TorrentData:
         return ret;
 
     def getHttpRow(self):
-        ret = "<tr><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
+        ret = "<tr  Id=\"TR_" + self.getMagnetUrl() + "\"><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
         ret += "<td>" + self.getModifyDate() + "</td>";
         ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>";
-        ret += "<td><input type=\"Button\" id=\"AddRow" + self.getStrIdx() + "\" Value=\"토렌트 추가\"></input></td>";
+        ret += "<td><panel >";
+        ret += "<input id=\"AddRow" + self.getStrIdx() + "\" type=\"Button\" Value=\"토렌트 추가\"></input>";
+        ret += "<input id=\"Delete" + self.getStrIdx() + "\"type=\"Button\" Value=\"토렌트 삭제\"></input>";
+        ret += "</panel></td>";        
         ret += self.getAjaxScript();
         ret += "</tr>";
         ret += self.getHttpScript();
@@ -101,9 +105,22 @@ class torrent:
         magnetUrl = osDefine.Base64Decoding(magnetUrl);
         osDefine.Logger("MagnetUrl : " + magnetUrl);
         addCmd = "sudo transmission-remote -t --start-paused -n \"pi\":\"cndwn5069()\"";
+        os.system(addCmd);
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\"";
         os.system(addCmd);
         return HttpResponse(addCmd);
+    @staticmethod
+    def TorrentDelete(request):
+        osDefine.Logger("TorrentDelete(+)");
+        magnetUrl = request.POST.get("magnetUrl").strip();
+        #magnetUrl = osDefine.Base64Decoding(magnetUrl);
+        osDefine.Logger("MagnetUrl : " + magnetUrl);
+        connection = DBExecute.GetDBConnection();
+        deleteQuery = ("delete from Torrent where magnetUrl='%s'" % magnetUrl);
+        osDefine.Logger("Delete Query : " + deleteQuery);
+        connection.InsertQueryExecute(deleteQuery);
+        return HttpResponse("");
+
     @staticmethod
     def torrentUpload(request):
         Title = request.POST.get("torrentTitle");
