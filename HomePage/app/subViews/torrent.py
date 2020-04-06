@@ -12,6 +12,7 @@ from ..module.DBExecute import SQLalchemy;
 from ..module.HtmlUtil import HtmlUtil;
 from ..FCM.FCM import FCM;
 from urllib.parse import unquote
+from datetime import datetime
 
 
 class RowEnum(Enum):
@@ -100,14 +101,19 @@ class TorrentData:
 class torrent:
     @staticmethod
     def torrentAdd(request):
-        magnetUrl = request.POST.get("magnetUrl").strip();
-        osDefine.Logger("MagnetUrl : " + magnetUrl);
-        magnetUrl = osDefine.Base64Decoding(magnetUrl);
-        osDefine.Logger("MagnetUrl : " + magnetUrl);
-        addCmd = "sudo transmission-remote -t --start-paused -n \"pi\":\"cndwn5069()\"";
-        os.system(addCmd);
-        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\"";
-        os.system(addCmd);
+        try:
+            magnetUrl = request.POST.get("magnetUrl").strip();
+            osDefine.Logger("MagnetUrl : " + magnetUrl);
+            magnetUrl = osDefine.Base64Decoding(magnetUrl);
+            osDefine.Logger("MagnetUrl : " + magnetUrl);
+            currentTime = datetime.now();
+            addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
+            if (10 < currentTime.hour and currentTime.hour < 24):
+                addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
+            osDefine.Logger("ExecuteCommand" + addCmd);
+            os.system(addCmd);
+        except Exception as e:
+            osDefine.Logger(e);
         return HttpResponse(addCmd);
     @staticmethod
     def TorrentDelete(request):
