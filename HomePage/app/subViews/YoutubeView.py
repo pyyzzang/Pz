@@ -76,8 +76,12 @@ class YoutubeView:
         jsonString = YoutubeRoot(**json.loads(config));
         root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
         retFormat = "";
-        for format in root.streamingData["adaptiveFormats"]:
+        for format in root.streamingData["formats"]:
             if((format["itag"] in YoutubeMp4_itag)):
+                osDefine.Logger("Itag : " + str(format["itag"]));
+                if(22 == format["itag"]):
+                    osDefine.Logger("itag 22 Return");
+                    return format;
                 if("" == retFormat or YoutubeMp4_itag[retFormat["itag"]] < YoutubeMp4_itag[format["itag"]]):
                     retFormat = format;
         return retFormat;
