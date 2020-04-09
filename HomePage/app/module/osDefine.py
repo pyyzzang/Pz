@@ -94,7 +94,6 @@ class osDefine:
             osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
 
             findInfo.setPosition(osDefine.currentPlayer.position());
-            findInfo.setTotalTime(osDefine.currentPlayer.metadata()["mpris:length"]/216000);
             findInfo.setDuration(osDefine.currentPlayer.duration());
             findInfo.setVolume(osDefine.currentPlayer.volume());
 
