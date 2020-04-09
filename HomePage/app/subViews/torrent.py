@@ -135,14 +135,15 @@ class torrent:
         osDefine.Logger("torrentUpload_magnet : " + magnet);
 
         try:
-            tmpTorrentFile = "/home/pi/Pz/HomePage/app/static/Tmp/LastUpload.Torrent";
+            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload.Torrent");
+            osDefine.Logger("TempFilePath : " + tmpTorrentFile);
             fileBinary = request.FILES["torrent_files"];
             f = open(tmpTorrentFile, 'wb+');
             for chunk in fileBinary.chunks():
                 f.write(chunk)
             f.close();
             
-            torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
+            torrentUrl = "magnet-link " + osDefine.getRunIp() + "/static/Tmp/LastUpload.Torrent";
             magnetUrl = subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
             Binary = magnetUrl.replace("\n", "");
             base64Magnet = osDefine.Base64Encoding(Binary);
