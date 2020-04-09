@@ -6,11 +6,12 @@ from ..Define import Define;
 infoLogger = logging.getLogger("HomePage");
 
 class PlayInfo(object):
-    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0):
+    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0, TotalTime = 0):
         self.Title = Title;
         self.Position = Position;
         self.Duration = Duration;
         self.Volume = Volume;
+        self.TotalTime = TotalTime;
 
     def getTitle(self):
         return self.Title;
@@ -32,6 +33,12 @@ class PlayInfo(object):
     
     def getVolume(self):
         return self.Volume;
+    
+    def setTotalTime(self, TotalTime):
+        self.TotalTime = TotalTime;
+    
+    def getTotalTime(self):
+        return TotalTime;
 
     @classmethod
     def from_json(cls, data):
