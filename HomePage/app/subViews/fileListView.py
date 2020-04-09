@@ -61,7 +61,11 @@ class FileInfo:
     def getTr(self, fileCount):
         retHttp  = '<tr class="TableRow">';
         retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
-        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" + self.getTitle() + "</td>";
+        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" ;
+        retHttp += "<div>" + self.getTitle() +"</div>";
+        if(True == self.isVideoFile()):
+            retHttp += "<div><progress class='VideoProgress' id=\"Pro_" + self.getEncodingFileName() +" max=\"100\" value=\"0\" \"/></div>";
+        retHttp += "</td>";
         retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
         retHttp += "</tr>";
         retHttp += "<script type=\"text/javascript\">";
@@ -149,7 +153,6 @@ class fileListView(object):
     @staticmethod
     def getVideoList(dirPath):
         localFilePath = osDefine.LocalFilePath()
-        ip = osDefine.Ip()
         fileCount = 0;      
         fileInfoList = []; 
         findDir = localFilePath + dirPath;
