@@ -181,4 +181,9 @@ class osDefine:
         if(True == osDefine.getIsDev()):
             return "http://192.168.219.102:8000"
         return "http://192.168.219.102:8080"
+    @staticmethod
+    def getRunDir():
+        if(True == osDefine.getIsDev()):
+            return "/home/pi/Pz/"
+        return "/home/pi/Sylva/Pz/"
 

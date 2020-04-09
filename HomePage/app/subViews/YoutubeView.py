@@ -2,30 +2,17 @@ from typing import List
 from requests import get
 import json
 from ..module.osDefine import osDefine
+from ..module.Youtube_Cipher import Cipher;
 
 from  requests import get;
 import json;
 import re;
 from ..Data.YoutubeVideo import videos;
+from ..Data.YoutubeVideo import YoutubeRoot;
 from ..Data.YoutubeVideo import PlayerResponse;
 from ..Data.YoutubeVideo import YoutubeMp4_itag;
 
-class YoutubeRoot(object):
-    def __init__(self, assets, attrs, args):
-        self.assets = assets;
-        self.attrs = attrs;
-        self.args = args;
 
-    def Test():
-        youtubeStr = get("https://www.youtube.com/watch?v=2hafAgIlR1Y");
-        baseYoutube = youtubeStr.text.encode("utf-8");
-        scripts = baseYoutube.split("ytplayer.config =");
-        config = scripts[1].split(";ytplayer.load =")[0];
-  
-        jsonString = YoutubeRoot(**json.loads(config.decode('utf-8')));
-        print(jsonString.args["player_response"]);
-        root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
-        print(root);
 
 class YoutubeView:
     @staticmethod
@@ -84,4 +71,9 @@ class YoutubeView:
                     return format;
                 if("" == retFormat or YoutubeMp4_itag[retFormat["itag"]] < YoutubeMp4_itag[format["itag"]]):
                     retFormat = format;
+        
+        jsPath = "https://youtube.com" + jsonString.assets["js"];
+        if("url" not in retFormat.keys()):
+            retFormat["url"] = Cipher.getCipher(retFormat["cipher"], jsPath);
+
         return retFormat;
