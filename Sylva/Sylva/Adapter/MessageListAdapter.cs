@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
+using Android.App;
 using Android.OS;
+using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
 using Firebase.Messaging;
@@ -27,12 +29,12 @@ namespace Sylva.Data
 
         public void AddReceiveMsg(RemoteMessage __remoteMsg)
         {
-            this.AddReceiveMsg(new FCM_Message(__remoteMsg.GetNotification().Title, __remoteMsg.GetNotification().Body));
+            this.AddReceiveMsg(new FCM_Message(__remoteMsg));
         }
 
         public void AddReceiveMsg(FCM_Message __addMsg)
         {
-            _FCM_List.Add(__addMsg);
+            _FCM_List.Insert(0, __addMsg);
             MainHandler.Post(new System.Action(Update));
             _FCM_List.SaveFile();
         }
@@ -42,6 +44,8 @@ namespace Sylva.Data
             this.Clear();
             this.AddAll(_FCM_List);
             this.NotifyDataSetChanged();
+
+            mainActivity.Noti(_FCM_List[0].Data.Body);
         }
 
         public MessageListAdapter(MainActivity __mainActivity): base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
@@ -62,11 +66,11 @@ namespace Sylva.Data
                 TextView bt = (TextView)v.FindViewById(Resource.Id.txtBody);
                 if (tt != null)
                 {
-                    tt.Text = "Title : " + msg.Title;
+                    tt.Text = "Title : " + msg.Data.Title;
                 }
                 if (bt != null)
                 {
-                    bt.Text = "Body : " + msg.Body;
+                    bt.Text = "Body : " + msg.Data.Body;
                 }
             }
             return v;
