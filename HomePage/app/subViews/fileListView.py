@@ -90,16 +90,21 @@ class fileListView(object):
             osDefine.Logger("requestFile : " + requestFile);
         except Exception:
             requestFile = "";
-        http = HtmlUtil.getHeader();
-        http += fileListView.getTitleHead();
 
-        http += HtmlUtil.getBodyHead();
+        try:
+            http = HtmlUtil.getHeader();
+            http += fileListView.getTitleHead();
 
-        http += fileListView.getVideoList(requestFile);
-        http += YoutubeView.getVideoList();
+            http += HtmlUtil.getBodyHead();
 
-        http += HtmlUtil.getBodyTail();
-        http += "</body>";
+            http += fileListView.getVideoList(requestFile);
+            http += YoutubeView.getVideoList();
+
+            http += HtmlUtil.getBodyTail();
+            http += "</body>";
+        except Exception as e:
+            osDefine.Logger(e);
+            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home;</script>";
         return HttpResponse(http); 
     @staticmethod
     def getTitleHead():
@@ -172,24 +177,7 @@ class fileListView(object):
 
         deleteFolder = "";
         for subItem in os.listdir(baseDir):
-            checkItem = baseDir + subItem;
+            checkItem = baseDir + "/" + subItem;
             if(True == os.path.isdir(checkItem)):
                 if(True == osDefine.checkEmpty(checkItem)):
                     os.system("sudo rm -r \"" + checkItem + "\"");
-
-    @staticmethod
-    def delete(request):
-        osDefine.Logger("delete");
-        deleteFile = osDefine.Base64Decoding(request.GET["fileName"]);
-        osDefine.Logger("Delete File : " + deleteFile);
-        splitPath = deleteFile.split('/',2);
-        if(3 == len(splitPath)):
-            chmodDir = 'sudo chown -R pi "' + osDefine.LocalFilePath() + splitPath[1] +"\"";
-            osDefine.Logger("chMod : " + chmodDir);
-            os.system(chmodDir);
-        deleteFullPath = (osDefine.LocalFilePath() + deleteFile)    
-        if(False == os.path.exists(deleteFullPath)):
-            return HttpResponse("");
-        os.remove(deleteFullPath);
-        return HttpResponse(deleteFullPath);
-    

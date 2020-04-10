@@ -55,6 +55,8 @@ def TorrentDownloadComplete(request):
     return torrent.torrentDownloadComplete(request);
 def TorrentAdd(request):
     return torrent.torrentAdd(request);
+def TorrentDelete(request):
+    return torrent.TorrentDelete(request);
 def TorrentUpdate(request):
     return torrent.torrentUpdate(request);
 def RegisterToken(request):

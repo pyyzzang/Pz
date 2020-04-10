@@ -12,6 +12,7 @@ from ..module.DBExecute import SQLalchemy;
 from ..module.HtmlUtil import HtmlUtil;
 from ..FCM.FCM import FCM;
 from urllib.parse import unquote
+from datetime import datetime
 
 
 class RowEnum(Enum):
@@ -42,6 +43,7 @@ class TorrentData:
 
     def getAjaxScript(self):
         ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
+        ret += "<script type=\"text/javascript\">$(function(){$(\"#Delete"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_" +self.getMagnetUrl() + "').style.display = \"none\";}});})})</script>";
         return ret;
 
     def getHttpScript(self):
@@ -75,10 +77,13 @@ class TorrentData:
         return ret;
 
     def getHttpRow(self):
-        ret = "<tr><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
+        ret = "<tr  Id=\"TR_" + self.getMagnetUrl() + "\"><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
         ret += "<td>" + self.getModifyDate() + "</td>";
         ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>";
-        ret += "<td><input type=\"Button\" id=\"AddRow" + self.getStrIdx() + "\" Value=\"토렌트 추가\"></input></td>";
+        ret += "<td><panel >";
+        ret += "<input id=\"AddRow" + self.getStrIdx() + "\" type=\"Button\" Value=\"토렌트 추가\"></input>";
+        ret += "<input id=\"Delete" + self.getStrIdx() + "\"type=\"Button\" Value=\"토렌트 삭제\"></input>";
+        ret += "</panel></td>";        
         ret += self.getAjaxScript();
         ret += "</tr>";
         ret += self.getHttpScript();
@@ -96,14 +101,32 @@ class TorrentData:
 class torrent:
     @staticmethod
     def torrentAdd(request):
-        magnetUrl = request.POST.get("magnetUrl").strip();
-        osDefine.Logger("MagnetUrl : " + magnetUrl);
-        magnetUrl = osDefine.Base64Decoding(magnetUrl);
-        osDefine.Logger("MagnetUrl : " + magnetUrl);
-        addCmd = "sudo transmission-remote -t --start-paused -n \"pi\":\"cndwn5069()\"";
-        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\"";
-        os.system(addCmd);
+        try:
+            magnetUrl = request.POST.get("magnetUrl").strip();
+            osDefine.Logger("MagnetUrl : " + magnetUrl);
+            magnetUrl = osDefine.Base64Decoding(magnetUrl);
+            osDefine.Logger("MagnetUrl : " + magnetUrl);
+            currentTime = datetime.now();
+            addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
+            if (10 < currentTime.hour and currentTime.hour < 24):
+                addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
+            osDefine.Logger("ExecuteCommand" + addCmd);
+            os.system(addCmd);
+        except Exception as e:
+            osDefine.Logger(e);
         return HttpResponse(addCmd);
+    @staticmethod
+    def TorrentDelete(request):
+        osDefine.Logger("TorrentDelete(+)");
+        magnetUrl = request.POST.get("magnetUrl").strip();
+        #magnetUrl = osDefine.Base64Decoding(magnetUrl);
+        osDefine.Logger("MagnetUrl : " + magnetUrl);
+        connection = DBExecute.GetDBConnection();
+        deleteQuery = ("delete from Torrent where magnetUrl='%s'" % magnetUrl);
+        osDefine.Logger("Delete Query : " + deleteQuery);
+        connection.InsertQueryExecute(deleteQuery);
+        return HttpResponse("");
+
     @staticmethod
     def torrentUpload(request):
         Title = request.POST.get("torrentTitle");
@@ -112,14 +135,15 @@ class torrent:
         osDefine.Logger("torrentUpload_magnet : " + magnet);
 
         try:
-            tmpTorrentFile = "/home/pi/Pz/HomePage/app/static/Tmp/LastUpload.Torrent";
+            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload.Torrent");
+            osDefine.Logger("TempFilePath : " + tmpTorrentFile);
             fileBinary = request.FILES["torrent_files"];
             f = open(tmpTorrentFile, 'wb+');
             for chunk in fileBinary.chunks():
                 f.write(chunk)
             f.close();
             
-            torrentUrl = "magnet-link http://192.168.219.102:8000/static/Tmp/LastUpload.Torrent";
+            torrentUrl = "magnet-link " + osDefine.getRunIp() + "/static/Tmp/LastUpload.Torrent";
             magnetUrl = subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
             Binary = magnetUrl.replace("\n", "");
             base64Magnet = osDefine.Base64Encoding(Binary);
@@ -137,9 +161,10 @@ class torrent:
         query = "select * from Torrent where magnetUrl='%s'" % (base64Magnet);
         osDefine.Logger("selectQuery : " + query);
         rows = session.QueryExecute(query);
-        if None != rows.fetchone():
+        row = rows.fetchone();
+        if None != row:
             osDefine.Logger("rows.cursor.arraysize : " + str(rows.cursor.arraysize));
-            osDefine.Logger("Equals Torrent Exists " + rows.fetchone()[0]);
+            osDefine.Logger("Equals Torrent Exists " + row[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
 
         query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);

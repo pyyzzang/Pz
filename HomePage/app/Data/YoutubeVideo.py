@@ -1135,6 +1135,12 @@ class PlayabilityStatus():
 		self.playableInEmbed = playableInEmbed;
 		self.contextParams = contextParams;
 
+class YoutubeRoot(object):
+    def __init__(self, assets, attrs, args):
+        self.assets = assets;
+        self.attrs = attrs;
+        self.args = args;
+
 class PlayerResponse():
     def __init__(self, playabilityStatus = "", streamingData = "", playerAds = "", playbackTracking = "",
     captions = "", videoDetails = "", annotations = "", playerConfig = "", storyboards = "", microformat = "",
