@@ -6,12 +6,12 @@ from ..Define import Define;
 infoLogger = logging.getLogger("HomePage");
 
 class PlayInfo(object):
-    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0):
+    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0, TotalTime = 0):
         self.Title = Title;
         self.Position = Position;
         self.Duration = Duration;
         self.Volume = Volume;
-
+        
     def getTitle(self):
         return self.Title;
     
@@ -32,6 +32,10 @@ class PlayInfo(object):
     
     def getVolume(self):
         return self.Volume;
+    
+    def getProgressValue(self):
+        return self.getPosition() * 100 / self.getDuration();
+
 
     @classmethod
     def from_json(cls, data):
@@ -46,13 +50,19 @@ class PlayInfos(object):
 
     def getPlayInfo(self, playFileName, isCreate = False):
         retPlayInfo = "";
-        for playInfo in self.playInfos:
-            if(playFileName == playInfo.getTitle()):
-                return playInfo;
+        try:
+            for playInfo in self.playInfos:
+                infoLogger.info("Title : " + playInfo.getTitle());
+                if(playFileName == playInfo.getTitle()):
+                    return playInfo;
 
-        if(True == isCreate):
+            if(False == isCreate):
+                return retPlayInfo;
+            
             retPlayInfo = PlayInfo(playFileName);
-        self.playInfos.append(retPlayInfo);
+            self.playInfos.append(retPlayInfo);
+        except Exception as e:
+            infoLogger.info("GetPlayInfo : " + e);
         return retPlayInfo;
     
     def saveFile(self):

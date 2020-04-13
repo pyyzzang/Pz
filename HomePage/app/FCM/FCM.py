@@ -6,6 +6,7 @@ from ..module.osDefine import osDefine
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
+from datetime import datetime;
 
 class FCM:
     @staticmethod
@@ -44,13 +45,14 @@ class FCM:
             # See documentation on defining a message payload.
             message = messaging.Message(
                 token=registration_token,
-                notification = messaging.Notification(
-                    title = "다운로드 완료",
-                    body = sendmessage + "다운로드가 완료되었습니다.",
-                ),
+                # notification = messaging.Notification(
+                #     title = "다운로드 완료",
+                #     body = sendmessage + "다운로드가 완료되었습니다.",
+                # ),
                 data={
                     "Title" : "다운로드 완료",
                     "Content" : sendmessage + "다운로드가 완료되었습니다.",
+                    "Time" : datetime.now().strftime("%Y.%m.%d %H:%M:%S"),
                 },
             )
         except Exception as e:

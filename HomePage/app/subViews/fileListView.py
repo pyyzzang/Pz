@@ -8,6 +8,7 @@ import base64
 from ..module.osDefine import PlayMode;
 from .YoutubeView import YoutubeView;
 from ..module.HtmlUtil import HtmlUtil;
+from ..Data.PlayInfo import PlayInfos
 
 class FileInfo:
     def __init__(self, filePath, dir):
@@ -58,10 +59,15 @@ class FileInfo:
         else:
             return "location.href='" + osDefine.getRunIp() + "/Play?file=" + self.getEncodingFileName() + "'";
 
-    def getTr(self, fileCount):
+    def getTr(self, fileCount, playInfo):
         retHttp  = '<tr class="TableRow">';
         retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
-        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" + self.getTitle() + "</td>";
+        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" ;
+        retHttp += "<div>" + self.getTitle() +"</div>";
+        if(True == self.isVideoFile()):
+            if("" != playInfo):
+                retHttp += "<div><progress class='VideoProgress' id=\"Pro_" + self.getEncodingFileName() +"\" max=100 value=" + str(playInfo.getProgressValue()) + " \"/></div>";
+        retHttp += "</td>";
         retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
         retHttp += "</tr>";
         retHttp += "<script type=\"text/javascript\">";
@@ -149,7 +155,6 @@ class fileListView(object):
     @staticmethod
     def getVideoList(dirPath):
         localFilePath = osDefine.LocalFilePath()
-        ip = osDefine.Ip()
         fileCount = 0;      
         fileInfoList = []; 
         findDir = localFilePath + dirPath;
@@ -160,12 +165,19 @@ class fileListView(object):
 
         fileInfoList.sort();
         http = fileListView.getTableHead();
+
+        infos = PlayInfos.GetPlayInfos();
         if( "" != dirPath):
             osDefine.Logger("DirPath : " + dirPath);
             parentInfo = FileInfo("", findDir);
             fileInfoList.insert(0,parentInfo);
         for info in fileInfoList:
-            http += info.getTr(fileCount);
+            try:
+                urlPath = info.getUrlPath();
+            except Exception as e:
+                osDefine.Logger(e);
+            playInfo = infos.getPlayInfo(urlPath, False);
+            http += info.getTr(fileCount, playInfo);
             fileCount = fileCount + 1;
         http += fileListView.getTableTail();
         

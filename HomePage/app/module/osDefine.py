@@ -86,6 +86,19 @@ class osDefine:
     def PlayerInit():
         osDefine.Logger("PlayerInit");
         if(0 != osDefine.currentPlayer):
+            saveInfos = PlayInfos.GetPlayInfos();
+            findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
+
+            osDefine.Logger("playFileName : " + str(osDefine.playFileName));
+            osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
+            osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
+
+            findInfo.setPosition(osDefine.currentPlayer.position());
+            findInfo.setDuration(osDefine.currentPlayer.duration());
+            findInfo.setVolume(osDefine.currentPlayer.volume());
+
+            saveInfos.saveFile();
+
             osDefine.currentPlayer.quit();
         os.system("sudo killall -9 omxplayer")
         os.system("sudo killall -9 omxplayer.bin")
@@ -112,7 +125,7 @@ class osDefine:
            else :
                return playUrl;
         executeFilePath = playUrl; 
-        osDefine.currentPlayer = OMXPlayer(playUrl); 
+        osDefine.currentPlayer.load(playUrl); 
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.playFileName = playUrl; 
         return executeFilePath;
@@ -131,17 +144,25 @@ class osDefine:
            else :
                return decodeStr;
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
-        osDefine.currentPlayer = OMXPlayer(executeFilePath);
+        if(0 == osDefine.currentPlayer):
+            osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
+        else:
+            osDefine.currentPlayer.load(executeFilePath);
 
-        playInfo = PlayInfos.GetPlayInfos().getPlayInfo(decodeStr);
+        osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
+        osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
+        osDefine.currentPlayer.play();
+        osDefine.playFileName = decodeStr; 
+        return executeFilePath; 
+    
+    @staticmethod
+    def PlayerPlay():
+        playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playFileName);
         
         if( "" != playInfo):
             osDefine.currentPlayer.set_position(playInfo.getPosition());
             osDefine.currentPlayer.set_volume(playInfo.getVolume());
-        osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
-        osDefine.playFileName = decodeStr; 
-        return executeFilePath; 
-
+        
     @staticmethod
     def GetPlayerName():
         if("nt" == os.name):
@@ -154,19 +175,6 @@ class osDefine:
 
     @staticmethod
     def Stop(request):
-
-        osDefine.Logger("playFileName : " + str(osDefine.playFileName));
-        osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
-        osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
-
-        saveInfos = PlayInfos.GetPlayInfos();
-        findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
-
-        findInfo.setPosition(osDefine.currentPlayer.position());
-        findInfo.setDuration(osDefine.currentPlayer.duration());
-        findInfo.setVolume(osDefine.currentPlayer.volume());
-
-        saveInfos.saveFile();
         osDefine.PlayerInit();
         return "";
     
