@@ -44,10 +44,10 @@ class FCM:
             # See documentation on defining a message payload.
             message = messaging.Message(
                 token=registration_token,
-                notification = messaging.Notification(
-                    title = "다운로드 완료",
-                    body = sendmessage + "다운로드가 완료되었습니다.",
-                ),
+                # notification = messaging.Notification(
+                #     title = "다운로드 완료",
+                #     body = sendmessage + "다운로드가 완료되었습니다.",
+                # ),
                 data={
                     "Title" : "다운로드 완료",
                     "Content" : sendmessage + "다운로드가 완료되었습니다.",
