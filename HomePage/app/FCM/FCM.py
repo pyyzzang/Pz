@@ -6,6 +6,7 @@ from ..module.osDefine import osDefine
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
+from datetime import datetime;
 
 class FCM:
     @staticmethod
@@ -51,6 +52,7 @@ class FCM:
                 data={
                     "Title" : "다운로드 완료",
                     "Content" : sendmessage + "다운로드가 완료되었습니다.",
+                    "Time" : datetime.now().strftime("%Y.%m.%d %H:%M:%S"),
                 },
             )
         except Exception as e:
