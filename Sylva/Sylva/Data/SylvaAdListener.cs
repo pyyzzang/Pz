@@ -8,6 +8,7 @@ using Android.Content;
 using Android.Gms.Ads;
 using Android.OS;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 
@@ -25,17 +26,17 @@ namespace Sylva.Data
             switch(p0)
             {
                 case AdRequest.ErrorCodeInternalError:
-                    Console.WriteLine("AdRequest.ErrorCodeInternalError");
+                    Sylva.Util.Log.Write("AdRequest.ErrorCodeInternalError");
                     
                     break;
                 case AdRequest.ErrorCodeInvalidRequest:
-                    Console.WriteLine("AdRequest.ErrorCodeInvalidRequest");
+                    Sylva.Util.Log.Write("AdRequest.ErrorCodeInvalidRequest");
                     break;
                 case AdRequest.ErrorCodeNetworkError:
-                    Console.WriteLine("AdRequest.ErrorCodeNetworkError");
+                    Sylva.Util.Log.Write("AdRequest.ErrorCodeNetworkError");
                     break;
                 case AdRequest.ErrorCodeNoFill:
-                    Console.WriteLine("AdRequest.ErrorCodeNoFill");
+                    Sylva.Util.Log.Write("AdRequest.ErrorCodeNoFill");
                     break;
             }
             
