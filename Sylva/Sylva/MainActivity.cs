@@ -3,8 +3,11 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading;
 using Android.App;
 using Android.Content;
+using Android.Gms.Ads;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.Design.Widget;
@@ -27,17 +30,35 @@ namespace Sylva
         static int NOTIFICATION_ID = 1006;
         static string CHANNEL_ID = "Sylva_Notification";
 
+        protected AdView adsView;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            SetContentView(Resource.Layout.activity_main);
+            SetContentView(Resource.Layout.content_main);
 
             ListView msgListView = FindViewById<ListView>(Resource.Id.MsgListView);
             msgListView.Adapter = MsgListAdapter;
+            
 
             CurrentMainActivity = this;
             NotiServiceCreat();
+
+            Android.Gms.Ads.MobileAds.Initialize(ApplicationContext, this.Resources.GetString(Resource.String.AdMobID));
+            adsView = (AdView)FindViewById(Resource.Id.adView);
+            adsView.AdListener = new SylvaAdListener();
+            AdRequest request = new AdRequest.Builder().Build();
+            adsView.LoadAd(request);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if(null != adsView)
+            {
+                adsView.Resume();
+            }
         }
 
         private void NotiServiceCreat()
@@ -60,7 +81,7 @@ namespace Sylva
             notificationManager.CreateNotificationChannel(channel);
         }
 
-        public void Noti(string __msg)
+        public void Noti(string __title, string __msg)
         {
             // When the user clicks the notification, SecondActivity will start up.
             var resultIntent = new Intent(this, typeof(MainActivity));
@@ -77,7 +98,7 @@ namespace Sylva
             var builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                           .SetAutoCancel(true) // Dismiss the notification from the notification area when the user clicks on it
                           .SetContentIntent(resultPendingIntent) // Start up this activity when the user clicks the intent.
-                          .SetContentTitle("다운로드 완료") // Set the title
+                          .SetContentTitle(__title) // Set the title
                           .SetSmallIcon(Resource.Drawable.ic_mtrl_chip_checked_black) // This is the icon to display
                           .SetContentText(__msg); // the message to display.
 

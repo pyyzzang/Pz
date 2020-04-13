@@ -16,6 +16,7 @@ using Android.Widget;
 using Firebase.Messaging;
 using Newtonsoft.Json;
 using Sylva.Util;
+using Xamarin.Essentials;
 
 namespace Sylva.Data
 {
@@ -25,9 +26,7 @@ namespace Sylva.Data
         private string _Title = string.Empty;
         private string _Body = string.Empty;
 
-        [JsonProperty(PropertyName = "Title")]
         public string Title { get { return _Title; } set { _Title = value; } }
-        [JsonProperty(PropertyName = "Body")]
         public string Body { get { return _Body; } set { _Body = value; } }
         public Notification(string __title, string __body)
         {
@@ -38,26 +37,26 @@ namespace Sylva.Data
 
     public class Data
     {
-        public Data(IDictionary<string,string> __data)
+        public Data(IDictionary<string,string> __dataDic)
         {
-            _Data = __data;
+            _DataDic = __dataDic;
         }
-        private IDictionary<string, string> _Data = null;
+        private IDictionary<string, string> _DataDic = null;
 
-        [JsonProperty(PropertyName = "Title")]
+        public IDictionary<string, string> DataDic { get { return _DataDic; } set { _DataDic = value; } }
+
         public string Title
         {
             get
             {
-                return _Data["Title"];
+                return _DataDic["Title"];
             }
         }
-        [JsonProperty(PropertyName = "Body")]
         public string Body
         {
             get
             {
-                return _Data["Body"];
+                return _DataDic["Body"];
             }
         }
     }
@@ -66,7 +65,11 @@ namespace Sylva.Data
     {
         public FCM_Message(RemoteMessage __remoteMessage) 
         {
-            //Notification = new Notification(__remoteMessage.GetNotification().Title, __remoteMessage.GetNotification().Body);
+            if(null != __remoteMessage.GetNotification())
+            {
+                Notification = new Notification(__remoteMessage.GetNotification().Title, __remoteMessage.GetNotification().Body);
+            }
+            
             Data = new Data(__remoteMessage.Data);
         }
         
@@ -74,6 +77,27 @@ namespace Sylva.Data
         public Notification Notification { get; set; }
         [JsonProperty(PropertyName = "Data")]
         public Data Data { get; set; }
+        [JsonProperty(PropertyName = "Title")]
+        public string Title
+        {
+            get
+            {
+                if (false == string.IsNullOrEmpty(Notification.Title))
+                    return Notification.Title;
+                return Data.Title;
+            }
+        }
+        [JsonProperty(PropertyName = "Body")]
+        public string Body
+        {
+            get
+            {
+                if (false == string.IsNullOrEmpty(Notification.Body))
+                    return Notification.Body;
+                return Data.Body;
+            }
+        }
+
     }
 
     public class FCM_List : ObservableCollection<FCM_Message>
@@ -110,11 +134,16 @@ namespace Sylva.Data
 
         public void SaveFile()
         {
-            using (StreamWriter sw = new StreamWriter(FileHelper.MsgListFilePath))
+            try
             {
-                string saveJsonString = JsonConvert.SerializeObject(FCM_List._fcm_List);
-                sw.WriteLine(saveJsonString);
+
+                using (StreamWriter sw = new StreamWriter(FileHelper.MsgListFilePath))
+                {
+                    string saveJsonString = JsonConvert.SerializeObject(FCM_List._fcm_List);
+                    sw.WriteLine(saveJsonString);
+                }
             }
+            catch (Exception e) { }
         }
     }
 }
