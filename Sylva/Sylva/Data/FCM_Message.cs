@@ -63,45 +63,34 @@ namespace Sylva.Data
 
     public class FCM_Message
     {
+        protected string _Date = string.Empty;
+        protected string _Body = string.Empty;
+        public FCM_Message() { }
         public FCM_Message(RemoteMessage __remoteMessage) 
         {
-            if(null != __remoteMessage.GetNotification())
+            if (true == __remoteMessage.Data.ContainsKey("Time"))
             {
-                Notification = new Notification(__remoteMessage.GetNotification().Title, __remoteMessage.GetNotification().Body);
+                Date = __remoteMessage.Data["Time"];
             }
-            
-            Data = new Data(__remoteMessage.Data);
+            if (true == __remoteMessage.Data.ContainsKey("Content"))
+            {
+                Body = __remoteMessage.Data["Content"];
+            }
         }
         
-        [JsonProperty(PropertyName = "Notification")]
-        public Notification Notification { get; set; }
-        [JsonProperty(PropertyName = "Data")]
-        public Data Data { get; set; }
-        [JsonProperty(PropertyName = "Title")]
-        public string Title
-        {
-            get
-            {
-                if (false == string.IsNullOrEmpty(Notification.Title))
-                    return Notification.Title;
-                return Data.Title;
-            }
-        }
+        [JsonProperty(PropertyName = "Date")]
+        public string Date { get { return _Date; } set { _Date = value; } }
         [JsonProperty(PropertyName = "Body")]
-        public string Body
-        {
-            get
-            {
-                if (false == string.IsNullOrEmpty(Notification.Body))
-                    return Notification.Body;
-                return Data.Body;
-            }
-        }
+        public string Body{ get { return _Body; } set { _Body = value; } }
 
     }
 
     public class FCM_List : ObservableCollection<FCM_Message>
     {
+        public FCM_List()
+        {
+
+        }
         private static FCM_List _fcm_List= null;
         public static FCM_List GetFCMList()
         {
@@ -116,7 +105,6 @@ namespace Sylva.Data
                             string readJsonString = sw.ReadLine();
                             Newtonsoft.Json.Linq.JArray jArray = (Newtonsoft.Json.Linq.JArray)JsonConvert.DeserializeObject(readJsonString);
                             FCM_List._fcm_List = jArray.ToObject<FCM_List>();
-
                         }
                         catch(Exception e)
                         {

@@ -22,5 +22,13 @@ namespace Sylva.Util
                 return Path.Combine(Android.App.Application.Context.DataDir.AbsolutePath, "MsgList");
             }
         }
+
+        public static string LogPath
+        {
+            get
+            {
+                return Path.Combine(Android.App.Application.Context.DataDir.AbsolutePath, string.Format("%s_Log.log", DateTime.Now.ToString("yyyy_MM_dd")));
+            }
+        }
     }
 }

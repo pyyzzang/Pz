@@ -19,18 +19,27 @@
             android:minWidth="25px"
             android:minHeight="25px"
             android:layout_width="match_parent"
-            android:layout_height="468.0dp"
+            android:layout_height="500dp"
             android:id="@+id/MsgListView" />
 
-
-        <com.google.android.gms.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true"
-            app:adSize="BANNER"
-            app:adUnitId="@string/AdMobID">
-        </com.google.android.gms.ads.AdView>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:minWidth="25px"
+            android:minHeight="25px"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@android:color/holo_red_dark"
+            android:id="@+id/linearLayout2">
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_vertical|center_horizontal"
+                app:adSize="BANNER"
+                app:adUnitId="@string/AdMobID">
+            </com.google.android.gms.ads.AdView>
+        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

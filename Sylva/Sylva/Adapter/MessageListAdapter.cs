@@ -45,7 +45,7 @@ namespace Sylva.Data
             this.AddAll(_FCM_List);
             this.NotifyDataSetChanged();
 
-            mainActivity.Noti(_FCM_List[0].Title, _FCM_List[0].Body);
+            mainActivity.Noti(_FCM_List[0].Date, _FCM_List[0].Body);
         }
 
         public MessageListAdapter(MainActivity __mainActivity): base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
@@ -62,15 +62,15 @@ namespace Sylva.Data
                 v = mainActivity.LayoutInflater.Inflate(Resource.Layout.MessageLayout, null);
             if (null != msg)
             {
-                TextView tt = (TextView)v.FindViewById(Resource.Id.txtTitle);
-                TextView bt = (TextView)v.FindViewById(Resource.Id.txtBody);
-                if (tt != null)
+                TextView txtViewDate = (TextView)v.FindViewById(Resource.Id.txtDate);
+                TextView txtViewBody = (TextView)v.FindViewById(Resource.Id.txtBody);
+                if (txtViewBody != null)
                 {
-                    tt.Text = "Title : " + msg.Title;
+                    txtViewBody.Text = msg.Body;
                 }
-                if (bt != null)
+                if(null != txtViewDate)
                 {
-                    bt.Text = "Body : " + msg.Body;
+                    txtViewDate.Text = msg.Date;
                 }
             }
             return v;
