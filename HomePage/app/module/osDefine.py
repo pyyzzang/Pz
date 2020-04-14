@@ -86,20 +86,25 @@ class osDefine:
     def PlayerInit():
         osDefine.Logger("PlayerInit");
         if(0 != osDefine.currentPlayer):
-            saveInfos = PlayInfos.GetPlayInfos();
-            findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
+            try:
+                saveInfos = PlayInfos.GetPlayInfos();
+                findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
 
-            osDefine.Logger("playFileName : " + str(osDefine.playFileName));
-            osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
-            osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
+                osDefine.Logger("playFileName : " + str(osDefine.playFileName));
+                osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
+                osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
 
-            findInfo.setPosition(osDefine.currentPlayer.position());
-            findInfo.setDuration(osDefine.currentPlayer.duration());
-            findInfo.setVolume(osDefine.currentPlayer.volume());
+                findInfo.setPosition(osDefine.currentPlayer.position());
+                findInfo.setDuration(osDefine.currentPlayer.duration());
+                findInfo.setVolume(osDefine.currentPlayer.volume());
 
-            saveInfos.saveFile();
+                saveInfos.saveFile();
 
-            osDefine.currentPlayer.quit();
+                osDefine.currentPlayer.quit();
+
+            except Exception as e:
+                osDefine.Logger(e);
+            
         os.system("sudo killall -9 omxplayer")
         os.system("sudo killall -9 omxplayer.bin")
         osDefine.palyFileName = 0;
@@ -135,8 +140,11 @@ class osDefine:
         ret = subprocess.check_output('ps -ef | grep ' + processName, shell = True).decode();
         return ret.count(processName); 
     @staticmethod
-    def PlayFile(playFileName):
-        decodeStr = osDefine.Base64Decoding(playFileName);
+    def PlayFile(playFileName , isDecode = True):
+        if(True == isDecode):
+            decodeStr = osDefine.Base64Decoding(playFileName);
+        else:
+            decodeStr = playFileName;
         if(0 != osDefine.playFileName ):
            if(osDefine.playFileName != decodeStr or 
               2 >= osDefine.getProcessCount("omxplayer")):
@@ -150,14 +158,46 @@ class osDefine:
             osDefine.currentPlayer.load(executeFilePath);
 
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
+        osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
         osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
         osDefine.currentPlayer.play();
         osDefine.playFileName = decodeStr; 
         return executeFilePath; 
-    
+
+    @staticmethod 
+    def playNextVideo():
+        playFilePath = osDefine.playFileName;
+        fileDir, fileName = os.path.split(playFilePath);
+        if("/" == fileDir):
+            return 0;
+
+        findDir = osDefine.LocalFilePath() + fileDir;
+        nextFile = "";
+        findFile = False;
+        for file in os.listdir(findDir):
+            osDefine.Logger("File : " + file);
+            if(True == findFile):
+                nextFile = file;
+                break;
+            if(file == fileName):
+                findFile = True;
+        
+        if(True == findFile):
+            nextPlayFile = os.path.join(fileDir, nextFile);
+            osDefine.PlayFile(nextPlayFile, False);
+
+    @staticmethod
+    def ExitEvent(exit_status):
+        osDefine.Logger("ExitEvent : " + str(exit_status));
+        if( 0 == exit_status or 1 == exit_status):
+            osDefine.playNextVideo();
+        
+
     @staticmethod
     def PlayerPlay():
         playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playFileName);
+
+        osDefine.Logger("PlayerPlay");
         
         if( "" != playInfo):
             osDefine.currentPlayer.set_position(playInfo.getPosition());
