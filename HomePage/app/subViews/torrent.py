@@ -269,6 +269,22 @@ class torrent:
                 dbConnection.InsertQueryExecute(updateQuery);
 
     @staticmethod
+    def SMI2SRT(curPath):
+    for subList in os.listdir(curPath):
+        subItem = os.path.join(curPath, subList);
+        if( True == os.path.isdir(subItem)):
+            SMI2SRT(subItem);
+        elif(True == os.path.isfile(subItem)):
+            fileName, ext = os.path.splitext(subItem);
+            if('.smi' == ext.lower()):
+                subs = ("subs -c srt %s.smi -o %s_tmp.srt") % (fileName, fileName);
+                os.system(subs);
+                subs = ("iconv -f euc-kr -t utf8 %s_tmp.srt -o %s.srt") % (fileName, fileName);
+                os.system(subs);
+    os.system("cd " + curPath);
+    os.system("rm *_tmp.srt");
+
+    @staticmethod
     def torrentDownloadComplete(request):
         osDefine.Logger("torrentDownloadComplete (+) " + os.getcwd());
         name = request.POST.get("name");
@@ -285,4 +301,6 @@ class torrent:
             osDefine.Logger(e);
         osDefine.Logger("FCM.SendFireBase(name)");
         FCM.SendFireBase(name);
+
+        torrent.SMI2SRT(osDefine.LocalFilePath());
         return HttpResponse("");
