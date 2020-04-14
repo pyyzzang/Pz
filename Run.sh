@@ -1,2 +1,2 @@
 cd /home/pi/Sylva/Pz/HomePage
-python3 manage.py runserver 192.168.219.102:8080
+python3 manage.py runserver 182.231.34.148:8080
