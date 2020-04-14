@@ -156,12 +156,13 @@ class osDefine:
             osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
         else:
             osDefine.currentPlayer.load(executeFilePath);
-
+        
+        osDefine.playFileName = decodeStr; 
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
         osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
         osDefine.currentPlayer.play();
-        osDefine.playFileName = decodeStr; 
+        
         return executeFilePath; 
 
     @staticmethod 
@@ -197,12 +198,13 @@ class osDefine:
     def PlayerPlay():
         playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playFileName);
 
-        osDefine.Logger("PlayerPlay");
+        osDefine.Logger("PlayerPlay : " + str(osDefine.playFileName));
         
         if( "" != playInfo):
             osDefine.currentPlayer.set_position(playInfo.getPosition());
             osDefine.currentPlayer.set_volume(playInfo.getVolume());
-        
+        osDefine.currentPlayer.playEvent -= lambda _: osDefine.PlayerPlay();
+
     @staticmethod
     def GetPlayerName():
         if("nt" == os.name):
