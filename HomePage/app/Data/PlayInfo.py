@@ -52,7 +52,6 @@ class PlayInfos(object):
         retPlayInfo = "";
         try:
             for playInfo in self.playInfos:
-                infoLogger.info("Title : " + playInfo.getTitle());
                 if(playFileName == playInfo.getTitle()):
                     return playInfo;
 
