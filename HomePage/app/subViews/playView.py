@@ -25,6 +25,7 @@ class playView(object):
         if(0):
             http += "Not Play Media.<p>"
         else:
+            http += "<p><font size=\"10\"><label>제목 : </label><label id=\"TitleLabel\">" + osDefine.playFileName + "</label></font></p>";
             http += "<script type=\"text/javascript\">"
             #Back600
             http += "$(function(){"
@@ -195,7 +196,21 @@ class playView(object):
             http += "})"
             http += "</script>"
 
-            http += "<body>"
+            http += "<body onload=\"FormLoad()\">"
+            http += "<script>function FormLoad(){setInterval(UpdateTitle, 3000);}</script>"
+            http += "<script>";
+            http += "function UpdateTitle(){";
+            http += "$.ajax({"
+            http += "type: 'get'"
+            http += ", url: 'Play/CurFileName'"
+            http += ", dataType : 'html'"
+            http += ", success : function(data){"
+            http += "titleLabel = document.getElementById(\"TitleLabel\");";
+            http += "titleLabel.innerHTML=data;";
+            http += "}";
+            http += "});";
+            http += "};";
+            http += "</script>"
 
             http += "<div class='main' style='top:-100'>                                                                             ";
             http += "	<div class='buttonDiv'><button id='Back600Button' class='back600'/>	</div>                  ";

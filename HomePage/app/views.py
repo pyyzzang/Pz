@@ -45,6 +45,8 @@ def VolumeUp(request):
     return playerMove.VolumeUp(request);
 def VolumeDown(request):
     return playerMove.VolumeDown(request);
+def CurFileName(request):
+    return playerMove.CurFileName(request);
 def test(request):
     return testView.test(request);
 def Torrent(request):

@@ -51,4 +51,8 @@ class playerMove():
     def VolumeDown(param):
         osDefine.Action(17);
         return HttpResponse("Volume Down");
+
+    @staticmethod 
+    def CurFileName(param):
+        return HttpResponse(osDefine.playFileName);
  

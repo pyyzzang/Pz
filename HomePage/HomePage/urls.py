@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'Play/Skip', app.views.Skip, name='Skip'),
     url(r'Play/VolumeUp', app.views.VolumeUp, name='VolumeUp'),
     url(r'Play/VolumeDown', app.views.VolumeDown, name='VolumeDown'),
+    url(r'Play/CurFileName', app.views.CurFileName, name='CurFileName'),
 
     url(r'Home/Delete', app.views.Delete, name='Delete'),
     url(r'Play', app.views.play, name='play'),
