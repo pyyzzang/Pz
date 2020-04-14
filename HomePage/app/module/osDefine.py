@@ -140,7 +140,7 @@ class osDefine:
         ret = subprocess.check_output('ps -ef | grep ' + processName, shell = True).decode();
         return ret.count(processName); 
     @staticmethod
-    def PlayFile(playFileName , isDecode = True):
+    def PlayFile(playFileName , isDecode = True, isPause = True):
         if(True == isDecode):
             decodeStr = osDefine.Base64Decoding(playFileName);
         else:
@@ -155,13 +155,15 @@ class osDefine:
         if(0 == osDefine.currentPlayer):
             osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
         else:
-            osDefine.currentPlayer.load(executeFilePath);
+            osDefine.currentPlayer.load(executeFilePath, pause=True);
         
         osDefine.playFileName = decodeStr; 
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
-        osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
+        if(True == isPause):
+            osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
         osDefine.currentPlayer.play();
+        
         
         return executeFilePath; 
 
@@ -185,7 +187,7 @@ class osDefine:
         
         if(True == findFile):
             nextPlayFile = os.path.join(fileDir, nextFile);
-            osDefine.PlayFile(nextPlayFile, False);
+            osDefine.PlayFile(nextPlayFile, False, False);
 
     @staticmethod
     def ExitEvent(exit_status):
