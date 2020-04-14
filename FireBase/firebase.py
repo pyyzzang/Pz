@@ -3,21 +3,24 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import messaging
+from datetime import datetime;
+
 
 cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
 default_app = firebase_admin.initialize_app(cred)
 
 
 # This registration token comes from the client FCM SDKs.
-registration_token = 'eIy_nFNUkhc:APA91bGlblPjjRsRgwz2Ez2GF07wNt5P9UpiBEvDIiKxR2tWXpJucausB4fk_skuEBBXi3NM_S19LufFRfg8KWMNUuFaokhcCb4HP_o2MgIK_r43T08vJg2NA6O-QqAcKTb3VJNkA1-B'
+registration_token = 'dTeyQCMuMxI:APA91bHY0EVD-JK7ZO6LLzhPNq_qjv5aNijxM35BKSe7WmPFpNb2l26ckZkp4vmUipHyyqgDsCx6lQUO2EK5QgPX4kbNlnUDvAmJq_I_S_y5FOZIevDF9DlCxk3RR4SiMSTM0R-_07oL'
 
 # See documentation on defining a message payload.
 message = messaging.Message(
     token=registration_token,
-    notification = messaging.Notification(
-        title = "제목",
-        body = "Python test body",
-    )
+    data={
+        "Title" : "제목",
+        "Content" : "몸통",
+        "Time" : datetime.now().strftime("%y.%m.%d %H:%M:%S"),
+    },
 )
 
 # Send a message to the device corresponding to the provided
