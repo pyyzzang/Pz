@@ -193,7 +193,6 @@ class osDefine:
     def ExitEvent(exit_status):
         osDefine.Logger("ExitEvent : " + str(exit_status));
         if( 0 == exit_status or 1 == exit_status):
-        
 
     @staticmethod
     def PlayerPlay():
