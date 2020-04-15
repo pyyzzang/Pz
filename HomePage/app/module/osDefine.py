@@ -74,7 +74,7 @@ class osDefine:
         if("nt" == os.name):
             return socket.gethostbyname(socket.getfqdn()) + ":8000"
         else:
-            return "182.231.34.148:8000"
+            return "192.168.219.102:8000"
 
     @staticmethod
     def PlayerName():
@@ -230,8 +230,8 @@ class osDefine:
     @staticmethod
     def getRunIp():
         if(True == osDefine.getIsDev()):
-            return "http://182.231.34.148:8000"
-        return "http://182.231.34.148:80"
+            return "http://192.168.219.102:8000"
+        return "http://192.168.219.102:80"
     @staticmethod
     def getRunDir():
         if(True == osDefine.getIsDev()):
