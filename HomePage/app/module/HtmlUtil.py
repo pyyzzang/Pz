@@ -48,5 +48,6 @@ class HtmlUtil:
         retHttp += ' <!--===============================================================================================-->              ';
         retHttp += ' 	<script src="js/main.js"></script>                                                                              ';
         retHttp += '                                                                                                                     ';
+        retHttp += '<script data-ad-client="ca-pub-7189432704232049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
         retHttp += ' </head>                                                                                                             ';
         return retHttp;
