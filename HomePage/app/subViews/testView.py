@@ -12,7 +12,7 @@ from django.http import HttpResponse
 import os.path
 import os,sys
 from ..module.osDefine import osDefine
-import pyautogui
+#import pyautogui
 import time
 #import pywinauto
 #import win32gui,win32con, time,sys
