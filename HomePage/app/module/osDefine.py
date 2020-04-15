@@ -193,7 +193,6 @@ class osDefine:
     def ExitEvent(exit_status):
         osDefine.Logger("ExitEvent : " + str(exit_status));
         if( 0 == exit_status or 1 == exit_status):
-            osDefine.playNextVideo();
         
 
     @staticmethod
@@ -232,7 +231,7 @@ class osDefine:
     def getRunIp():
         if(True == osDefine.getIsDev()):
             return "http://182.231.34.148:8000"
-        return "http://182.231.34.148:8080"
+        return "http://182.231.34.148:80"
     @staticmethod
     def getRunDir():
         if(True == osDefine.getIsDev()):
