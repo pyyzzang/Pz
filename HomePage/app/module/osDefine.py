@@ -15,6 +15,9 @@ from ..Data.PlayInfo import PlayInfo
 from ..Data.PlayInfo import PlayInfos
 from .strUtil import strUtil;
 import json
+import threading;
+import time;
+
 
 class PlayMode:
     File = 0;
@@ -93,19 +96,6 @@ class osDefine:
         osDefine.Logger("PlayerInit");
         if(0 != osDefine.currentPlayer):
             try:
-                saveInfos = PlayInfos.GetPlayInfos();
-                findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
-
-                osDefine.Logger("playFileName : " + str(osDefine.playFileName));
-                osDefine.Logger("Position : " + str(osDefine.currentPlayer.position()));
-                osDefine.Logger("Volume : " + str(osDefine.currentPlayer.volume()));
-
-                findInfo.setPosition(osDefine.currentPlayer.position());
-                findInfo.setDuration(osDefine.currentPlayer.duration());
-                findInfo.setVolume(osDefine.currentPlayer.volume());
-
-                saveInfos.saveFile();
-
                 osDefine.currentPlayer.quit();
                 osDefine.playFileName = 0;
 
@@ -159,20 +149,36 @@ class osDefine:
            else :
                return decodeStr;
         executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
-        if(0 == osDefine.currentPlayer):
-            osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
-        else:
-            osDefine.currentPlayer.load(executeFilePath, pause=True);
+        if(0 != osDefine.currentPlayer):
+            osDefine.currentPlayer.quit();
+
+        osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
         
         osDefine.playFileName = decodeStr; 
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
-        if(True == isPause):
-            osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
+        
+        osDefine.currentPlayer.playEvent += lambda _: osDefine.PlayerPlay();
         osDefine.currentPlayer.play();
         
-        
+        saveThread = threading.Thread(target=osDefine.PlayInfoSaveThread, args=(osDefine.playFileName,));
+        saveThread.start();
+
         return executeFilePath; 
+
+    @staticmethod
+    def PlayInfoSaveThread(currentPlayFile):
+
+        while(osDefine.playFileName == currentPlayFile):
+            saveInfos = PlayInfos.GetPlayInfos();
+            findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
+
+            findInfo.setPosition(osDefine.currentPlayer.position());
+            findInfo.setDuration(osDefine.currentPlayer.duration());
+            findInfo.setVolume(osDefine.currentPlayer.volume());
+
+            saveInfos.saveFile();
+            time.sleep(3);
 
     @staticmethod 
     def playNextVideo():
@@ -211,7 +217,6 @@ class osDefine:
         if( "" != playInfo):
             osDefine.currentPlayer.set_position(playInfo.getPosition());
             osDefine.currentPlayer.set_volume(playInfo.getVolume());
-        osDefine.currentPlayer.playEvent -= lambda _: osDefine.PlayerPlay();
 
     @staticmethod
     def GetPlayerName():
@@ -225,7 +230,10 @@ class osDefine:
 
     @staticmethod
     def Stop(request):
-        osDefine.PlayerInit();
+        try:
+            osDefine.PlayerInit();
+        except Exception as e:
+            osDefine.Logger(e);
         return "";
     
     @staticmethod

@@ -2,6 +2,7 @@ import os;
 import json;
 import logging
 from ..Define import Define;
+from threading import Lock;
 
 infoLogger = logging.getLogger("HomePage");
 
@@ -65,9 +66,10 @@ class PlayInfos(object):
         return retPlayInfo;
     
     def saveFile(self):
-        infoLogger.info("saveFile : " + PlayInfos.UserInfo);
-        with open(PlayInfos.UserInfo, "w") as filePlayInfo:
-            json.dump(self, filePlayInfo, default=lambda o: o.__dict__);
+        criticalSection = Lock();
+        with criticalSection:
+            with open(PlayInfos.UserInfo, "w") as filePlayInfo:
+                json.dump(self, filePlayInfo, default=lambda o: o.__dict__);
 
     @staticmethod
     def GetPlayInfos():
