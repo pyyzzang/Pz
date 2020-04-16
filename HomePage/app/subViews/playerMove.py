@@ -54,5 +54,5 @@ class playerMove():
 
     @staticmethod 
     def CurFileName(param):
-        return HttpResponse(osDefine.playFileName);
+        return HttpResponse(osDefine.getPlayFileName());
  
