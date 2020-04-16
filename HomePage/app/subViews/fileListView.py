@@ -8,7 +8,8 @@ import base64
 from ..module.osDefine import PlayMode;
 from .YoutubeView import YoutubeView;
 from ..module.HtmlUtil import HtmlUtil;
-from ..Data.PlayInfo import PlayInfos
+from ..Data.PlayInfo import PlayInfos;
+from .playView import playView;
 
 class FileInfo:
     def __init__(self, filePath, dir):
@@ -97,12 +98,11 @@ class fileListView(object):
         except Exception:
             requestFile = "";
 
+        http = "";
         try:
             http = HtmlUtil.getHeader();
             http += fileListView.getTitleHead();
-
             http += HtmlUtil.getBodyHead();
-
             http += fileListView.getVideoList(requestFile);
             http += YoutubeView.getVideoList();
 
@@ -110,11 +110,13 @@ class fileListView(object):
             http += "</body>";
         except Exception as e:
             osDefine.Logger(e);
-            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home;</script>";
+            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home\;</script>";
         return HttpResponse(http); 
     @staticmethod
     def getTitleHead():
         retHttp  = '<body Onload="FormLoad()">';
+        retHttp += playView.getPlayView("200px", "70%");
+        
         retHttp += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         retHttp += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
         retHttp += "<script>";
