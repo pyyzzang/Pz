@@ -1,15 +1,19 @@
+import os
 import re
+
+
 class strUtil:
  tvPattern = 0
  movePattern = 0
 
  @staticmethod
  def init():
-  strUtil.titlePattern = '.+.E\d+' 
+  strUtil.titlePattern = '.+.E\d+'
+
  @staticmethod
  def isMatchTitle(title):
-  strUtil.init();
-  if(re.search(strUtil.titlePattern,title)):
+  strUtil.init()
+  if(re.search(strUtil.titlePattern, title)):
     return True
   return False
 
@@ -17,15 +21,14 @@ class strUtil:
  def getRegulaString(str, pattern):
   regulTitle = re.compile(pattern)
   result = regulTitle.findall(str)
-  return result;
+  return result
 
  @staticmethod
  def getMatchTitle(title):
   strUtil.init()
-  
-  result = strUtil.getRegulaString(title, strUtil.titlePattern);
-  length = len(result);
+  fileName = os.path.split(title)[1]
+  result = strUtil.getRegulaString(fileName, strUtil.titlePattern)
+  length = len(result)
   if(0 != length):
-   return result[length - 1];
-  return title;
-
+   return result[length - 1]
+  return fileName
