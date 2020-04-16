@@ -107,6 +107,7 @@ class osDefine:
                 saveInfos.saveFile();
 
                 osDefine.currentPlayer.quit();
+                osDefine.playFileName = 0;
 
             except Exception as e:
                 osDefine.Logger(e);
