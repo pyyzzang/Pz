@@ -13,6 +13,7 @@ import subprocess
 import logging
 from ..Data.PlayInfo import PlayInfo
 from ..Data.PlayInfo import PlayInfos
+from .strUtil import strUtil;
 import json
 
 class PlayMode:
@@ -23,6 +24,11 @@ class PlayMode:
 class osDefine:
     currentPlayer = 0;
     playFileName = 0;
+    @staticmethod 
+    def getPlayFileName():
+        if(0 == osDefine.playFileName or "" == osDefine.playFileName):
+            return "";
+        return strUtil.getMatchTitle(osDefine.playFileName);
     @staticmethod
     def Skip(value):
         if(0 == osDefine.currentPlayer):
