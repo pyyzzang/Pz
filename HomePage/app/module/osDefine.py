@@ -215,7 +215,9 @@ class osDefine:
         osDefine.Logger("PlayerPlay : " + str(osDefine.playFileName));
         
         if( "" != playInfo):
-            osDefine.currentPlayer.set_position(playInfo.getPosition());
+            if( playInfo.getPosition() + 10 < playInfo.getDuration()):
+                osDefine.currentPlayer.set_position(playInfo.getPosition());
+            
             osDefine.currentPlayer.set_volume(playInfo.getVolume());
 
     @staticmethod
