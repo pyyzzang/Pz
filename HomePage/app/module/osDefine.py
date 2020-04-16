@@ -230,7 +230,7 @@ class osDefine:
     @staticmethod
     def getRunIp():
         if(True == osDefine.getIsDev()):
-            return "http://192.168.219.102:8000"
+            return "http://192.168.219.102:8080"
         return "http://192.168.219.102:80"
     @staticmethod
     def getRunDir():
