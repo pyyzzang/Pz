@@ -18,7 +18,7 @@ class playView(object):
         retHttp += "$(\"#Back600Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Back600'"
+        retHttp += ", url: '%sPlay/Back600'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -38,7 +38,7 @@ class playView(object):
         retHttp += "$(\"#Back10Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Back'"
+        retHttp += ", url: '%sPlay/Back'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -60,7 +60,7 @@ class playView(object):
         retHttp += "$(\"#ReplayButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Replay'"
+        retHttp += ", url: '%sPlay/Replay'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -84,7 +84,7 @@ class playView(object):
         retHttp += "$(\"#PauseButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Pause'"
+        retHttp += ", url: '%sPlay/Pause'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -110,7 +110,7 @@ class playView(object):
         retHttp += "$(\"#StopButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Stop'"
+        retHttp += ", url: '%sPlay/Stop'"  % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -133,7 +133,7 @@ class playView(object):
         retHttp += "$(\"#Skip10Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url : 'Play/Skip'"
+        retHttp += ", url : '%sPlay/Skip'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -155,7 +155,7 @@ class playView(object):
         retHttp += "$(\"#Skip600Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/Skip600'"
+        retHttp += ", url: '%sPlay/Skip600'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -177,7 +177,7 @@ class playView(object):
         retHttp += "$(\"#VolumeUpButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/VolumeUp'"
+        retHttp += ", url: '%sPlay/VolumeUp'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -198,7 +198,7 @@ class playView(object):
         retHttp += "$(\"#VolumeDownButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/VolumeDown'"
+        retHttp += ", url: '%sPlay/VolumeDown'" % osDefine.getRunIp();
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -215,32 +215,34 @@ class playView(object):
     @staticmethod
     def getFormload():
         retHttp = "";
-        retHttp += "<script>function FormLoad(){setInterval(UpdateTitle, 3000);}</script>"
         retHttp += "<script>";
         retHttp += "function UpdateTitle(){";
-        retHttp += "$.ajax({"
-        retHttp += "type: 'get'"
-        retHttp += ", url: 'Play/CurFileName'"
-        retHttp += ", dataType : 'html'"
-        retHttp += ", success : function(data){"
-        retHttp += "titleLabel = document.getElementById(\"TitleLabel\");";
-        retHttp += "titleLabel.innerHTML=data;";
-        retHttp += "}";
-        retHttp += "});";
-        retHttp += "};";
+        retHttp += "$.ajax({\n"
+        retHttp += "type: 'get'\n"
+        retHttp += ", url: '%s/Play/CurFileName'" % osDefine.getRunIp() + "\n";
+        retHttp += ", dataType : 'html'" + "\n";
+        retHttp += ", success : function(data){"+ "\n";
+        retHttp += "titleLabel = document.getElementById(\"TitleLabel\");"+ "\n";
+        retHttp += "titleLabel.innerHTML=data;" + "\n";
+        retHttp += "PlayControler = document.getElementById(\"PlayControler\");" + "\n";
+        retHttp += "if(\"\" == data){" + "\n";
+        retHttp += "PlayControler.style.display=\"none\";}" + "\n";
+        retHttp += "else{PlayControler.style.display=\"block\";}" + "\n";
+        retHttp += "}" + "\n";
+        retHttp += "});" + "\n";
+        retHttp += "}" + "\n";
+        retHttp += "setInterval(UpdateTitle, 3000);";
         retHttp += "</script>"
         return retHttp;
 
     @staticmethod
     def getPlayView(height = "100%", width="100%"):
         retHttp  = "";
-        isVisiblePlayControl = osDefine.getPlayFileName() == "" and "none" or "visible";
-        retHttp += "<div style=\"height:%s;width:%s;display:%s;\">" % (height, width, isVisiblePlayControl);
+        isVisiblePlayControl = osDefine.getPlayFileName() == "" and "none" or "block";
+        retHttp += "<div id=\"PlayControler\" style=\"height:%s;width:%s;display:%s;\">" % (height, width, isVisiblePlayControl);
 
         retHttp += "<font><label>제목 : </label><label id=\"TitleLabel\">" + osDefine.getPlayFileName() + "</label></font>";
-
-        retHttp += playView.getFormload();
-        retHttp += "<body onload=\"FormLoad()\">"
+        retHttp += "<body>"
 
         retHttp += "<div class='main' style='top:-100'>                                                                             ";
         retHttp += playView.getBack600();
@@ -261,7 +263,9 @@ class playView(object):
         retHttp += playView.getVolumeDown();
         retHttp += "</div>                                                                                         ";
         retHttp += "</body>    "
+        retHttp += playView.getFormload();
         retHttp += "</div>";
+        
         return retHttp;
 
     @staticmethod

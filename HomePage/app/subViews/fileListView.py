@@ -110,17 +110,17 @@ class fileListView(object):
             http += "</body>";
         except Exception as e:
             osDefine.Logger(e);
-            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home\;</script>";
+            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home\";</script>";
         return HttpResponse(http); 
     @staticmethod
     def getTitleHead():
-        retHttp  = '<body Onload="FormLoad()">';
+        retHttp  = '<body Onload="FormLoadFileListView()">';
         retHttp += playView.getPlayView("200px", "70%");
         
         retHttp += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         retHttp += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
         retHttp += "<script>";
-        retHttp += "function FormLoad(){"
+        retHttp += "function FormLoadFileListView(){"
         retHttp += "    document.getElementById('FileRadio').checked = true;"
         retHttp += "    RadioChecked(document.getElementById('FileRadio'));}";
         
