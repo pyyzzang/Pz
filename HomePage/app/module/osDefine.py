@@ -190,7 +190,9 @@ class osDefine:
         findDir = osDefine.LocalFilePath() + fileDir;
         nextFile = "";
         findFile = False;
-        for file in os.listdir(findDir):
+        fileTuple = os.listdir(findDir);
+        fileTuple.sort();
+        for file in fileTuple:
             osDefine.Logger("File : " + file);
             if(True == findFile):
                 nextFile = file;
