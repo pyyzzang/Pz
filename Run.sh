@@ -1,2 +1,4 @@
 cd /home/pi/Sylva/Pz/HomePage
-sudo python3 manage.py runserver 192.168.219.102:80
+mkdir log
+sudo chmod 777 log
+sudo python3 manage.py runsslserver 192.168.219.102:80 --certificate django.cert --key django.key
