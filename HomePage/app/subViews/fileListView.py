@@ -201,12 +201,10 @@ class fileListView(object):
         try:
             decodingFileName = osDefine.Base64Decoding(request.GET.get("fileName"));
             filePath = osDefine.LocalFilePath() + decodingFileName;
-            deleteCmd = "";
+            deleteCmd = "sudo rm '%s'" % filePath;
             if(True == os.path.isdir(filePath)):
-                deleteCmd = "sudo rm -R %s" % filePath;
-            else:
-                deleteCmd = "sudo rm %s" % filePath;
-
+                deleteCmd = "%s -R" % deleteCmd;
+            
             osDefine.Logger("Delete Cmd : " + deleteCmd);
             os.system(deleteCmd);
         except Exception as e:
