@@ -35,7 +35,7 @@ class FileInfo:
     def isDirectory(self):
         return os.path.isdir(self.getFullName());
     def visibleDeleteButton(self):
-        return self.isDirectory() and "Hidden" or "Visible";
+        return "" == self.filePath and "Hidden" or "Visible";
     def getThumbNailId(self):
         return "Thumbnail" + (self.isDirectory() and "Dir" or "File");
     def getEncodingFileName(self):
@@ -195,3 +195,20 @@ class fileListView(object):
             if(True == os.path.isdir(checkItem)):
                 if(True == osDefine.checkEmpty(checkItem)):
                     os.system("sudo rm -r \"" + checkItem + "\"");
+
+    @staticmethod
+    def delete(request):
+        try:
+            decodingFileName = osDefine.Base64Decoding(request.GET.get("fileName"));
+            filePath = osDefine.LocalFilePath() + decodingFileName;
+            deleteCmd = "";
+            if(True == os.path.isdir(filePath)):
+                deleteCmd = "sudo rm -R %s" % filePath;
+            else:
+                deleteCmd = "sudo rm %s" % filePath;
+
+            osDefine.Logger("Delete Cmd : " + deleteCmd);
+            os.system(deleteCmd);
+        except Exception as e:
+            osDefine.Logger(e);
+        return HttpResponse(deleteCmd);
