@@ -210,8 +210,13 @@ LOGGING = {
     }
 }
 
+#python3 manage.py crontab add     --- Register crontab 
+#python3 manage.py crontab remove  --- UnRegister crontab 
+
 CRONJOBS = [
     ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
     ('* 18 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
     ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
+    ('* 4 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
+    ('* 5 * * *', 'app.cron.CronTab.Delete_DotVsCode'),    #delete .vscode folder 
 ]
