@@ -115,6 +115,8 @@ class fileListView(object):
     @staticmethod
     def getTitleHead():
         retHttp  = '<body Onload="FormLoadFileListView()">';
+        retHttp += "<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>";
+        retHttp += "<script>function MoveTorrentPage(){ location.href = '/Torrent';}</script>"
         retHttp += playView.getPlayView("200px", "70%");
         
         retHttp += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';

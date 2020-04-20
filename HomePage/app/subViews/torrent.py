@@ -175,25 +175,27 @@ class torrent:
 
     @staticmethod 
     def getTorrentAddDiv():
-        ret = "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
-        ret += "<div class=\"dialog_window\" id=\"dialog_Window\">";
-        ret += "<div class=\"dialog_logo\" id=\"upload_dialog_logo\"></div>";
-        ret += "<h2 class=\"dialog_heading\">Upload Torrent Files</h2>";
-        ret += "<form action=\"/Torrent/Upload\" method=\"post\" id=\"torrent_upload_form\"";
-        ret += "enctype=\"multipart/form-data\">";
-        ret += "<div class=\"dialog_message\">";
-        ret += "<label\">제목을 입력하세요(*) : </label>";
-        ret += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\" autocomplete=\"off\"/>";
-        ret += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
-        ret += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
-        ret += "<p><label for=\"torrent_upload_url\" >Or enter a URL:</label>";
-        ret += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\" autocomplete=\"off\"/>";
-        ret +=  "</div>"
-        ret += "<button id=\"upload_confirm_button\">Upload</button>";
-        ret += "</form>"
-        ret += "</div>"
-        ret += "</div>"
-        return ret;
+        retHttp  = "<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>";
+        retHttp += "<script>function MoveTorrentPage(){ location.href = '/Home';}</script>"
+        retHttp += "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
+        retHttp += "<div class=\"dialog_window\" id=\"dialog_Window\">";
+        retHttp += "<div class=\"dialog_logo\" id=\"upload_dialog_logo\"></div>";
+        retHttp += "<h2 class=\"dialog_heading\">Upload Torrent Files</h2>";
+        retHttp += "<form action=\"/Torrent/Upload\" method=\"post\" id=\"torrent_upload_form\"";
+        retHttp += "enctype=\"multipart/form-data\">";
+        retHttp += "<div class=\"dialog_message\">";
+        retHttp += "<label\">제목을 입력하세요(*) : </label>";
+        retHttp += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\" autocomplete=\"off\"/>";
+        retHttp += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
+        retHttp += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
+        retHttp += "<p><label for=\"torrent_upload_url\" >Or enter a URL:</label>";
+        retHttp += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\" autocomplete=\"off\"/>";
+        retHttp +=  "</div>"
+        retHttp += "<button id=\"upload_confirm_button\">Upload</button>";
+        retHttp += "</form>"
+        retHttp += "</div>"
+        retHttp += "</div>"
+        return retHttp;
 
     @staticmethod
     def getTableHead():
