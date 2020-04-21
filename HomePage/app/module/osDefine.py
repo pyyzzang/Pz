@@ -17,7 +17,7 @@ from .strUtil import strUtil;
 import json
 import threading;
 import time;
-
+from urllib.parse import urlparse
 
 class PlayMode:
     File = 0;
@@ -247,13 +247,20 @@ class osDefine:
         return False;
 
     @staticmethod
-    def getRunIp():
-        if(True == osDefine.getIsDev()):
-            return "https://192.168.219.102:8080"
-        return "https://192.168.219.102"
+    def getRunIp(request = None):
+        try:
+            url = urlparse(request.build_absolute_uri());
+            return "%s://%s" % (url.scheme, url.netloc);
+        except Exception as e:
+            osDefine.Logger("getRunIp : " + e);
+            if(True == osDefine.getIsDev()):
+                return "https://192.168.219.102:8080"
+            return "https://192.168.219.102"
     @staticmethod
     def getRunDir():
         if(True == osDefine.getIsDev()):
             return "/home/pi/Pz/"
         return "/home/pi/Sylva/Pz/"
+
+    
 
