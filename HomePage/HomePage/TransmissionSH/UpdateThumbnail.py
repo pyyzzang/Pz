@@ -14,8 +14,8 @@ def getIsDev():
 
 def getRunIp():
     if(True == getIsDev()):
-        return "http://192.168.219.102:8000"
-    return "http://192.168.219.102:80"
+        return "https://192.168.219.102:8000"
+    return "https://192.168.219.102:80"
 
 def Base64Encoding(utfString):
     baseByte = base64.b64encode(utfString.encode("utf-8"));

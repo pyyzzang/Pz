@@ -13,22 +13,22 @@ class playView(object):
 
     @staticmethod
     def getBack600():
-        retHttp  = "<script type=\"text/javascript\">"
-        retHttp += "$(function(){"
-        retHttp += "$(\"#Back600Button\").click(function(){"
-        retHttp += "$.ajax({"
-        retHttp += "type: 'get'"
-        retHttp += ", url: '/Play/Back600'";
-        retHttp += ", dataType : 'html'"
-        retHttp += ", error : function(){"
-        retHttp += "}"
-        retHttp += ", success : function(data){"
-        retHttp += "}"
-        retHttp += "});"
-        retHttp += "})"
-        retHttp += "})"
-        retHttp += "</script>"
-        retHttp += "	<div class='buttonDiv'><button id='Back600Button' class='back600'/>	</div>                  ";
+        retHttp  = "<script type=\"text/javascript\">"+ "\n"; 
+        retHttp += "$(function(){"+ "\n"; 
+        retHttp += "$(\"#Back600Button\").click(function(){" + "\n"; 
+        retHttp += "$.ajax({"+ "\n"; 
+        retHttp += "type: 'get'"+ "\n"; 
+        retHttp += ", url: '/Play/Back600'"+ "\n"; 
+        retHttp += ", dataType : 'html'"+ "\n"; 
+        retHttp += ", error : function(){"+ "\n"; 
+        retHttp += "}"+ "\n"; 
+        retHttp += ", success : function(data){"+ "\n"; 
+        retHttp += "}"+ "\n"; 
+        retHttp += "});"+ "\n"; 
+        retHttp += "})"+ "\n"; 
+        retHttp += "})"+ "\n"; 
+        retHttp += "</script>"+ "\n"; 
+        retHttp += "	<div class='buttonDiv'><button id='Back600Button' class='back600'/>	</div>                  " + "\n"; 
         return retHttp;
 
     @staticmethod
@@ -278,7 +278,7 @@ class playView(object):
             filePath = playVideo.GET.get("youtube", "");
             YoutubeView.play(filePath);
         http = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />"
-        http += "<html> <script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
+        http += "<html> <script src=\"https://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";
         if(0):
             http += "Not Play Media.<p>"
