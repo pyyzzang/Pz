@@ -31,27 +31,8 @@ from .fileListView import fileListView
 
 class testView():
     @staticmethod
-    def test(arg):
-        searchUrl = "https://www.youtube.com/watch?v=SvscXx9ADbA";
-        decode_VideoUrl = get(searchUrl);
-        content = decode_VideoUrl.content.decode('utf-8');
-        content = urllib.parse.unquote(content);
-        content = content.replace("\\u0026", "&");
-        reguler = re.compile("&url=https.+;");
-        m = reguler.findall(content);
-        videoUrl = "";
-        print(content);
-        return HttpResponse(content);
-        for url in m[0].split("url="):
-            try:
-                videoUrl = url.split(",")[0].split(";")[0];
-                if videoUrl.startswith("http"):
-                 break;
-            except:
-             print("Error");
-        return HttpResponse(videoUrl);
-        OMXPlayer(videoUrl);
-        return HttpResponse(content);
+    def test(request):
+        return HttpResponse(request.build_absolute_uri());
 
 
 
