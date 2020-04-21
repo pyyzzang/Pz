@@ -12,9 +12,10 @@ from ..Data.PlayInfo import PlayInfos;
 from .playView import playView;
 
 class FileInfo:
-    def __init__(self, filePath, dir):
+    def __init__(self, filePath, dir, request):
         self.filePath = filePath;
         self.dir = dir;
+        self.request = request;
         self.fileName, self.ext = os.path.splitext(filePath);
     def __lt__(self, other):
         return self.getTitle() < other.getTitle(); 
@@ -53,12 +54,12 @@ class FileInfo:
             
             osPath = osDefine.Base64Encoding(splitParentPath);
             if("/" != splitParentPath):
-                return "location.href='" + osDefine.getRunIp() + "/Home?file=" + osPath + "'";
-            return "location.href='" + osDefine.getRunIp() + "/Home'";
+                return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file=" + osPath + "'";
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Home'";
         if True == self.isDirectory() :
-            return "location.href='" + osDefine.getRunIp() + "/Home?file="+ self.getEncodingFileName() + "'";
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file="+ self.getEncodingFileName() + "'";
         else:
-            return "location.href='" + osDefine.getRunIp() + "/Play?file=" + self.getEncodingFileName() + "'";
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Play?file=" + self.getEncodingFileName() + "'";
 
     def getTr(self, fileCount, playInfo):
         retHttp  = '<tr class="TableRow">';
@@ -103,14 +104,14 @@ class fileListView(object):
             http = HtmlUtil.getHeader();
             http += fileListView.getTitleHead();
             http += HtmlUtil.getBodyHead();
-            http += fileListView.getVideoList(requestFile);
+            http += fileListView.getVideoList(requestFile, request);
             http += YoutubeView.getVideoList();
 
             http += HtmlUtil.getBodyTail();
             http += "</body>";
         except Exception as e:
             osDefine.Logger(e);
-            http = "<script>location.href=\"" + osDefine.getRunIp()+"\/Home\";</script>";
+            http = "<script>location.href=\"" + osDefine.getRunIp(request)+"\/Home\";</script>";
         return HttpResponse(http); 
     @staticmethod
     def getTitleHead():
@@ -157,13 +158,13 @@ class fileListView(object):
         return "</tbody></table>";
 
     @staticmethod
-    def getVideoList(dirPath):
+    def getVideoList(dirPath, request):
         localFilePath = osDefine.LocalFilePath()
         fileCount = 0;      
         fileInfoList = []; 
         findDir = localFilePath + dirPath;
         for file in os.listdir(findDir):
-                info = FileInfo(file, findDir);
+                info = FileInfo(file, findDir, request);
                 if(True == info.isVideoFile() or True == info.isDirectory()):
                     fileInfoList.append(info);
 
@@ -173,7 +174,7 @@ class fileListView(object):
         infos = PlayInfos.GetPlayInfos();
         if( "" != dirPath):
             osDefine.Logger("DirPath : " + dirPath);
-            parentInfo = FileInfo("", findDir);
+            parentInfo = FileInfo("", findDir, request);
             fileInfoList.insert(0,parentInfo);
         for info in fileInfoList:
             try:
