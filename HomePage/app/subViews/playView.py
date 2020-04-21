@@ -18,7 +18,7 @@ class playView(object):
         retHttp += "$(\"#Back600Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Back600'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Back600'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -38,7 +38,7 @@ class playView(object):
         retHttp += "$(\"#Back10Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Back'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Back'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -60,7 +60,7 @@ class playView(object):
         retHttp += "$(\"#ReplayButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Replay'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Replay'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -84,7 +84,7 @@ class playView(object):
         retHttp += "$(\"#PauseButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Pause'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Pause'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -110,7 +110,7 @@ class playView(object):
         retHttp += "$(\"#StopButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Stop'"  % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Stop'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -133,7 +133,7 @@ class playView(object):
         retHttp += "$(\"#Skip10Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url : '%s/Play/Skip'" % osDefine.getRunIp();
+        retHttp += ", url : '/Play/Skip'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -155,7 +155,7 @@ class playView(object):
         retHttp += "$(\"#Skip600Button\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/Skip600'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/Skip600'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -177,7 +177,7 @@ class playView(object):
         retHttp += "$(\"#VolumeUpButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/VolumeUp'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/VolumeUp'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "}"
@@ -198,7 +198,7 @@ class playView(object):
         retHttp += "$(\"#VolumeDownButton\").click(function(){"
         retHttp += "$.ajax({"
         retHttp += "type: 'get'"
-        retHttp += ", url: '%s/Play/VolumeDown'" % osDefine.getRunIp();
+        retHttp += ", url: '/Play/VolumeDown'";
         retHttp += ", dataType : 'html'"
         retHttp += ", error : function(){"
         retHttp += "alert('fail!!');"
@@ -219,7 +219,7 @@ class playView(object):
         retHttp += "function UpdateTitle(){";
         retHttp += "$.ajax({\n"
         retHttp += "type: 'get'\n"
-        retHttp += ", url: '%s/Play/CurFileName'" % osDefine.getRunIp() + "\n";
+        retHttp += ", url: '/Play/CurFileName'" + "\n";
         retHttp += ", dataType : 'html'" + "\n";
         retHttp += ", success : function(data){"+ "\n";
         retHttp += "titleLabel = document.getElementById(\"TitleLabel\");"+ "\n";

@@ -28,11 +28,21 @@ import urllib.parse
 
 
 from .fileListView import fileListView 
+from urllib.parse import urlparse
 
 class testView():
     @staticmethod
     def test(request):
-        return HttpResponse(request.build_absolute_uri());
+        url = urlparse(request.build_absolute_uri());
+
+        retHttp  = "url.scheme : " + url.scheme;
+        retHttp += "url.netloc : " + url.netloc;
+        retHttp += "url.path : " + url.path;
+        retHttp += "url.params : " + url.params;
+        retHttp += "url.query : " + url.query;
+        
+
+        return HttpResponse(retHttp);
 
 
 

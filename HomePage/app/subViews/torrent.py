@@ -143,7 +143,7 @@ class torrent:
                 f.write(chunk)
             f.close();
             
-            torrentUrl = "magnet-link " + osDefine.getRunIp() + "/static/Tmp/LastUpload.Torrent";
+            torrentUrl = "magnet-link " + osDefine.getRunIp(request) + "/static/Tmp/LastUpload.Torrent";
             magnetUrl = subprocess.check_output(torrentUrl, shell = True).decode("utf-8");
             Binary = magnetUrl.replace("\n", "");
             base64Magnet = osDefine.Base64Encoding(Binary);
@@ -165,13 +165,13 @@ class torrent:
         if None != row:
             osDefine.Logger("rows.cursor.arraysize : " + str(rows.cursor.arraysize));
             osDefine.Logger("Equals Torrent Exists " + row[0]);
-            return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
+            return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
         query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
         
         session.InsertQueryExecute(query);
-        return HttpResponse("<script> location.href='" + osDefine.getRunIp() + "/Torrent'</script>");
+        return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
     @staticmethod 
     def getTorrentAddDiv():
