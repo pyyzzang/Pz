@@ -47,6 +47,9 @@ class PlayInfos(object):
     UserInfo = os.path.join(DataPath, "UserInfo");
 
     def __init__(self, playInfos):
+        if (False == os.path.isdir(PlayInfos.DataPath)):
+            os.mkdir(PlayInfos.DataPath);
+
         self.playInfos = playInfos;
 
     def getPlayInfo(self, playFileName, isCreate = False):
