@@ -36,6 +36,7 @@ class osDefine:
     def Skip(value):
         if(0 == osDefine.currentPlayer):
             return 0;
+        osDefine.Logger("Skip : " + str(value));
         osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
     
 
@@ -57,12 +58,14 @@ class osDefine:
     def Replay(value):
         if(0 == osDefine.currentPlayer):
             return 0;
+        osDefine.Logger("Replay ");
         osDefine.currentPlayer.play();
         
     @staticmethod
     def Pause(value):
         if(0 == osDefine.currentPlayer):
             return 0;
+        osDefine.Logger("Pause");
         osDefine.currentPlayer.pause();
 
 
@@ -70,6 +73,7 @@ class osDefine:
     def Action(value):
         if(0 == osDefine.currentPlayer):
             return 0;
+        osDefine.Logger("Action : " + str(value));
         osDefine.currentPlayer.action(value);
     @staticmethod
     def LocalFilePath():
@@ -235,6 +239,7 @@ class osDefine:
     @staticmethod
     def Stop(request):
         try:
+            osDefine.Logger("Stop");
             osDefine.PlayerInit();
         except Exception as e:
             osDefine.Logger(e);
