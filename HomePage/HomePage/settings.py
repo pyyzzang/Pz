@@ -215,10 +215,22 @@ LOGGING = {
 #python3 manage.py crontab add     --- Register crontab 
 #python3 manage.py crontab remove  --- UnRegister crontab 
 
+
+#0 5 * * * : 매일 5시 0분에 실행.
+#5 * * * * : 매시 5분이 될 때마다 실행. 즉, 한 시간 간격으로 실행.
+#* * * * * : 1분에 한 번씩 실행.
+#0 5 1 * * : 매달 1일 새벽 5시에 실행.
+#그럼 5분에 한 번씩 혹은 5시간에 한 번씩 실행하고 싶으면 어떻게 적어야 하는가? 아래처럼 적는다.
+#*/5 * * * * : 5분마다 한 번씩
+#0 */5 * * * : 5시간마다 한 번씩
+
+#0 5,11 * * * : 새벽 5시와 밤 11시.
+#0 5,11 * * 0,3 : 매주 일요일과 수요일 새벽 5시와 밤 11시.
+
 CRONJOBS = [
     ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
     ('* 18 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
     ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
-    ('* 4 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
+    ('* 6 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
     ('* 5 * * *', 'app.cron.CronTab.Delete_DotVsCode'),    #delete .vscode folder 
 ]
