@@ -12,7 +12,8 @@ from .subViews.playerMove import playerMove
 from .subViews.torrent import torrent
 from .subViews.testView import testView
 from .FCM.FCM import FCM
-
+from .module.osDefine import osDefine;
+from django.http import HttpResponse
 
 def home(request):
     return fileListView.getViewList(request);
@@ -63,3 +64,8 @@ def TorrentUpdate(request):
     return torrent.torrentUpdate(request);
 def RegisterToken(request):
     return FCM.RegisterToken(request);
+def API(request):
+    osDefine.Logger(request.GET.get("API"));
+    osDefine.Logger(request.GET.get("Value"));
+    return HttpResponse("111");
+    

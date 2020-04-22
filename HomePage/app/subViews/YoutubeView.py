@@ -17,20 +17,47 @@ from ..Data.YoutubeVideo import YoutubeMp4_itag;
 class YoutubeView:
     @staticmethod
     def getTableHead():
-        retHttp  = '				<table id="YoutubeTable">                                                         ';
-        retHttp += '					<thead>                                                     ';
-        retHttp += '						<tr class="table100-head">                              ';
-        retHttp += '							<th class="column1"></th>                       ';
-        retHttp += '							<th class="column2"></th>                   ';
-        retHttp += '							<th class="column3">제목</th>                       ';
-        retHttp += '						</tr>                                                   ';
-        retHttp += '					</thead>                                                    ';
-        retHttp += '                    <tbody>                                                     ';
+        retHttp  = '				<table id="YoutubeTable">                                                         \n';
+        retHttp += '					<thead>                                                     \n';
+        retHttp += '						<tr class="table100-head">                              \n';
+        retHttp += '							<th class="column1"></th>                       \n';
+        retHttp += '							<th class="column2"></th>                   \n';
+        retHttp += '							<th class="column3">제목</th>                       \n';
+        retHttp += '						</tr>                                                   \n';
+        retHttp += '					</thead>                                                    \n';
+        retHttp += '                    <tbody>                                                     \n';
+        return retHttp;
+    @staticmethod
+    def getSearchView():
+        retHttp = "";
+        retHttp += "<input type='text' id='txtSearch' />\n";
+        retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
+        retHttp += "<script type='text/javascript'>\n";
+        retHttp += "$(function(){\n"
+        retHttp += "$(\"#btnSearch\").click(function(){\n"
+        retHttp += "searchValue = document.getElementById('txtSearch').value;\n"
+        retHttp += "jsonData = {'API' : 'SearchYoutube', 'Value' : searchValue};\n";
+        retHttp += "$.ajax({\n"
+        retHttp += "type: 'get'\n"
+        retHttp += ", url: '/API'\n";
+        retHttp += ", dataType : 'json'\n";
+        retHttp += ", data:jsonData\n";
+        retHttp += ", error : function(){\n"
+        retHttp += "alert('Error');\n";
+        retHttp += "}\n"
+        retHttp += ", success : function(data){\n"
+        retHttp += "alert('11 : ' + data);\n";
+        retHttp += "}\n"
+        retHttp += "});\n"
+        retHttp += "})\n"
+        retHttp += "})\n"
+        retHttp += "</script>\n"
         return retHttp;
 
     @staticmethod
     def getVideoList():
-        retHttp = YoutubeView.getTableHead();
+        retHttp =  YoutubeView.getSearchView();
+        retHttp += YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos():
             retHttp +="<tr>"
             retHttp +="<td class='column1'><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
