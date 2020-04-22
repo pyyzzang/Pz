@@ -17,7 +17,7 @@ class HtmlUtil:
     @staticmethod
     def getHeader():
         retHttp = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />";
-        retHttp += "<script src=\"http://code.jquery.com/jquery-1.11.2.min.js\"></script>"
+        retHttp += "<script src=\"https://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         retHttp += ' <head>																												';
         retHttp += ' 	<meta charset="UTF-8">                                                                                          ';
         retHttp += ' <!--===============================================================================================-->	            ';
