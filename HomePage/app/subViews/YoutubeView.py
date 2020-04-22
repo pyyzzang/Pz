@@ -3,6 +3,7 @@ from requests import get
 import json
 from ..module.osDefine import osDefine
 from ..module.Youtube_Cipher import Cipher;
+from django.http import HttpResponse
 
 from  requests import get;
 import json;
@@ -11,7 +12,10 @@ from ..Data.YoutubeVideo import videos;
 from ..Data.YoutubeVideo import YoutubeRoot;
 from ..Data.YoutubeVideo import PlayerResponse;
 from ..Data.YoutubeVideo import YoutubeMp4_itag;
-
+from apiclient.discovery import build
+from apiclient.errors import HttpError
+from oauth2client.tools import argparser
+from ..Data.YoutubeVideo import Items;
 
 
 class YoutubeView:
@@ -40,10 +44,12 @@ class YoutubeView:
         retHttp += "$.ajax({\n"
         retHttp += "type: 'get'\n"
         retHttp += ", url: '/API'\n";
-        retHttp += ", dataType : 'json'\n";
+        retHttp += ", dataType : 'html'\n";
         retHttp += ", data:jsonData\n";
-        retHttp += ", error : function(){\n"
-        retHttp += "alert('Error');\n";
+        retHttp += ", error : function(request,status,error){\n"
+        retHttp += "alert(request);\n";
+        retHttp += "alert(status);\n";
+        retHttp += "alert(error);\n";
         retHttp += "}\n"
         retHttp += ", success : function(data){\n"
         retHttp += "alert('11 : ' + data);\n";
@@ -55,21 +61,25 @@ class YoutubeView:
         return retHttp;
 
     @staticmethod
-    def getVideoList():
-        retHttp =  YoutubeView.getSearchView();
-        retHttp += YoutubeView.getTableHead();
-        for (videoItem) in YoutubeView.getYoutubeVideos():
+    def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
+        retHttp = YoutubeView.getTableHead();
+        for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
             retHttp +="<tr>"
             retHttp +="<td class='column1'><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
-            retHttp +="<td class='column2'>" + videoItem["id"] + "</td>";
-            retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(videoItem["id"]) + ">" + videoItem['snippet']['title'] + "</td>"
+            retHttp +="<td class='column2'>" + Items.getVideoId(videoItem) + "</td>";
+            retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(Items.getVideoId(videoItem)) + ">" + videoItem['snippet']['title'] + "</td>"
             retHttp +="</tr>";
         retHttp +="</table>";
         return retHttp;
+
+    @staticmethod
+    def getVideoList():
+        retHttp =  YoutubeView.getSearchView();
+        retHttp += YoutubeView.getVideoTable();
+        return retHttp;
     
     @staticmethod
-    def getYoutubeVideos():
-        searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr";
+    def getYoutubeVideos(searchUrl):
 
         downloadString = get(searchUrl);
         decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
@@ -104,3 +114,36 @@ class YoutubeView:
             retFormat["url"] = Cipher.getCipher(retFormat["cipher"], jsPath);
 
         return retFormat;
+
+    @staticmethod
+    def youtube_search(options):
+
+        videos = []
+        channels = []
+        playlists = []
+
+        # Add each result to the appropriate list, and then display the lists of
+        # matching videos, channels, and playlists.
+        for search_result in search_response.get("items", []):
+            if search_result["id"]["kind"] == "youtube#video":
+                videos.append("%s (%s)" % (search_result["snippet"]["title"],
+                                       search_result["id"]["videoId"]))
+            elif search_result["id"]["kind"] == "youtube#channel":
+                channels.append("%s (%s)" % (search_result["snippet"]["title"],
+                                         search_result["id"]["channelId"]))
+            elif search_result["id"]["kind"] == "youtube#playlist":
+                playlists.append("%s (%s)" % (search_result["snippet"]["title"],
+                                          search_result["id"]["playlistId"]))
+        print ("Videos:\n", "\n".join(videos), "\n")
+        print ("Channels:\n", "\n".join(channels), "\n")
+        print ("Playlists:\n", "\n".join(playlists), "\n")
+
+    @staticmethod
+    def getSearchYoutube(searchValue):
+        try:
+            searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
+            retHttp = YoutubeView.getVideoTable(searchUrl)
+            osDefine.Logger(retHttp);
+        except Exception as e:
+            osDefine.Logger(e);
+        return HttpResponse(retHttp);

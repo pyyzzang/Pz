@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 from .subViews.fileListView import fileListView
+from .subViews.YoutubeView import YoutubeView
 from .subViews.playView import playView
 from .subViews.playerMove import playerMove
 from .subViews.torrent import torrent
@@ -65,7 +66,15 @@ def TorrentUpdate(request):
 def RegisterToken(request):
     return FCM.RegisterToken(request);
 def API(request):
-    osDefine.Logger(request.GET.get("API"));
-    osDefine.Logger(request.GET.get("Value"));
-    return HttpResponse("111");
+    executeFunc = "";
+    try:
+        switcher={
+            "SearchYoutube":YoutubeView.getSearchYoutube,
+        }; 
+        executeFunc = switcher.get(request.GET.get("API"));
+    except Exception as e:
+        osDefine.Logger(e);
+    if("" == executeFunc):
+        return HttpResponse("Error");
+    return executeFunc(request.GET.get("Value"));
     

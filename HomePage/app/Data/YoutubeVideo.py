@@ -1234,11 +1234,19 @@ class Item(object):
         def __init__(self, kind):
             self.kind = kind;
 
+class Items():
+    @staticmethod
+    def getVideoId(videoItemDict):
+        if(videoItemDict["id"] is dict):
+            return videoItemDict["id"]["videoId"];
+        return "";
+
 class videos(object):
-    def __init__(self, kind, etag, nextPageToken, pageInfo, items):
+    def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = ""):
         self.kind = kind;
         self.etag = etag;
         self.items = items;
+        self.regionCode = regionCode;
 
 YoutubeMp4_itag = {18 : 360	,# mp4	audio/video	360p	-	-	-		
                         22	: 720 ,# mp4	audio/video	720p	-	-	-       
