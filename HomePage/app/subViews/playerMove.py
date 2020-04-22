@@ -54,5 +54,6 @@ class playerMove():
 
     @staticmethod 
     def CurFileName(param):
+        osDefine.Logger("CurFileName");
         return HttpResponse(osDefine.getPlayFileName());
  
