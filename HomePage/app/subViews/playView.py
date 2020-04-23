@@ -276,7 +276,9 @@ class playView(object):
             osDefine.PlayFile(filePath);
         else :
             filePath = playVideo.GET.get("youtube", "");
-            YoutubeView.play(filePath);
+            title = osDefine.Base64Decoding(playVideo.GET.get("title", ""));
+            osDefine.Logger("title : " + title);
+            YoutubeView.play(filePath, title);
         http = "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\" />"
         http += "<html> <script src=\"https://code.jquery.com/jquery-1.11.2.min.js\"></script>"
         http += "<Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Head>";

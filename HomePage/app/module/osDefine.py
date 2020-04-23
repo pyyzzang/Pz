@@ -125,7 +125,7 @@ class osDefine:
 
     @staticmethod
     def PlayYoutube(playUrl):
-        return osDefine.PlayFile(playUrl, isDecode=False);
+        return osDefine.PlayFile(playUrl, isDecode=False, isYoutube = True);
         
     @staticmethod
     def getProcessCount(processName):

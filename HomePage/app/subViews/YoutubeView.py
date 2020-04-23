@@ -72,7 +72,7 @@ class YoutubeView:
             retHttp +="<tr>"
             retHttp +="<td class='column1'><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
             retHttp +="<td class='column2'>" + Items.getVideoId(videoItem) + "</td>";
-            retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(Items.getVideoId(videoItem)) + ">" + videoItem['snippet']['title'] + "</td>"
+            retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(Items.getVideoId(videoItem)) + "&title=" + osDefine.Base64Encoding(videoItem['snippet']['title']) + ">" + videoItem['snippet']['title'] + "</td>"
             retHttp +="</tr>";
         retHttp +="</table>";
         retHttp += "</div>\n";
@@ -91,10 +91,11 @@ class YoutubeView:
         decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
         return decoded_videos.items;
     @staticmethod
-    def play(youtubeId):
+    def play(youtubeId, title):
         youtubeId = osDefine.Base64Decoding(youtubeId);
         playFormat = YoutubeView.getPlayUrl(youtubeId);
         osDefine.PlayYoutube(playFormat["url"]);
+        osDefine.playTitle = title;
     
     @staticmethod
     def getPlayUrl(youtubeId):
