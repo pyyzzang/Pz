@@ -27,11 +27,12 @@ class PlayMode:
 class osDefine:
     currentPlayer = 0;
     playFileName = 0;
+    playTitle = 0;
     @staticmethod 
     def getPlayFileName():
-        if(0 == osDefine.playFileName or "" == osDefine.playFileName):
+        if(0 == osDefine.playTitle or "" == osDefine.playTitle):
             return "";
-        return strUtil.getMatchTitle(osDefine.playFileName);
+        return strUtil.getMatchTitle(osDefine.playTitle);
     @staticmethod
     def Skip(value):
         if(0 == osDefine.currentPlayer):
@@ -101,8 +102,6 @@ class osDefine:
         if(0 != osDefine.currentPlayer):
             try:
                 osDefine.currentPlayer.quit();
-                osDefine.playFileName = 0;
-
             except Exception as e:
                 osDefine.Logger(e);
             
@@ -110,6 +109,8 @@ class osDefine:
         os.system("sudo killall -9 omxplayer.bin")
         osDefine.palyFileName = 0;
         osDefine.currentPlayer = 0;
+        osDefine.playTitle = 0;
+        
     @staticmethod
     def Base64Encoding(utfString):
         baseByte = base64.b64encode(utfString.encode("utf-8"));
@@ -124,24 +125,14 @@ class osDefine:
 
     @staticmethod
     def PlayYoutube(playUrl):
-        if(0 != osDefine.playFileName ):
-           if(osDefine.playFileName != playUrl or 
-              2 >= osDefine.getProcessCount("omxplayer")):
-               osDefine.PlayerInit();
-           else :
-               return playUrl;
-        executeFilePath = playUrl; 
-        osDefine.currentPlayer.load(playUrl); 
-        osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
-        osDefine.playFileName = playUrl; 
-        return executeFilePath;
+        return osDefine.PlayFile(playUrl, isDecode=False);
         
     @staticmethod
     def getProcessCount(processName):
         ret = subprocess.check_output('ps -ef | grep ' + processName, shell = True).decode();
         return ret.count(processName); 
     @staticmethod
-    def PlayFile(playFileName , isDecode = True, isPause = True):
+    def PlayFile(playFileName , isDecode = True, isPause = True, isYoutube = False, title = ""):
         if(True == isDecode):
             decodeStr = osDefine.Base64Decoding(playFileName);
         else:
@@ -152,13 +143,14 @@ class osDefine:
                osDefine.PlayerInit();
            else :
                return decodeStr;
-        executeFilePath = osDefine.LocalFilePath()+ "/" + decodeStr  
+        executeFilePath = isYoutube and (osDefine.LocalFilePath()+ "/" + decodeStr) or decodeStr;
         if(0 != osDefine.currentPlayer):
             osDefine.currentPlayer.quit();
 
         osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
         
         osDefine.playFileName = decodeStr; 
+        osDefine.playTitle = title == "" and osDefine.playFileName or title;
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
         

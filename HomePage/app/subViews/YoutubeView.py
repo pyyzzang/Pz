@@ -52,7 +52,8 @@ class YoutubeView:
         retHttp += "alert(error);\n";
         retHttp += "}\n"
         retHttp += ", success : function(data){\n"
-        retHttp += "alert('11 : ' + data);\n";
+        retHttp += "Youtubeview = document.getElementById('Youtubeview');";
+        retHttp += "Youtubeview.innerHTML = data;\n";
         retHttp += "}\n"
         retHttp += "});\n"
         retHttp += "})\n"
@@ -62,14 +63,19 @@ class YoutubeView:
 
     @staticmethod
     def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
-        retHttp = YoutubeView.getTableHead();
+        retHttp  = "<div id='Youtubeview'>\n";
+        retHttp += YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
+            if("youtube#video" != Items.getVideoKind(videoItem)):
+                osDefine.Logger("Items.getVideoKind(videoItem) : " + Items.getVideoKind(videoItem));
+                continue;
             retHttp +="<tr>"
             retHttp +="<td class='column1'><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
             retHttp +="<td class='column2'>" + Items.getVideoId(videoItem) + "</td>";
             retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(Items.getVideoId(videoItem)) + ">" + videoItem['snippet']['title'] + "</td>"
             retHttp +="</tr>";
         retHttp +="</table>";
+        retHttp += "</div>\n";
         return retHttp;
 
     @staticmethod

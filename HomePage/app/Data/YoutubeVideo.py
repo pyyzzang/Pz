@@ -1237,9 +1237,14 @@ class Item(object):
 class Items():
     @staticmethod
     def getVideoId(videoItemDict):
-        if(videoItemDict["id"] is dict):
+        if(type(videoItemDict["id"]) is dict):
             return videoItemDict["id"]["videoId"];
-        return "";
+        return videoItemDict["id"];
+
+    def getVideoKind(videoItemDict):
+        if(type(videoItemDict["id"]) is dict):
+            return videoItemDict["id"]["kind"];
+        return videoItemDict["kind"];
 
 class videos(object):
     def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = ""):
