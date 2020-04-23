@@ -143,7 +143,8 @@ class osDefine:
                osDefine.PlayerInit();
            else :
                return decodeStr;
-        executeFilePath = isYoutube and (osDefine.LocalFilePath()+ "/" + decodeStr) or decodeStr;
+        executeFilePath = isYoutube and decodeStr or (osDefine.LocalFilePath() + "/" + decodeStr);
+        osDefine.Logger("executeFilePath : " + executeFilePath);
         if(0 != osDefine.currentPlayer):
             osDefine.currentPlayer.quit();
 
