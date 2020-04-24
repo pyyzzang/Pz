@@ -94,8 +94,7 @@ class YoutubeView:
     def play(youtubeId, title):
         youtubeId = osDefine.Base64Decoding(youtubeId);
         playFormat = YoutubeView.getPlayUrl(youtubeId);
-        osDefine.PlayYoutube(playFormat["url"]);
-        osDefine.playTitle = title;
+        osDefine.PlayYoutube(playFormat["url"], title);
     
     @staticmethod
     def getPlayUrl(youtubeId):

@@ -124,8 +124,8 @@ class osDefine:
         return utfStr;
 
     @staticmethod
-    def PlayYoutube(playUrl):
-        return osDefine.PlayFile(playUrl, isDecode=False, isYoutube = True);
+    def PlayYoutube(playUrl, title):
+        return osDefine.PlayFile(playUrl, isDecode=False, isYoutube = True, title=title);
         
     @staticmethod
     def getProcessCount(processName):
@@ -151,7 +151,13 @@ class osDefine:
         osDefine.currentPlayer = OMXPlayer(executeFilePath, pause=True);
         
         osDefine.playFileName = decodeStr; 
-        osDefine.playTitle = title == "" and osDefine.playFileName or title;
+        if(True == isYoutube):
+            osDefine.playTitle = title;
+        else:
+            osDefine.playTitle = osDefine.playFileName;
+            
+        osDefine.Logger("title : " + title);
+        osDefine.Logger("osDefine.playTitle : " + osDefine.playTitle);
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit();
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
         
@@ -168,7 +174,7 @@ class osDefine:
 
         while(osDefine.playFileName == currentPlayFile):
             saveInfos = PlayInfos.GetPlayInfos();
-            findInfo = saveInfos.getPlayInfo(osDefine.playFileName, True);
+            findInfo = saveInfos.getPlayInfo(osDefine.playTitle, True);
 
             findInfo.setPosition(osDefine.currentPlayer.position());
             findInfo.setDuration(osDefine.currentPlayer.duration());
@@ -209,9 +215,8 @@ class osDefine:
 
     @staticmethod
     def PlayerPlay():
-        playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playFileName);
-
-        osDefine.Logger("PlayerPlay : " + str(osDefine.playFileName));
+        playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playTitle);
+        osDefine.Logger("PlayerPlay : " + str(osDefine.playTitle));
         
         if( "" != playInfo):
             if( playInfo.getPosition() + 10 < playInfo.getDuration()):
