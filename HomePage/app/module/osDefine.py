@@ -255,7 +255,7 @@ class osDefine:
             url = urlparse(request.build_absolute_uri());
             return "%s://%s" % (url.scheme, url.netloc);
         except Exception as e:
-            osDefine.Logger("getRunIp : " + e);
+            osDefine.Logger(e);
             if(True == osDefine.getIsDev()):
                 return "https://192.168.219.102:8080"
             return "https://192.168.219.102"
