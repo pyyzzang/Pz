@@ -126,14 +126,8 @@ class torrent:
         osDefine.Logger("Delete Query : " + deleteQuery);
         connection.InsertQueryExecute(deleteQuery);
         return HttpResponse("");
-
     @staticmethod
-    def torrentUpload(request):
-        Title = request.POST.get("torrentTitle");
-        magnet = request.POST.get("torrent_upload_url")
-
-        osDefine.Logger("torrentUpload_magnet : " + magnet);
-
+    def torrentInsert(request, title, magnet):
         try:
             tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload.Torrent");
             osDefine.Logger("TempFilePath : " + tmpTorrentFile);
@@ -154,7 +148,7 @@ class torrent:
             Binary = "";
         
         if "" == Binary:
-            Binary = request.POST.get("torrent_upload_url", "");
+            Binary = magnet;
             base64Magnet = osDefine.Base64Encoding(Binary);
         
         session = DBExecute.GetDBConnection();
@@ -167,11 +161,21 @@ class torrent:
             osDefine.Logger("Equals Torrent Exists " + row[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
-        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (Title, base64Magnet);
+        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (title, base64Magnet);
         osDefine.Logger("Torrent : " + query);
         
         session.InsertQueryExecute(query);
         return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
+
+    @staticmethod
+    def torrentUpload(request):
+        Title = request.POST.get("torrentTitle");
+        magnet = request.POST.get("torrent_upload_url")
+
+        osDefine.Logger("torrentUpload_magnet : " + magnet);
+        return torrent.torrentInsert(request, title=Title, magnet=magnet);
+
+        
 
     @staticmethod 
     def getTorrentAddDiv():
@@ -306,3 +310,41 @@ class torrent:
 
         torrent.SMI2SRT(osDefine.LocalFilePath());
         return HttpResponse("");
+
+    @staticmethod
+    def getMeta(param):
+        connection = DBExecute.GetDBConnection();
+        selectQuery = "select value from meta where name='%s'" % param;
+        rows = connection.QueryExecute(selectQuery);
+        listRow = list(rows);
+        return str(listRow[0][0]).strip();
+
+    @staticmethod
+    def updateTorrentIndex(index, metaName):
+        connection = DBExecute.GetDBConnection();
+        if(int(index) > 100):
+            selectQuery = ("update meta set value='%s' where name='%s'" % (index, metaName));
+            rows = connection.InsertQueryExecute(selectQuery);
+        return torrent.getMeta(metaName);
+
+    @staticmethod
+    def updateEntIndex(index):
+        metaName = "EntIndex";
+        return torrent.updateTorrentIndex(index, metaName);
+
+    @staticmethod
+    def updateDocuIndex(index):
+        metaName = "DocuIndex";
+        return torrent.updateTorrentIndex(index, metaName);
+
+    @staticmethod
+    def updateTvendIndex(index):
+        metaName = "TvendIndex";
+        return torrent.updateTorrentIndex(index, metaName);
+
+    @staticmethod
+    def updateDramaIndex(index):
+        metaName = "DramaIndex";
+        return torrent.updateTorrentIndex(index, metaName);
+            
+

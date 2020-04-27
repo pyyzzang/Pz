@@ -15,6 +15,7 @@ from .subViews.testView import testView
 from .FCM.FCM import FCM
 from .module.osDefine import osDefine;
 from django.http import HttpResponse
+from .TorrentParse.TorrentveryParse import TorrentveryParse;
 
 def home(request):
     return fileListView.getViewList(request);
@@ -67,14 +68,21 @@ def RegisterToken(request):
     return FCM.RegisterToken(request);
 def API(request):
     executeFunc = "";
+    value = "";
     try:
         switcher={
+            "UpdateEntIndex":torrent.updateEntIndex,
+            "UpdateDocuIndex":torrent.updateDocuIndex,
+            "UpdateTvendIndex":torrent.updateTvendIndex,
+            "UpdateDramaIndex":torrent.updateDramaIndex,
+            "TorrentveryParse":TorrentveryParse.Test,
+            "getMeta":torrent.getMeta,
             "SearchYoutube":YoutubeView.getSearchYoutube,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
+        value = request.GET.get("Value")
     except Exception as e:
         osDefine.Logger(e);
     if("" == executeFunc):
         return HttpResponse("Error");
-    return executeFunc(request.GET.get("Value"));
-    
+    return HttpResponse(executeFunc(value));
