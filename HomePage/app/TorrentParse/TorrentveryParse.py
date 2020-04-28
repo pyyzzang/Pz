@@ -3,10 +3,12 @@ from bs4 import BeautifulSoup
 from .TorrentParse import TorrentParse;
 from ..module.osDefine import osDefine;
 from requests import post;
+from ..Data.TorrentInfo import torrentInfo;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
         TorrentParse.__init__(self);
+        self.TorrentInfos = [];
 
     def getMagnet(self, soup):
         retMagnet = "";
@@ -36,8 +38,10 @@ class TorrentveryParse(TorrentParse):
             try:
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);
-                torrentParam = {'torrentTitle': title, 'torrent_upload_url': magnet};
+                
+                osDefine.Logger("url : " + url);
                 torrent.torrentInsert(None, title, magnet, genre);
+                self.TorrentInfos.append(torrentInfo(title));
 
                 index = index + 1;
                 url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
@@ -54,11 +58,13 @@ class TorrentveryParse(TorrentParse):
     @staticmethod
     def CrawlingTorrent(param):
         osDefine.Logger(param);
-        pa = TorrentveryParse();
-        pa.getUpdateList("movieko", 1);
-        pa.getUpdateList("drama", 2);
-        pa.getUpdateList("ent", 3);
-        pa.getUpdateList("docu", 4);
-        pa.getUpdateList("tvend", 5);
+        tvParse = TorrentveryParse();
+        
+        tvParse.getUpdateList("movieko", 1);
+        tvParse.getUpdateList("drama", 2);
+        tvParse.getUpdateList("ent", 3);
+        tvParse.getUpdateList("docu", 4);
+        tvParse.getUpdateList("tvend", 5);
+
         return "";
             
