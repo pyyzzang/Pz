@@ -5,6 +5,7 @@ from ..module.osDefine import osDefine;
 from requests import post;
 from ..Data.TorrentInfo import torrentInfo;
 import time;
+import threading;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
@@ -69,4 +70,11 @@ class TorrentveryParse(TorrentParse):
             tvParse.getUpdateList("docu", 4);
             tvParse.getUpdateList("tvend", 5);
         return "";
-TorrentveryParse.CrawlingTorrent();            
+    
+    @staticmethod
+    def RunCrawlingThread():
+        t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
+        t.start();
+        
+TorrentveryParse.RunCrawlingThread();            
+
