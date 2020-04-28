@@ -130,7 +130,6 @@ class torrent:
     def torrentInsert(request, title, magnet, genre = 99):
         try:
             tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload.Torrent");
-            osDefine.Logger("TempFilePath : " + tmpTorrentFile);
             fileBinary = request.FILES["torrent_files"];
             f = open(tmpTorrentFile, 'wb+');
             for chunk in fileBinary.chunks():
@@ -161,10 +160,9 @@ class torrent:
             osDefine.Logger("Equals Torrent Exists " + row[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
-        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage, genre) values ('%s', '%s', GETDATE(), '', %s)" % (title, base64Magnet, genre);
-        osDefine.Logger("Torrent : " + query);
-        
+        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage, genre) values ('%s', '%s', GETDATE(), '', %s)" % (title.replace('\'', '\'\''), base64Magnet, genre);
         session.InsertQueryExecute(query);
+        osDefine.Logger("Torrent : " + query);
         return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
     @staticmethod
