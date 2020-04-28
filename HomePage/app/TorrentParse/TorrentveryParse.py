@@ -61,6 +61,7 @@ class TorrentveryParse(TorrentParse):
     def CrawlingTorrent(param = ""):
         
         osDefine.Logger("Start Craling");
+        '''
         while(True):
             time.sleep(60 * 5);
             tvParse = TorrentveryParse();
@@ -69,6 +70,7 @@ class TorrentveryParse(TorrentParse):
             tvParse.getUpdateList("ent", 3);
             tvParse.getUpdateList("docu", 4);
             tvParse.getUpdateList("tvend", 5);
+        '''
         return "";
     
     @staticmethod
