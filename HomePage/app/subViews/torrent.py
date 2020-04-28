@@ -127,7 +127,7 @@ class torrent:
         connection.InsertQueryExecute(deleteQuery);
         return HttpResponse("");
     @staticmethod
-    def torrentInsert(request, title, magnet):
+    def torrentInsert(request, title, magnet, genre = 99):
         try:
             tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload.Torrent");
             osDefine.Logger("TempFilePath : " + tmpTorrentFile);
@@ -161,7 +161,7 @@ class torrent:
             osDefine.Logger("Equals Torrent Exists " + row[0]);
             return HttpResponse("<script> location.href='" + osDefine.getRunIp(request) + "/Torrent'</script>");
 
-        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage) values ('%s', '%s', GETDATE(), '')" % (title, base64Magnet);
+        query = "insert into Torrent (Title, MagnetUrl, modifyDate, ThumbnailImage, genre) values ('%s', '%s', GETDATE(), '', %s)" % (title, base64Magnet, genre);
         osDefine.Logger("Torrent : " + query);
         
         session.InsertQueryExecute(query);
@@ -314,7 +314,7 @@ class torrent:
     @staticmethod
     def getMeta(param):
         connection = DBExecute.GetDBConnection();
-        selectQuery = "select value from meta where name='%s'" % param;
+        selectQuery = "select value from meta where name='%sindex'" % param;
         rows = connection.QueryExecute(selectQuery);
         listRow = list(rows);
         return str(listRow[0][0]).strip();
@@ -323,28 +323,28 @@ class torrent:
     def updateTorrentIndex(index, metaName):
         connection = DBExecute.GetDBConnection();
         if(int(index) > 100):
-            selectQuery = ("update meta set value='%s' where name='%s'" % (index, metaName));
+            selectQuery = ("update meta set value='%s' where name='%sIndex'" % (index, metaName));
             rows = connection.InsertQueryExecute(selectQuery);
         return torrent.getMeta(metaName);
 
     @staticmethod
     def updateEntIndex(index):
-        metaName = "EntIndex";
+        metaName = "Ent";
         return torrent.updateTorrentIndex(index, metaName);
 
     @staticmethod
     def updateDocuIndex(index):
-        metaName = "DocuIndex";
+        metaName = "Docu";
         return torrent.updateTorrentIndex(index, metaName);
 
     @staticmethod
     def updateTvendIndex(index):
-        metaName = "TvendIndex";
+        metaName = "Tvend";
         return torrent.updateTorrentIndex(index, metaName);
 
     @staticmethod
     def updateDramaIndex(index):
-        metaName = "DramaIndex";
+        metaName = "drama";
         return torrent.updateTorrentIndex(index, metaName);
             
 

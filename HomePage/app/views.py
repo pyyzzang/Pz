@@ -75,8 +75,7 @@ def API(request):
             "UpdateDocuIndex":torrent.updateDocuIndex,
             "UpdateTvendIndex":torrent.updateTvendIndex,
             "UpdateDramaIndex":torrent.updateDramaIndex,
-            "TorrentveryParse":TorrentveryParse.Test,
-            "getMeta":torrent.getMeta,
+            "CrawlingTorrent":TorrentveryParse.CrawlingTorrent,
             "SearchYoutube":YoutubeView.getSearchYoutube,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));

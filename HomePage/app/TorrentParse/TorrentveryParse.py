@@ -25,9 +25,9 @@ class TorrentveryParse(TorrentParse):
                 break;
         return retTitle;
     
-    def getUpdateList(self, param):
-        dramaIndex = int(torrent.getMeta("DramaIndex"));
-        url = 'https://torrentvery.com/torrent_drama/%s' % dramaIndex;
+    def getUpdateList(self, param, genre):
+        index = int(torrent.getMeta("%s" % param));
+        url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
         self.browser.get(url);
         soup = BeautifulSoup(self.browser.page_source, 'html.parser')
         insertMagnet = "";
@@ -37,13 +37,13 @@ class TorrentveryParse(TorrentParse):
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);
                 torrentParam = {'torrentTitle': title, 'torrent_upload_url': magnet};
-                torrent.torrentInsert(None, title, magnet);
+                torrent.torrentInsert(None, title, magnet, genre);
 
-                dramaIndex = dramaIndex + 1;
-                url = 'https://torrentvery.com/torrent_drama/%s' % dramaIndex;
+                index = index + 1;
+                url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
                 self.browser.get(url);
                 soup = BeautifulSoup(self.browser.page_source, 'html.parser');
-                torrent.updateDramaIndex(dramaIndex);
+                torrent.updateTorrentIndex(index, param);
 
             except Exception as e:
                 #osDefine.Logger(e);
@@ -52,8 +52,13 @@ class TorrentveryParse(TorrentParse):
         return log;
     
     @staticmethod
-    def Test(param):
+    def CrawlingTorrent(param):
         osDefine.Logger(param);
         pa = TorrentveryParse();
-        return pa.getUpdateList(param);
+        pa.getUpdateList("movieko", 1);
+        pa.getUpdateList("drama", 2);
+        pa.getUpdateList("ent", 3);
+        pa.getUpdateList("docu", 4);
+        pa.getUpdateList("tvend", 5);
+        return "";
             
