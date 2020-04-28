@@ -4,6 +4,7 @@ from .TorrentParse import TorrentParse;
 from ..module.osDefine import osDefine;
 from requests import post;
 from ..Data.TorrentInfo import torrentInfo;
+import time;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
@@ -56,15 +57,16 @@ class TorrentveryParse(TorrentParse):
         return log;
     
     @staticmethod
-    def CrawlingTorrent(param):
-        osDefine.Logger(param);
-        tvParse = TorrentveryParse();
+    def CrawlingTorrent(param = ""):
         
-        tvParse.getUpdateList("movieko", 1);
-        tvParse.getUpdateList("drama", 2);
-        tvParse.getUpdateList("ent", 3);
-        tvParse.getUpdateList("docu", 4);
-        tvParse.getUpdateList("tvend", 5);
-
+        osDefine.Logger("Start Craling");
+        while(True):
+            time.sleep(60 * 5);
+            tvParse = TorrentveryParse();
+            tvParse.getUpdateList("movieko", 1);
+            tvParse.getUpdateList("drama", 2);
+            tvParse.getUpdateList("ent", 3);
+            tvParse.getUpdateList("docu", 4);
+            tvParse.getUpdateList("tvend", 5);
         return "";
-            
+TorrentveryParse.CrawlingTorrent();            
