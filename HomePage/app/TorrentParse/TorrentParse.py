@@ -10,15 +10,12 @@ class TorrentParse:
     def __init__(self):
         os.system("sudo killall -9 /usr/lib/chromium-browser/chromium-browser-v7");
         os.system("sudo killall -9 chromedriver");
+        os.system("sudo killall -9 chromium-browse")
 
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless")  # Background(CLI) 동작 사용
-        chrome_options.add_argument("--no-sandbox")
-        chrome_options.add_argument('--disable-dev-shm-usage')
-        chrome_options.add_argument("--remote-debugging-port=9222")  # 이 부분이 핵심
-        binary = "chromedriver"
-        self.browser = "";
-        self.browser = webdriver.Chrome(binary, chrome_options=chrome_options);
+    def __del__(self):
+        os.system("sudo killall -9 /usr/lib/chromium-browser/chromium-browser-v7");
+        os.system("sudo killall -9 chromedriver");
+        os.system("sudo killall -9 chromium-browse")
 
     def isEmpty(self):
         pass;
