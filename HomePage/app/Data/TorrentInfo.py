@@ -49,7 +49,8 @@ class torrentInfo():
     def equals(self, compareInfo):
         if(self.getTitle() == compareInfo.getTitle()):
             return True;
-        elif(self.getSeason() == compareInfo.getSeason() and    \
+        elif (True == self.getSimilar(compareInfo) and              \
+            self.getSeason() == compareInfo.getSeason() and         \
             self.getEpisode() == compareInfo.getEpisode()):
             return True;
         return False;
