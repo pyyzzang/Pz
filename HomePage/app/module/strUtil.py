@@ -47,7 +47,7 @@ class strUtil:
 
     @staticmethod
     def getEpisode(text):
-        return strUtil.getRegularText(text, "E\d\d");
+        return strUtil.getRegularText(text, "E\d{2,6}");
     
     @staticmethod
     def getDate(text):
