@@ -4,13 +4,13 @@ from .TorrentParse import TorrentParse;
 from ..module.osDefine import osDefine;
 from requests import post;
 from ..Data.TorrentInfo import torrentInfo;
+from ..Data.TorrentInfo import TorrentInfos;
 import time;
 import threading;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
         TorrentParse.__init__(self);
-        self.TorrentInfos = [];
 
     def getMagnet(self, soup):
         retMagnet = "";
@@ -36,15 +36,19 @@ class TorrentveryParse(TorrentParse):
         soup = BeautifulSoup(self.browser.page_source, 'html.parser')
         insertMagnet = "";
         log = "";
+        infos = TorrentInfos.GetTorrentInfos();
         while True:
             try:
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);
                 
-                osDefine.Logger("url : " + url);
-                torrent.torrentInsert(None, title, magnet, genre);
-                self.TorrentInfos.append(torrentInfo(title));
+                if(None == FindEqualsTorrentInfo(title)):
+                    osDefine.Logger("url : " + url);
+                    torrent.torrentInsert(None, title, magnet, genre);
 
+                    if(None != infos.findSimilarTorrintInfo(title)):
+                        osDefine.Logger("Send FCM and Auto Add");
+                
                 index = index + 1;
                 url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
                 self.browser.get(url);
@@ -78,5 +82,5 @@ class TorrentveryParse(TorrentParse):
         t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
         t.start();
         
-TorrentveryParse.RunCrawlingThread();            
+#TorrentveryParse.RunCrawlingThread();            
 

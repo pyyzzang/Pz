@@ -4,6 +4,7 @@ import os;
 from ..module.osDefine import osDefine;
 from threading import Lock;
 import json;
+from difflib import SequenceMatcher
 
 class torrentInfo():
     def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1):
@@ -35,6 +36,15 @@ class torrentInfo():
     def incrementCount(self):
         self.count = self.count + 1;
         return self.count;
+    
+    def getSimilar(self, compareInfo):
+        fullTitleValue = SequenceMatcher(None, self.getFullName(), compareInfo.getFullName()).ratio();
+        if(0.4 < fullTitleValue):
+            return True;
+        titleValue = SequenceMatcher(None, self.getTitle(), compareInfo.getTitle()).ratio();
+        if(0.8 < titleValue):
+            return True;
+        return False;
 
     def equals(self, compareInfo):
         if(self.getTitle() == compareInfo.getTitle()):
@@ -72,7 +82,7 @@ class TorrentInfos(object):
             with open(TorrentInfos.TorrentInfoFile, "w") as fileTorrentInfo:
                 json.dump(self, fileTorrentInfo, default=lambda o: o.__dict__);
 
-    def findTorrintInfo(self, title, isCrate = False):
+    def findSimilarTorrintInfo(self, title, isCrate = False):
         addInfo = torrentInfo(title);
         for info in self.infos:
             if(True == info.equals(addInfo)):
@@ -98,15 +108,13 @@ class TorrentInfos(object):
             with open(TorrentInfos.TorrentInfoFile, "r") as filePlayInfo:
                 infos = TorrentInfos.from_json(json.load(filePlayInfo));
         return infos;
-
-    
     
     @staticmethod
     def updateTorrentInfo(title):
         torrentInfos = TorrentInfos.GetTorrentInfos();
-        info = torrentInfos.findTorrintInfo(title, True);
+        info = torrentInfos.findSimilarTorrintInfo(title, True);
         for info in torrentInfos.infos:
             osDefine.Logger(info.getCount());
         
         torrentInfos.saveFile();
-        return "";
+        return info;
