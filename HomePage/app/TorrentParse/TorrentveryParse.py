@@ -7,10 +7,14 @@ from ..Data.TorrentInfo import torrentInfo;
 from ..Data.TorrentInfo import TorrentInfos;
 import time;
 import threading;
+import requests;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
         TorrentParse.__init__(self);
+    
+    def __del__(self):
+        TorrentParse.__del__(self);
 
     def getMagnet(self, soup):
         retMagnet = "";
@@ -32,17 +36,17 @@ class TorrentveryParse(TorrentParse):
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
         url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
-        self.browser.get(url);
-        soup = BeautifulSoup(self.browser.page_source, 'html.parser')
+        response = requests.get(url);
+        soup = BeautifulSoup(response.text, 'html.parser')
         insertMagnet = "";
         log = "";
         infos = TorrentInfos.GetTorrentInfos();
-        reTryCount = 5;
+        reTryCount = 30;
         while True:
             try:
                 osDefine.Logger("url : " + url);
                 magnet = self.getMagnet(soup);
-                title = self.getTitle(soup);
+                title = self.getTitle(soup);              
                 if(False == TorrentParse.existsEqualsTorrent(title)):
                     torrent.torrentInsert(None, title, magnet, genre);
                     #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
@@ -50,7 +54,7 @@ class TorrentveryParse(TorrentParse):
                         osDefine.Logger("Send FCM and Auto Add");
 
                 
-                reTryCount = 5;
+                reTryCount = 30;
                 torrent.updateTorrentIndex(index, param);
 
             except Exception as e:
@@ -61,8 +65,8 @@ class TorrentveryParse(TorrentParse):
             finally:
                 index = index + 1;
                 url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
-                self.browser.get(url);
-                soup = BeautifulSoup(self.browser.page_source, 'html.parser');
+                response = requests.get(url);
+                soup = BeautifulSoup(response.text, 'html.parser');
                 
         return log;
     
@@ -70,9 +74,18 @@ class TorrentveryParse(TorrentParse):
     def CrawlingTorrent(param = ""):
         
         osDefine.Logger("Start Craling");
-        tvParse = TorrentveryParse();
-        tvParse.getUpdateList("ent", 3);
         '''
+        while(True):
+            try:
+                tvParse = TorrentveryParse();
+                tvParse.getUpdateList("ent", 3);
+                
+            except Exception as e:
+                osDefine.Logger(e);
+            finally : 
+                time.sleep(30 * 1);
+        
+        
         while(True):
             time.sleep(60 * 5);
             tvParse = TorrentveryParse();
@@ -89,5 +102,5 @@ class TorrentveryParse(TorrentParse):
         t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
         t.start();
         
-#TorrentveryParse.RunCrawlingThread();            
+TorrentveryParse.RunCrawlingThread();            
 
