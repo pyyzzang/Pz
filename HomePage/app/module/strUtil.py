@@ -43,12 +43,15 @@ class strUtil:
     
     @staticmethod
     def getSeason(text):
-        return strUtil.getRegularText(text, "S\d\d");
+        season = strUtil.getRegularText(text, "S\d\d");
+        return strUtil.getRegularText(season, "\d\d");
 
     @staticmethod
     def getEpisode(text):
-        return strUtil.getRegularText(text, "E\d{2,6}");
+        episode = strUtil.getRegularText(text, "E\d{2,6}|\d{2,6}회|E.\d{2,6}");
+        return strUtil.getRegularText(text, "\d{2,6}");
     
     @staticmethod
     def getDate(text):
-        return strUtil.getRegularText(text, "['\.',' ']\d{4,6}\.");
+        date = strUtil.getRegularText(text, "['\.',' ']\d{4,6}\.");
+        return strUtil.getRegularText(date, "\d{4,6}");
