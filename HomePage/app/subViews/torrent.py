@@ -325,6 +325,7 @@ class torrent:
         connection = DBExecute.GetDBConnection();
         if(int(index) > 100):
             selectQuery = ("update meta set value='%s' where name='%sIndex'" % (index, metaName));
+            osDefine.Logger(selectQuery);
             rows = connection.InsertQueryExecute(selectQuery);
         return torrent.getMeta(metaName);
 
