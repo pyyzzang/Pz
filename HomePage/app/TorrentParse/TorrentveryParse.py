@@ -28,7 +28,7 @@ class TorrentveryParse(TorrentParse):
                 retTitle = tag.text;
                 break;
         return retTitle;
-    
+
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
         url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
@@ -37,34 +37,41 @@ class TorrentveryParse(TorrentParse):
         insertMagnet = "";
         log = "";
         infos = TorrentInfos.GetTorrentInfos();
+        reTryCount = 5;
         while True:
             try:
+                osDefine.Logger("url : " + url);
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);
-                
-                if(None == FindEqualsTorrentInfo(title)):
-                    osDefine.Logger("url : " + url);
+                if(False == TorrentParse.existsEqualsTorrent(title)):
                     torrent.torrentInsert(None, title, magnet, genre);
-
+                    #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
                     if(None != infos.findSimilarTorrintInfo(title)):
                         osDefine.Logger("Send FCM and Auto Add");
+
                 
+                reTryCount = 5;
+                torrent.updateTorrentIndex(index, param);
+
+            except Exception as e:
+                osDefine.Logger(e);
+                reTryCount = reTryCount - 1;
+                if 0 == reTryCount:
+                    break;
+            finally:
                 index = index + 1;
                 url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
                 self.browser.get(url);
                 soup = BeautifulSoup(self.browser.page_source, 'html.parser');
-                torrent.updateTorrentIndex(index, param);
-
-            except Exception as e:
-                #osDefine.Logger(e);
-                break;
-
+                
         return log;
     
     @staticmethod
     def CrawlingTorrent(param = ""):
         
         osDefine.Logger("Start Craling");
+        tvParse = TorrentveryParse();
+        tvParse.getUpdateList("ent", 3);
         '''
         while(True):
             time.sleep(60 * 5);
