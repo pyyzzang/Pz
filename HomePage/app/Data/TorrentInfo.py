@@ -39,7 +39,7 @@ class torrentInfo():
     
     def getSimilar(self, compareInfo):
         fullTitleValue = SequenceMatcher(None, self.getFullName(), compareInfo.getFullName()).ratio();
-        if(0.4 < fullTitleValue):
+        if(0.8 < fullTitleValue):
             return True;
         titleValue = SequenceMatcher(None, self.getTitle(), compareInfo.getTitle()).ratio();
         if(0.8 < titleValue):
@@ -86,7 +86,8 @@ class TorrentInfos(object):
     def findSimilarTorrintInfo(self, title, isCrate = False):
         addInfo = torrentInfo(title);
         for info in self.infos:
-            if(True == info.equals(addInfo)):
+            if(True == info.getSimilar(addInfo)):
+                osDefine.Logger("title : " + title + " info.FullName : " + info.getFullName());
                 info.incrementCount();
                 return info;
         if(True == isCrate):
