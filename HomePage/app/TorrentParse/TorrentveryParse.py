@@ -8,6 +8,7 @@ from ..Data.TorrentInfo import TorrentInfos;
 import time;
 import threading;
 import requests;
+from ..FCM.FCM import FCM;
 
 class TorrentveryParse(TorrentParse):
     def __init__(self):
@@ -33,6 +34,7 @@ class TorrentveryParse(TorrentParse):
                 break;
         return retTitle;
 
+    retryValue = 20;
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
         url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
@@ -41,7 +43,7 @@ class TorrentveryParse(TorrentParse):
         insertMagnet = "";
         log = "";
         infos = TorrentInfos.GetTorrentInfos();
-        reTryCount = 30;
+        
         while True:
             try:
                 osDefine.Logger("url : " + url);
@@ -51,16 +53,18 @@ class TorrentveryParse(TorrentParse):
                     torrent.torrentInsert(None, title, magnet, genre);
                     #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
                     if(None != infos.findSimilarTorrintInfo(title)):
+                        FCM.SendFireBase(msg = title + "다운로드를 실행합니다.", title ="다운로드 실행");
                         osDefine.Logger("Send FCM and Auto Add");
+                        torrent.torrentRemoteAdd(magnet, title);
 
-                
-                reTryCount = 30;
+                TorrentveryParse.retryValue = 20;
                 torrent.updateTorrentIndex(index, param);
 
             except Exception as e:
                 osDefine.Logger(e);
                 reTryCount = reTryCount - 1;
                 if 0 == reTryCount:
+                    TorrentveryParse.retryValue = TorrentveryParse.retryValue * 2;
                     break;
             finally:
                 index = index + 1;
@@ -74,18 +78,7 @@ class TorrentveryParse(TorrentParse):
     def CrawlingTorrent(param = ""):
         
         osDefine.Logger("Start Craling");
-        '''
-        while(True):
-            try:
-                tvParse = TorrentveryParse();
-                tvParse.getUpdateList("ent", 3);
-                
-            except Exception as e:
-                osDefine.Logger(e);
-            finally : 
-                time.sleep(30 * 1);
-        
-        
+
         while(True):
             time.sleep(60 * 5);
             tvParse = TorrentveryParse();
@@ -94,7 +87,6 @@ class TorrentveryParse(TorrentParse):
             tvParse.getUpdateList("ent", 3);
             tvParse.getUpdateList("docu", 4);
             tvParse.getUpdateList("tvend", 5);
-        '''
         return "";
     
     @staticmethod
