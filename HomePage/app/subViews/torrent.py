@@ -100,21 +100,26 @@ class TorrentData:
         return retData;
 
 class torrent:
+
+    @staticmethod
+    def torrentRemoteAdd(magnetUrl, title):
+        osDefine.Logger("Title : " + title);
+        TorrentInfos.updateTorrentInfo(title);
+
+        currentTime = datetime.now();
+        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
+        #if (10 < currentTime.hour and currentTime.hour < 24):
+        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
+        osDefine.Logger("ExecuteCommand" + addCmd);
+        os.system(addCmd);
+
     @staticmethod
     def torrentAdd(request):
         try:
             magnetUrl = request.POST.get("magnetUrl").strip();
             magnetUrl = osDefine.Base64Decoding(magnetUrl);
             title = request.POST.get("title").strip();
-            osDefine.Logger("Title : " + title);
-            TorrentInfos.updateTorrentInfo(title);
-
-            currentTime = datetime.now();
-            addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
-            if (10 < currentTime.hour and currentTime.hour < 24):
-                addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
-            osDefine.Logger("ExecuteCommand" + addCmd);
-            os.system(addCmd);
+            torrent.torrentRemoteAdd(magnetUrl, title);
         except Exception as e:
             osDefine.Logger(e);
         return HttpResponse(addCmd);
@@ -307,7 +312,7 @@ class torrent:
             osDefine.Logger("Thumbnail Create Exception");
             osDefine.Logger(e);
         osDefine.Logger("FCM.SendFireBase(name)");
-        FCM.SendFireBase(name);
+        FCM.SendFireBase(msg = name + "다운로드가 완료되었습니다.");
 
         torrent.SMI2SRT(osDefine.LocalFilePath());
         return HttpResponse("");
