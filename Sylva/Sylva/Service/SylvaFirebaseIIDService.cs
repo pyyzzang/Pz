@@ -20,7 +20,7 @@ namespace Sylva.Service
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
     public class MyFirebaseIIDService : FirebaseInstanceIdService
     {
-        const string TAG = "MyFirebaseIIDService";
+        const string TAG = "MyFirebaseIIDService"; 
         public override void OnTokenRefresh()
         {
             var refreshedToken = FirebaseInstanceId.Instance.Token;
@@ -32,12 +32,14 @@ namespace Sylva.Service
             dbUpdateWorker.RunWorkerAsync(refreshedToken);
         }
 
+        private static string UpdateUserInfo { get { return "{0}/RegisterToken"; } }
+
         private void DbUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             System.Collections.Specialized.NameValueCollection sendValue = new System.Collections.Specialized.NameValueCollection();
             sendValue.Add("id", "1");
             sendValue.Add("token", e.Argument.ToString());
-            HttpUtil.SendMessage(true, sendValue);
+            HttpUtil.SendMessage(UpdateUserInfo, true, sendValue);
         }
 
         void SendRegistrationToServer(string token)
