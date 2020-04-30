@@ -27,12 +27,13 @@ class FCM:
         connection.InsertQueryExecute(updateQuery)            
         
         return HttpResponse("");
-    
+    cred = "";
     @staticmethod
-    def SendFireBase(sendmessage):
+    def SendFireBase(msg, title = "다운로드 완료"):
         try:
-            cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json")
-            firebase_admin.initialize_app(cred)
+            if "" == FCM.cred :
+                FCM.cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json");
+                firebase_admin.initialize_app(FCM.cred);
             # This registration token comes from the client FCM SDKs.
             connection = SQLalchemy.GetDBConnection();
             query = "select token from UserInfo where id='1'";
@@ -50,8 +51,8 @@ class FCM:
                 #     body = sendmessage + "다운로드가 완료되었습니다.",
                 # ),
                 data={
-                    "Title" : "다운로드 완료",
-                    "Content" : sendmessage + "다운로드가 완료되었습니다.",
+                    "Title" : title,
+                    "Content" : msg,
                     "Time" : datetime.now().strftime("%Y.%m.%d %H:%M:%S"),
                 },
             )
@@ -62,4 +63,4 @@ class FCM:
         # registration token.
         response = messaging.send(message)
         # Response is a message ID string.
-        osDefine.Logger('Successfully sent message:', response)
+        osDefine.Logger('Successfully sent message:' + response)
