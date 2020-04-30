@@ -65,6 +65,9 @@ namespace Sylva.Data
     {
         protected string _Date = string.Empty;
         protected string _Body = string.Empty;
+        protected string _Title = string.Empty;
+        protected string _MsgGUID = string.Empty;
+
         public FCM_Message() { }
         public FCM_Message(RemoteMessage __remoteMessage) 
         {
@@ -76,12 +79,38 @@ namespace Sylva.Data
             {
                 Body = __remoteMessage.Data["Content"];
             }
+
+            if (true == __remoteMessage.Data.ContainsKey("Title"))
+            {
+                Title = __remoteMessage.Data["Title"];
+            }
+            if (true == __remoteMessage.Data.ContainsKey("MsgGUID"))
+            {
+                MsgGUID = __remoteMessage.Data["MsgGUID"];
+            }
         }
         
         [JsonProperty(PropertyName = "Date")]
         public string Date { get { return _Date; } set { _Date = value; } }
         [JsonProperty(PropertyName = "Body")]
         public string Body{ get { return _Body; } set { _Body = value; } }
+        [JsonProperty(PropertyName = "Title")]
+        public string Title { get { return _Title; } set { _Title= value; } }
+
+        private static string UpdateMsgStatus { get { return "{0}/API?API=UpdateMsgStatus"; } }
+        [JsonIgnore]
+        public string MsgGUID { get { return _MsgGUID; } 
+            set 
+            { 
+                _MsgGUID = value;
+                if(false == string.IsNullOrEmpty(_MsgGUID))
+                {
+                    System.Collections.Specialized.NameValueCollection sendValue = new System.Collections.Specialized.NameValueCollection();
+                    sendValue.Add("Value", _MsgGUID);
+                    HttpUtil.SendMessage(UpdateMsgStatus, true, sendValue);
+                }
+            } 
+        }
 
     }
 

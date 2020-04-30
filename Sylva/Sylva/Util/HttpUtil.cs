@@ -21,25 +21,18 @@ namespace Sylva.Util
             get
             {
 #if DEBUG
-                return "http://182.231.34.148:8080";
+                return "https://192.168.219.102:8080";
 #else
-                return "182.231.34.148:8080";
+                return "https://192.168.219.102";
 #endif
             }
         }
 
-        private static string UpdateUserInfo
+        public static string SendMessage(string __Url, bool __isPost = true, System.Collections.Specialized.NameValueCollection __param = null)
         {
-            get
-            {
-                return string.Format("{0}/RegisterToken", ServerUrl);
-            }
-        }
-
-        public static string SendMessage(bool __isPost = true, System.Collections.Specialized.NameValueCollection __param = null)
-        {
+            ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
             WebClient client = new WebClient();
-            byte[] downloadByte = client.UploadValues(UpdateUserInfo, __isPost ? "POST" : "GET", __param);
+            byte[] downloadByte = client.UploadValues(string.Format(__Url, ServerUrl), __isPost ? "POST" : "GET", __param);
             return Encoding.UTF8.GetString(downloadByte);
         }
     }
