@@ -94,5 +94,5 @@ class TorrentveryParse(TorrentParse):
         t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
         t.start();
         
-TorrentveryParse.RunCrawlingThread();            
+#TorrentveryParse.RunCrawlingThread();            
 

@@ -71,15 +71,15 @@ def API(request):
     value = "";
     try:
         switcher={
-            "UpdateEntIndex":torrent.updateEntIndex,
-            "UpdateDocuIndex":torrent.updateDocuIndex,
-            "UpdateTvendIndex":torrent.updateTvendIndex,
-            "UpdateDramaIndex":torrent.updateDramaIndex,
             "CrawlingTorrent":TorrentveryParse.CrawlingTorrent,
             "SearchYoutube":YoutubeView.getSearchYoutube,
+            "SendFCM":FCM.SendFireBase,
+            "UpdateMsgStatus":FCM.UpdateMsgStatus,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
-        value = request.GET.get("Value")
+        value = request.GET.get("Value");
+        if(None == value):
+            value = request.POST.get("Value");
     except Exception as e:
         osDefine.Logger(e);
     if("" == executeFunc):
