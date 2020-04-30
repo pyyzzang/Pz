@@ -23,11 +23,11 @@ class TorrentParse:
         pass;
     
     @staticmethod
-    def existsEqualsTorrent(title):
+    def existsEqualsTorrent(title, genre):
         try:
             info = torrentInfo(title);
             session = DBExecute.GetDBConnection();
-            updateQuery = "select Title from Torrent where title like '\%" + info.getEpisode() + "%' or title like '%" + info.getDate() + "%'"
+            updateQuery = "select Title from Torrent where genre='" + str(genre) + "' and title like '\%" + info.getEpisode() + "%' or title like '%" + info.getDate() + "%'"
             osDefine.Logger("UpdateQuery : " + updateQuery);
             rows = session.QueryExecute(updateQuery);
             for row in rows:
