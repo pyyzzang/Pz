@@ -39,15 +39,18 @@ class FCM:
     cred = "";
     @staticmethod
     def SendFireBaseThread():
-       
-        cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json");
-        firebase_admin.initialize_app(cred);
+        if("" == FCM.cred):
+            FCM.cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json");
+            firebase_admin.initialize_app(FCM.cred);
 
         while(True):
             connection = SQLalchemy.GetDBConnection();
             query = "select info.token, fcm.Title, fcm.Content, fcm.SendTime, fcm.MsgGUID from FCM as fcm, UserInfo as info where fcm.Id = info.id;";
             rows = connection.QueryExecute(query);
             osDefine.Logger(query);
+
+            if(0 == rows.rowcount):
+                break;
 
             for row in rows:
                 try:
@@ -70,11 +73,7 @@ class FCM:
                     osDefine.Logger('Successfully sent message:' + response);
                 except Exception as e:
                     osDefine.Logger(e);
-
             time.sleep(60 * 5);
-
-        
-
     @staticmethod
     def SendFireBase(msg, title = "다운로드 완료"):
         try:
@@ -83,6 +82,7 @@ class FCM:
             connection.InsertQueryExecute(query);
         except Exception as e:
             osDefine.Logger(e);
+        FCM.SendFireBaseThreadStart();
 
     @staticmethod
     def SendFireBaseTest(msg, title = "다운로드 완료"):
@@ -129,4 +129,4 @@ class FCM:
         rows = connection.InsertQueryExecute(query);
 
     
-#FCM.SendFireBaseThreadStart();
+
