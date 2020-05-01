@@ -115,8 +115,5 @@ class TorrentInfos(object):
     def updateTorrentInfo(title):
         torrentInfos = TorrentInfos.GetTorrentInfos();
         info = torrentInfos.findSimilarTorrintInfo(title, True);
-        for info in torrentInfos.infos:
-            osDefine.Logger(info.getCount());
-        
         torrentInfos.saveFile();
         return info;
