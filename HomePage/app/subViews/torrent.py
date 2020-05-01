@@ -222,19 +222,71 @@ class torrent:
         return retHttp;
 
     @staticmethod
+    def getSelectBox():
+        retHttp = "";
+
+        retHttp += "<script>\n";
+        retHttp += "function genreChange()\n";
+        retHttp += "{\n";
+        retHttp += "    ganreSelect = document.getElementById('genreSelect');\n";
+        retHttp += "    $.ajax({\n";
+        retHttp += "    type: 'post', \n"
+        retHttp += "    data:{\n"
+        retHttp += "    'Value' : ganreSelect.options[ganreSelect.selectedIndex].value,\n";
+        retHttp += "    },\n";
+        retHttp += "    url: 'API?API=GENRE',\n";
+        retHttp += "    dataType : 'html',\n"
+        retHttp += "    error : function(){alert('errr')},\n";
+        retHttp += "    success : function(data){\n"
+        retHttp += "        TorrentTableDiv = document.getElementById('TorrentTableDiv');\n"
+        retHttp += "        TorrentTableDiv.innerHTML = data\n";
+        retHttp += "    }\n";
+        retHttp += "    });\n";
+        retHttp += "}\n";
+        retHttp += "</script>\n"
+
+        retHttp += "<select id='genreSelect' name='genreSelect' OnChange='genreChange()'>\n";
+        retHttp += "    <option value=''>장르</option>\n";
+        retHttp += "    <option value='1'>한국영화</option>\n";
+        retHttp += "    <option value='2'>드라마</option>\n";
+        retHttp += "    <option value='3'>예능</option>\n";
+        retHttp += "    <option value='4'>다큐</option>\n";
+        retHttp += "    <option value='5'>완결</option>\n";
+        retHttp += "    <option value='99'>완결</option>\n";
+        retHttp += "</select>\n"
+        
+        return retHttp;
+
+    @staticmethod
+    def getTorrentTable(genre = ""):
+        osDefine.Logger("genre : " + str(genre));
+        ret = "<Table width:'100%' border='1'>";
+        session = DBExecute.GetDBConnection();
+        query = "select top 100 title, MagnetUrl, modifyDate, idx from Torrent ";
+        if("" != genre and None != genre):
+            query += " where genre='" + genre + "'";
+        query += " order by modifyDate desc";
+        osDefine.Logger("query : " + query);
+        rows = session.QueryExecute(query);
+        ret += torrent.getTableHead();
+        
+        for row in rows:
+            data = TorrentData.createTorrenData(row);
+            ret += data.getHttpRow();
+        ret += "</tbody></table>"
+        return ret;
+
+    @staticmethod
     def getTorrent(request):
         ret = HtmlUtil.getHeader();
         ret += torrent.getTorrentAddDiv();
 
         ret += HtmlUtil.getBodyHead();
-        ret += "<Table width:'100%' border='1'>";
-        session = DBExecute.GetDBConnection();
-        rows = session.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent  order by modifyDate desc");
-        ret += torrent.getTableHead();
-        for row in rows:
-            data = TorrentData.createTorrenData(row);
-            ret += data.getHttpRow();
-        ret += "</tbody></table>"
+        ret += torrent.getSelectBox();
+        ret += "<div id='TorrentTableDiv'>\n";
+        ret += torrent.getTorrentTable();
+        ret += "</div>\n";
+
         ret += HtmlUtil.getBodyTail();
         ret += "</html>"
 

@@ -75,6 +75,7 @@ def API(request):
             "SearchYoutube":YoutubeView.getSearchYoutube,
             "SendFCM":FCM.SendFireBase,
             "UpdateMsgStatus":FCM.UpdateMsgStatus,
+            "GENRE":torrent.getTorrentTable,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
         value = request.GET.get("Value");
