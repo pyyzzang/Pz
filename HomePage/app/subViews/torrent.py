@@ -252,7 +252,7 @@ class torrent:
         retHttp += "    <option value='3'>예능</option>\n";
         retHttp += "    <option value='4'>다큐</option>\n";
         retHttp += "    <option value='5'>완결</option>\n";
-        retHttp += "    <option value='99'>완결</option>\n";
+        retHttp += "    <option value='99'>기타</option>\n";
         retHttp += "</select>\n"
         
         return retHttp;
