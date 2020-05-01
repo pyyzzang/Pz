@@ -20,11 +20,7 @@ namespace Sylva.Util
         {
             get
             {
-#if DEBUG
-                return "https://192.168.219.102:8080";
-#else
                 return "https://192.168.219.102";
-#endif
             }
         }
 

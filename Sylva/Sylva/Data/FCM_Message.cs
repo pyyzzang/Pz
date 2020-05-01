@@ -162,5 +162,17 @@ namespace Sylva.Data
             }
             catch (Exception e) { }
         }
+
+        public bool ExistFCM(FCM_Message __findMsg)
+        {
+            foreach( FCM_Message msg in this)
+            {
+                if(msg.MsgGUID == __findMsg.MsgGUID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
