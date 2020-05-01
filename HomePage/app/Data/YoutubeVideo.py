@@ -1144,7 +1144,8 @@ class YoutubeRoot(object):
 class PlayerResponse():
     def __init__(self, playabilityStatus = "", streamingData = "", playerAds = "", playbackTracking = "",
     captions = "", videoDetails = "", annotations = "", playerConfig = "", storyboards = "", microformat = "",
-    cards = "", trackingParams = "", attestation = "", videoQualityPromoSupportedRenderers = "", messages = "", adPlacements = "", endscreen = ""):
+    cards = "", trackingParams = "", attestation = "", videoQualityPromoSupportedRenderers = "", messages = "", adPlacements = "", endscreen = "",
+    responseContext = ""):
         #public PlayabilityStatus playabilityStatus { get; set; }
         self.playabilityStatus = playabilityStatus;
         #public StreamingData streamingData { get; set; }

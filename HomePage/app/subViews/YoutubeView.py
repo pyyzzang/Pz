@@ -100,8 +100,33 @@ class YoutubeView:
     def getPlayUrl(youtubeId):
         youtubeStr = get("https://www.youtube.com/watch?v=" + youtubeId);
         baseYoutube = youtubeStr.text;
-        scripts = baseYoutube.split("ytplayer.config =");
-        config = scripts[1].split(";ytplayer.load =")[0];
+        scripts = baseYoutube.split("ytplayer.config =")[1].strip();
+
+        index = 0;
+        count = 0;
+        with open("/home/pi/Pz/scripts", "w") as f:
+            f.write(scripts);
+        while(True):
+            if('{' == scripts[index]):
+                count = 1;
+                index + 1
+                break;
+        index = index + 1;
+        osDefine.Logger("count(+) : " + str(count));
+        while(index < len(scripts)):
+            if('{' == scripts[index]):
+                count = count + 1;
+            elif('}' == scripts[index]):
+                count = count - 1;
+            if(0 == count):
+                break;
+            index = index + 1;
+
+        config = scripts[0:index + 1];
+        osDefine.Logger("Index : " + str(index));
+
+        with open("/home/pi/Pz/Youtube", "w") as f:
+            f.write(config);
   
         jsonString = YoutubeRoot(**json.loads(config));
         root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
