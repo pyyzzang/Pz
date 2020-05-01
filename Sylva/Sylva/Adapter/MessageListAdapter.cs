@@ -34,6 +34,11 @@ namespace Sylva.Data
 
         public void AddReceiveMsg(FCM_Message __addMsg)
         {
+            if(true == _FCM_List.ExistFCM(__addMsg))
+            {
+                return;
+            }
+
             _FCM_List.Insert(0, __addMsg);
             MainHandler.Post(new System.Action(Update));
             _FCM_List.SaveFile();
