@@ -2,6 +2,7 @@
 SERVER="9091 --auth pi:cndwn5069()"
 TORRENTLIST=`transmission-remote $SERVER --list | sed -e '1d;$d;s/^ *//' | cut --only-delimited --delimiter=" " --fields=1`
 LOG_FILE="Bach.log"
+
 for TORRENTID in $TORRENTLIST
 do
     DL_COMPLETED=`transmission-remote $SERVER --torrent $TORRENTID --info | grep "Percent Done: 100%"`
@@ -19,3 +20,11 @@ do
     fi
 done 
 
+for TORRENTID in $TORRENTLIST
+do
+    STATE_STOPPED=`transmission-remote $SERVER --torrent $TORRENTID --info | grep "State: Stopped"`
+    if [ "$STATE_STOPPED" ]; then
+        transmission-remote $SERVER --torrent $TORRENTID --start
+        break 
+    fi
+done

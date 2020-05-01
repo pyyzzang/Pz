@@ -43,7 +43,7 @@ class TorrentData:
         return str(self.getIdx());
 
     def getAjaxScript(self):
-        ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"', 'title' : '" + self.getTitle() + "'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
+        ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"', 'title' : '" + self.getTitle() + "'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
         ret += "<script type=\"text/javascript\">$(function(){$(\"#Delete"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_" +self.getMagnetUrl() + "').style.display = \"none\";}});})})</script>";
         return ret;
 
@@ -110,8 +110,9 @@ class torrent:
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
         #if (10 < currentTime.hour and currentTime.hour < 24):
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
-        osDefine.Logger("ExecuteCommand" + addCmd);
+        osDefine.Logger("ExecuteCommand : " + addCmd);
         os.system(addCmd);
+        return addCmd;
 
     @staticmethod
     def torrentAdd(request):
@@ -119,7 +120,7 @@ class torrent:
             magnetUrl = request.POST.get("magnetUrl").strip();
             magnetUrl = osDefine.Base64Decoding(magnetUrl);
             title = request.POST.get("title").strip();
-            torrent.torrentRemoteAdd(magnetUrl, title);
+            addCmd = torrent.torrentRemoteAdd(magnetUrl, title);
         except Exception as e:
             osDefine.Logger(e);
         return HttpResponse(addCmd);
@@ -282,19 +283,22 @@ class torrent:
 
     @staticmethod
     def SMI2SRT(curPath):
-        for subList in os.listdir(curPath):
-            subItem = os.path.join(curPath, subList);
-            if( True == os.path.isdir(subItem)):
-                SMI2SRT(subItem);
-            elif(True == os.path.isfile(subItem)):
-                fileName, ext = os.path.splitext(subItem);
-                if('.smi' == ext.lower()):
-                    subs = ("subs -c srt %s.smi -o %s_tmp.srt") % (fileName, fileName);
-                    os.system(subs);
-                    subs = ("iconv -f euc-kr -t utf8 %s_tmp.srt -o %s.srt") % (fileName, fileName);
-                    os.system(subs);
-        os.system("cd " + curPath);
-        os.system("rm *_tmp.srt");
+        try:
+            for subList in os.listdir(curPath):
+                subItem = os.path.join(curPath, subList);
+                if( True == os.path.isdir(subItem)):
+                    torrent.SMI2SRT(subItem);
+                elif(True == os.path.isfile(subItem)):
+                    fileName, ext = os.path.splitext(subItem);
+                    if('.smi' == ext.lower()):
+                        subs = ("subs -c srt %s.smi -o %s_tmp.srt") % (fileName, fileName);
+                        os.system(subs);
+                        subs = ("iconv -f euc-kr -t utf8 %s_tmp.srt -o %s.srt") % (fileName, fileName);
+                        os.system(subs);
+            os.system("cd " + curPath);
+            os.system("rm *_tmp.srt");
+        except Exception as e:
+            osDefine.Logger(e);
 
     @staticmethod
     def torrentDownloadComplete(request):
