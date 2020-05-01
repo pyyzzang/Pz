@@ -245,7 +245,7 @@ class osDefine:
     
     @staticmethod
     def getIsDev():
-        if '/home/pi/Pz' == os.getcwd() : 
+        if -1 != os.getcwd().find('/home/pi/Pz'):
             return True;
         return False;
 
