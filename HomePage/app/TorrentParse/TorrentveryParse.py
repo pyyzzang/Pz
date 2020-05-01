@@ -91,8 +91,11 @@ class TorrentveryParse(TorrentParse):
     
     @staticmethod
     def RunCrawlingThread():
-        t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
-        t.start();
+        if(True == osDefine.getIsDev()):
+            osDefine.Logger("개발 모드");
+        else:
+            t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
+            t.start();
         
-#TorrentveryParse.RunCrawlingThread();            
+TorrentveryParse.RunCrawlingThread();
 
