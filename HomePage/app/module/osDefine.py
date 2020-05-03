@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import os
 import socket
 import base64
@@ -17,7 +16,9 @@ from .strUtil import strUtil;
 import json
 import threading;
 import time;
-from urllib.parse import urlparse
+from urllib.parse import urlparse;
+from ..Define import Define;
+import datetime;
 
 class PlayMode:
     File = 0;
@@ -267,3 +268,19 @@ class osDefine:
 
     
 
+    @staticmethod
+    def Init():
+        logFilePath = os.path.join(Define.BASE_DIR, "log");
+        folderName = datetime.datetime.now().strftime("%Y_%m_%d");
+        logPath = os.path.join(logFilePath,folderName);
+        if(False == os.path.exists(logPath)):
+            cmd = "sudo mkdir " + logPath;
+            os.system(cmd);
+            os.system("sudo mv *.log " + logPath);
+        
+        removeDate = (datetime.datetime.now() + datetime.timedelta(days=-10)).strftime("%Y_%m_%d");
+        deleteLogPath = os.path.join(logFilePath, removeDate);
+        if(True == os.path.exists(deleteLogPath)):
+            cmd = "sudo rm -R " + deleteLogPath;
+            os.system(cmd);
+osDefine.Init();
