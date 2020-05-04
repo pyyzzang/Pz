@@ -6,6 +6,7 @@ from ..module.Youtube_Cipher import Cipher;
 from django.http import HttpResponse
 
 from  requests import get;
+import requests;
 import json;
 import re;
 from ..Data.YoutubeVideo import videos;
@@ -16,6 +17,7 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from ..Data.YoutubeVideo import Items;
+from ..Data.YoutubeToken import AccessToken;
 
 
 class YoutubeView:
@@ -178,3 +180,23 @@ class YoutubeView:
         except Exception as e:
             osDefine.Logger(e);
         return HttpResponse(retHttp);
+
+    @staticmethod
+    def Redirect(reqeust):
+        code = "";
+        try:
+            code = reqeust.GET.get("code");
+            osDefine.Logger("Code : " + str(code));
+
+            data = {'code': code, 
+                'client_id': '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com', 
+                'client_secret': '95_SJoiXXd8f4keeHUzy8O8s', 
+                'grant_type': 'authorization_code', 
+                'redirect_uri': 'https://pyyzzang.shop:8080/YoutubeRedirect'};
+            res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
+            print(res.text);
+            acceseToken = AccessToken(**json.loads(res.text));
+            print(acceseToken.access_token);
+        except Exception as e:
+            osDefine.Logger(e);
+        return HttpResponse(code);

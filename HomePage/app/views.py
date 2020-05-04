@@ -40,6 +40,9 @@ def Skip(request):
 def Skip600(request):
     return playerMove.Skip600(request);
 
+def YoutubeRedirect(request):
+    return YoutubeView.Redirect(request);
+
 def VolumeDown(request):
     return playerMove.VolumeDown(request);
 def play(request):
