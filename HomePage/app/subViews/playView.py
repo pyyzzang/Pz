@@ -74,7 +74,7 @@ class playView(object):
         retHttp += "})"
         retHttp += "})"
         retHttp += "</script>"
-        retHttp += "	    <div id='Replay' class='buttonFullDiv' style='position: relative;left:0px; top: 100%; visibility:hidden'><button id='ReplayButton' class='play' /> </div>                     ";
+        retHttp += "	    <div id='Replay' class='buttonDiv'><button id='ReplayButton' class='play' /> </div>                     ";
         return retHttp;
     @staticmethod
     def getPause():
@@ -99,7 +99,7 @@ class playView(object):
         retHttp += "})"
         retHttp += "})"
         retHttp += "</script>"
-        retHttp += "	    <div id='Pause' class='buttonFullDiv' style='position: relative; left:0px; top: 0%; '><button id='PauseButton' class='pause' />	</div>                  ";
+        retHttp += "	    <div id='Pause' class='buttonDiv'><button id='PauseButton' class='pause' />	</div>                  ";
         return retHttp;
 
     @staticmethod
@@ -247,10 +247,8 @@ class playView(object):
         retHttp += "<div class='main' style='top:-100'>                                                                             ";
         retHttp += playView.getBack600();
         retHttp += playView.getBack10();
-        retHttp += "   <div class='buttonDiv' style='position: relative;height=15%;width=15%'>"
         retHttp += playView.getRePlay();
         retHttp += playView.getPause();
-        retHttp += "   </div>"
         retHttp += playView.getStop();
         retHttp += playView.getSkip10();
         retHttp += playView.getSkip600();

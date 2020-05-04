@@ -34,8 +34,9 @@
 
 .buttonDiv{
 	display: inline-block;
-	width : 15%;
+	width : 10%;
 	height : 15%;
+	background-color: white;
 }
 
 .ListView{
@@ -102,18 +103,26 @@ td, th{
 
 .pause{
 	background-image : url("../Image/Pause.png");
+	position: relative;
+	left : -100%;
 }
 
 .stop{
 	background-image : url("../Image/Stop.png");
+	position: relative;
+	left : -100%;
 }
 
 .skip10{
-        background-image : url("../Image/Skip10.png");
+	background-image : url("../Image/Skip10.png");
+	position: relative;
+	left : -100%;
 }
 
 .skip600{
 	background-image : url("../Image/Skip600.png");
+	position: relative;
+	left : -100%;
 }
 
 
@@ -148,5 +157,28 @@ td, th{
 
 .Empty20{
 	width : 100%;
-	height : 20%;
+	height : 5%;
+}
+
+#SeekBar{
+	position:absolute;
+	left:o;
+	bottom:-10px;
+	width:100%;
+    -webkit-appearance: none;
+}
+
+#SeekBar::-webkit-slider-runnable-track {
+    height: 5px;
+    background: url('F:\Temp\1.PNG');
+}
+
+#SeekBar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+	background:url('F:\Temp\2.PNG') no-repeat;
+	background-size:100% 100%;
+    height: 32px;
+    width: 32px;
+	margin:-12px 0 0 -10px;
 }
