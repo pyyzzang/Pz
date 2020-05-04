@@ -37,6 +37,9 @@ class PlayInfo(object):
     def getProgressValue(self):
         return self.getPosition() * 100 / self.getDuration();
 
+    def getVideoPos(self, value):
+        return value * self.getDuration() / 100;
+
 
     @classmethod
     def from_json(cls, data):

@@ -76,6 +76,8 @@ def API(request):
             "SendFCM":FCM.SendFireBase,
             "UpdateMsgStatus":FCM.UpdateMsgStatus,
             "GENRE":torrent.getTorrentTable,
+            "ProgressValue":osDefine.getCurrentProgressValue,
+            "SkipVideo":osDefine.SkipVideo,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
         value = request.GET.get("Value");

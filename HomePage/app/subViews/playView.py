@@ -270,16 +270,47 @@ class playView(object):
     @staticmethod
     def getSeekBar():
         retHttp = "<p/>\n";
-        retHttp += "<input type='range' min='1' max='100' value='50' class='slider' id='progress'>\n"
+        retHttp += "<div>\n";
+        retHttp += "<input type='range' min='0' max='100' value='"+ str(osDefine.getCurrentProgressValue(None)) + "' class='slider' id='progress'>\n"
         retHttp += "<span id='progressValue'></span>\n";
-        retHttp += "<script>";
+        retHttp += "<script>\n";
+        retHttp += "UpdateProgress();"
+        retHttp += "setInterval(UpdateProgress, 1000);\n" #// 3000ms(3초)가 경과하면 ozit_timer_test() 함수를 실행합니다.
+        retHttp += "function UpdateProgress(){\n"
+        retHttp += "    jsonData = {'API' : 'ProgressValue'};\n";
+        retHttp += "    $.ajax({"+ "\n"; 
+        retHttp += "        type: 'get'"+ "\n"; 
+        retHttp += "        , url: '/API'"+ "\n"; 
+        retHttp += "        , data:jsonData\n";
+        retHttp += "        , dataType : 'html'"+ "\n"; 
+        retHttp += "        , success : function(data){"+ "\n";
+        retHttp += "            if(-1 < data){\n"
+        retHttp += "                var slider = document.getElementById('progress');\n"; 
+        retHttp += "                var output = document.getElementById('progressValue');\n";
+        retHttp += "                slider.value = data;\n";
+        retHttp += "               output.innerHTML = data;\n";
+        retHttp += "            }"
+        retHttp += "        }"+ "\n"; 
+        retHttp += "    });"+ "\n"; 
+        retHttp += "}\n";
+
         retHttp += "var slider = document.getElementById('progress');\n";
         retHttp += "var output = document.getElementById('progressValue');\n";
-        retHttp += "output.innerHTML = slider.value;\n";
         retHttp += "slider.oninput = function() {\n";
-        retHttp += "output.innerHTML = this.value;\n";
+        retHttp += "    output.innerHTML = this.value;\n";
+        retHttp += "    jsonData = {'API' : 'SkipVideo', 'Value':slider.value};\n";
+        retHttp += "    $.ajax({"+ "\n"; 
+        retHttp += "        type: 'get'"+ "\n"; 
+        retHttp += "        , url: '/API'"+ "\n"; 
+        retHttp += "        , data:jsonData\n";
+        retHttp += "        , dataType : 'html'"+ "\n"; 
+        retHttp += "        , success : function(data){"+ "\n";
+        retHttp += "        }"+ "\n"; 
+        retHttp += "    });"+ "\n"; 
         retHttp += "}\n";
         retHttp += "</script>";
+        
+        retHttp += "</div>\n";
         return retHttp;
 
     @staticmethod

@@ -35,12 +35,28 @@ class osDefine:
             return "";
         return strUtil.getMatchTitle(osDefine.playTitle);
     @staticmethod
-    def Skip(value):
+    def Skip(value, skipMode = 0):
         if(0 == osDefine.currentPlayer):
             return 0;
-        osDefine.Logger("Skip : " + str(value));
-        osDefine.currentPlayer.set_position(osDefine.currentPlayer.position() + value);
+        cur = 0;
+        if 0 == skipMode:
+            cur = osDefine.currentPlayer.position() + value;
+        elif 1 == skipMode:
+            cur = value;
+        osDefine.Logger("Skip : " + str(cur));
+        osDefine.currentPlayer.set_position(cur);
+        osDefine.CurPlayInfo.setPosition(cur);
     
+    @staticmethod
+    def SkipVideo(value):
+        osDefine.Logger("value : " + str(value));
+        try:
+            skipPos = osDefine.CurPlayInfo.getVideoPos(int(value));
+            osDefine.Skip(skipPos, 1);
+            osDefine.PlayInfoSaveThread(currentPlayFile = osDefine.playFileName, isThread = False);
+            
+        except Exception as e:
+            osDefine.Logger(e);
 
     SupportExt = ['.mp4', '.mkv', '.avi'];
     NotDeleteExt = SupportExt + ['.part'];
@@ -59,7 +75,7 @@ class osDefine:
     @staticmethod
     def Replay(value):
         if(0 == osDefine.currentPlayer):
-            return 0;
+            return -1;
         osDefine.Logger("Replay ");
         osDefine.currentPlayer.play();
         
@@ -170,19 +186,29 @@ class osDefine:
 
         return executeFilePath; 
 
+    CurPlayInfo = "";
     @staticmethod
-    def PlayInfoSaveThread(currentPlayFile):
+    def PlayInfoSaveThread(currentPlayFile, isThread = True):
 
         while(osDefine.playFileName == currentPlayFile):
             saveInfos = PlayInfos.GetPlayInfos();
-            findInfo = saveInfos.getPlayInfo(osDefine.playTitle, True);
+            osDefine.CurPlayInfo = saveInfos.getPlayInfo(osDefine.playTitle, True);
 
-            findInfo.setPosition(osDefine.currentPlayer.position());
-            findInfo.setDuration(osDefine.currentPlayer.duration());
-            findInfo.setVolume(osDefine.currentPlayer.volume());
+            osDefine.CurPlayInfo.setPosition(osDefine.currentPlayer.position());
+            osDefine.CurPlayInfo.setDuration(osDefine.currentPlayer.duration());
+            osDefine.CurPlayInfo.setVolume(osDefine.currentPlayer.volume());
 
             saveInfos.saveFile();
+            if(False == isThread):
+                break;
             time.sleep(3);
+        osDefine.CurPlayInfo = "";
+
+    @staticmethod
+    def getCurrentProgressValue(param):
+        if("" == osDefine.CurPlayInfo):
+            return -1;
+        return int(osDefine.CurPlayInfo.getProgressValue());
 
     @staticmethod 
     def playNextVideo():
