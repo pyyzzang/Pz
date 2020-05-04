@@ -262,8 +262,24 @@ class playView(object):
         retHttp += "</div>                                                                                         ";
         retHttp += "</body>    "
         retHttp += playView.getFormload();
+        retHttp += playView.getSeekBar();
         retHttp += "</div>";
         
+        return retHttp;
+    
+    @staticmethod
+    def getSeekBar():
+        retHttp = "<p/>\n";
+        retHttp += "<input type='range' min='1' max='100' value='50' class='slider' id='progress'>\n"
+        retHttp += "<span id='progressValue'></span>\n";
+        retHttp += "<script>";
+        retHttp += "var slider = document.getElementById('progress');\n";
+        retHttp += "var output = document.getElementById('progressValue');\n";
+        retHttp += "output.innerHTML = slider.value;\n";
+        retHttp += "slider.oninput = function() {\n";
+        retHttp += "output.innerHTML = this.value;\n";
+        retHttp += "}\n";
+        retHttp += "</script>";
         return retHttp;
 
     @staticmethod
