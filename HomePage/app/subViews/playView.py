@@ -74,7 +74,7 @@ class playView(object):
         retHttp += "})"
         retHttp += "})"
         retHttp += "</script>"
-        retHttp += "	    <div id='Replay' class='buttonDiv'><button id='ReplayButton' class='play' /> </div>                     ";
+        retHttp += "	    <div id='Replay' class='buttonDiv' style='visibility:visible'><button id='ReplayButton' class='play' /> </div>                     ";
         return retHttp;
     @staticmethod
     def getPause():

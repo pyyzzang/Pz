@@ -104,25 +104,25 @@ td, th{
 .pause{
 	background-image : url("../Image/Pause.png");
 	position: relative;
-	left : -100%;
+	left : -105%;
 }
 
 .stop{
 	background-image : url("../Image/Stop.png");
 	position: relative;
-	left : -100%;
+	left : -105%;
 }
 
 .skip10{
 	background-image : url("../Image/Skip10.png");
 	position: relative;
-	left : -100%;
+	left : -105%;
 }
 
 .skip600{
 	background-image : url("../Image/Skip600.png");
 	position: relative;
-	left : -100%;
+	left : -105%;
 }
 
 
