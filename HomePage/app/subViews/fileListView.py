@@ -92,6 +92,13 @@ class FileInfo:
 class fileListView(object):
     @staticmethod
     def getViewList(request):
+        youtubeToken = osDefine.getParameter(request, "token");
+        if(None == youtubeToken):
+            oAuthUrl = "https://accounts.google.com/o/oauth2/auth?client_id=456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com&redirect_uri=%s/YoutubeRedirect&response_type=code&scope=https://www.googleapis.com/auth/youtube" % osDefine.getRunIp(request);
+            http = "<script>location.href=\"" + oAuthUrl + "\"</script>";
+            osDefine.Logger("oAuth Url : " + http);
+            return HttpResponse(http);
+
         fileListView.deleteEmptyFolder();
         try:
             requestFile = osDefine.Base64Decoding(request.GET["file"]);
@@ -105,7 +112,7 @@ class fileListView(object):
             http += fileListView.getTitleHead();
             http += HtmlUtil.getBodyHead();
             http += fileListView.getVideoList(requestFile, request);
-            http += YoutubeView.getVideoList();
+            http += YoutubeView.getVideoList(youtubeToken);
 
             http += HtmlUtil.getBodyTail();
             http += "</body>";

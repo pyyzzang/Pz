@@ -1248,11 +1248,12 @@ class Items():
         return videoItemDict["kind"];
 
 class videos(object):
-    def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = ""):
+    def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = "", error=""):
         self.kind = kind;
         self.etag = etag;
         self.items = items;
         self.regionCode = regionCode;
+        self.error = error;
 
 YoutubeMp4_itag = {18 : 360	,# mp4	audio/video	360p	-	-	-		
                         22	: 720 ,# mp4	audio/video	720p	-	-	-       

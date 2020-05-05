@@ -68,7 +68,8 @@ class YoutubeView:
         retHttp  = "<div id='Youtubeview'>\n";
         retHttp += YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
-            if("youtube#video" != Items.getVideoKind(videoItem)):
+            if("youtube#video" != Items.getVideoKind(videoItem) and
+                "youtube#activity" != Items.getVideoKind(videoItem)):
                 osDefine.Logger("Items.getVideoKind(videoItem) : " + Items.getVideoKind(videoItem));
                 continue;
             retHttp +="<tr>"
@@ -81,9 +82,17 @@ class YoutubeView:
         return retHttp;
 
     @staticmethod
-    def getVideoList():
+    def getVideoList(token):
         retHttp =  YoutubeView.getSearchView();
-        retHttp += YoutubeView.getVideoTable();
+
+        activitiesUrl = "https://www.googleapis.com/youtube/v3/activities?" \
+            + "regionCode=KR&"                                              \
+            + "part=snippet&"                                               \
+            + "home=true&"                                                  \
+            + "maxResults=50&"                                              \
+            + "access_token=" + token;
+        
+        retHttp += YoutubeView.getVideoTable(activitiesUrl);
         return retHttp;
     
     @staticmethod
@@ -182,10 +191,10 @@ class YoutubeView:
         return HttpResponse(retHttp);
 
     @staticmethod
-    def Redirect(reqeust):
+    def Redirect(request):
         code = "";
         try:
-            code = reqeust.GET.get("code");
+            code = request.GET.get("code");
             osDefine.Logger("Code : " + str(code));
 
             data = {'code': code, 
@@ -194,9 +203,11 @@ class YoutubeView:
                 'grant_type': 'authorization_code', 
                 'redirect_uri': 'https://pyyzzang.shop:8080/YoutubeRedirect'};
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
-            print(res.text);
             acceseToken = AccessToken(**json.loads(res.text));
-            print(acceseToken.access_token);
+            redirectUrl = osDefine.getRunIp(request) + "/?token="+acceseToken.access_token;
+            http = "<script>location.href=\"" + redirectUrl + ";\"</script>";
+            return HttpResponse(http);
+
         except Exception as e:
             osDefine.Logger(e);
         return HttpResponse(code);

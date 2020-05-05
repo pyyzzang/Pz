@@ -309,4 +309,13 @@ class osDefine:
         if(True == os.path.exists(deleteLogPath)):
             cmd = "sudo rm -R " + deleteLogPath;
             os.system(cmd);
+    
+    @staticmethod
+    def getParameter(request, name):
+        param = request.GET.get(name);
+        if(None == param):
+            param = request.POST.get(name);
+        return param;
+        
+
 osDefine.Init();
