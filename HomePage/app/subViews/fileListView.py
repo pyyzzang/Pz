@@ -138,12 +138,14 @@ class fileListView(object):
         retHttp += "if(radio.value=='File')";
         retHttp += "{";
         retHttp += '    YoutubeTable.style.visibility = "collapse";';
+        retHttp += '    SearchDiv.style.visibility = "collapse";';
         retHttp += '    FileViewTable.style.visibility = "visible";';
         retHttp += '}';
         retHttp += 'else';
         retHttp += '{';
         retHttp += '    FileViewTable.style.visibility = "collapse";';
         retHttp += '    YoutubeTable.style.visibility = "visible";';
+        retHttp += '    SearchDiv.style.visibility = "visible";';
         retHttp += '}}';
         retHttp += "</script>";
         return retHttp;

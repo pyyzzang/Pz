@@ -35,9 +35,10 @@ class YoutubeView:
         return retHttp;
     @staticmethod
     def getSearchView():
-        retHttp = "";
+        retHttp = "<div id='SearchDiv'>\n";
         retHttp += "<input type='text' id='txtSearch' />\n";
         retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
+        retHttp += "</div>\n"
         retHttp += "<script type='text/javascript'>\n";
         retHttp += "$(function(){\n"
         retHttp += "$(\"#btnSearch\").click(function(){\n"
@@ -80,7 +81,7 @@ class YoutubeView:
 
         activitiesUrl = "https://www.googleapis.com/youtube/v3/activities?" \
             + "regionCode=KR&"                                              \
-            + "part=contentDetails,snippet&"                                        \
+            + "part=contentDetails,snippet&"                                \
             + "home=true&"                                                  \
             + "maxResults=50&"                                              \
             + "access_token=" + token;
