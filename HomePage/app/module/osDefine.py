@@ -198,6 +198,10 @@ class osDefine:
             osDefine.CurPlayInfo.setDuration(osDefine.currentPlayer.duration());
             osDefine.CurPlayInfo.setVolume(osDefine.currentPlayer.volume());
 
+            if( 97 < osDefine.CurPlayInfo.getProgressValue()):
+                saveInfos.removeInfo(osDefine.CurPlayInfo);
+                isThread = False;
+
             saveInfos.saveFile();
             if(False == isThread):
                 break;

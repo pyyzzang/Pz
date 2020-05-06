@@ -70,6 +70,9 @@ class PlayInfos(object):
         except Exception as e:
             infoLogger.info("GetPlayInfo : " + e);
         return retPlayInfo;
+
+    def removeInfo(self, removeInfo):
+        self.playInfos.remove(removeInfo);
     
     def saveFile(self):
         criticalSection = Lock();
