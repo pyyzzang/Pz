@@ -42,11 +42,6 @@ class TorrentData:
     def getStrIdx(self):
         return str(self.getIdx());
 
-    def getAjaxScript(self):
-        ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"', 'title' : '" + self.getTitle() + "'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
-        ret += "<script type=\"text/javascript\">$(function(){$(\"#Delete"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"'}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_" +self.getMagnetUrl() + "').style.display = \"none\";}});})})</script>";
-        return ret;
-
     def getHttpScript(self):
 
         focusFunc = "FocusOut" + self.getMagnetUrl();
@@ -77,16 +72,22 @@ class TorrentData:
 
         return ret;
 
+    def getAjaxScript(self):
+        #ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"', 'title' : '" + self.getTitle() + "'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
+        ret = "\n<script type=\"text/javascript\"> function TorrentDelete(magnet){$.ajax({type: 'post', data:{'magnetUrl' : magnet}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_' + magnet).style.display = \"none\";}})}</script>\n";
+        ret += "\n<script type=\"text/javascript\"> function TorrentAdd(magnet, title){ $.ajax({type: 'post', data:{'magnetUrl' : magnet, 'title' : title}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(title + \" 토렌트 추가 하였습니다.\");}})}</script>\n";
+        return ret;
+
     def getHttpRow(self):
-        ret = "<tr  Id=\"TR_" + self.getMagnetUrl() + "\"><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>";
-        ret += "<td>" + self.getModifyDate() + "</td>";
-        ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>";
-        ret += "<td><panel >";
-        ret += "<input id=\"AddRow" + self.getStrIdx() + "\" type=\"Button\" Value=\"토렌트 추가\"></input>";
-        ret += "<input id=\"Delete" + self.getStrIdx() + "\"type=\"Button\" Value=\"토렌트 삭제\"></input>";
-        ret += "</panel></td>";        
+        ret = "<tr  Id=\"TR_" + self.getMagnetUrl() + "\"><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>\n";
+        ret += "<td>" + self.getModifyDate() + "</td>\n";
+        ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>\n";
+        ret += "<td><panel >\n";
+        ret += "<input id=\"AddRow" + self.getStrIdx() + "\" OnClick=\"TorrentAdd('" + self.getMagnetUrl() + "','"+ self.getTitle() + "');\" type=\"Button\" Value=\"토렌트 추가\"></input>\n";
+        ret += "<input id=\"Delete" + self.getStrIdx() + "\" OnClick=\"TorrentDelete('" + self.getMagnetUrl() + "')\" type=\"Button\" Value=\"토렌트 삭제\"></input>\n";
+        ret += "</panel></td>\n";
         ret += self.getAjaxScript();
-        ret += "</tr>";
+        ret += "</tr>\n";
         ret += self.getHttpScript();
         return ret;
     
