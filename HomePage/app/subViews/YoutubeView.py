@@ -10,13 +10,13 @@ import requests;
 import json;
 import re;
 from ..Data.YoutubeVideo import videos;
+from ..Data.YoutubeVideo import Item;
 from ..Data.YoutubeVideo import YoutubeRoot;
 from ..Data.YoutubeVideo import PlayerResponse;
 from ..Data.YoutubeVideo import YoutubeMp4_itag;
 from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
-from ..Data.YoutubeVideo import Items;
 from ..Data.YoutubeToken import AccessToken;
 
 
@@ -68,15 +68,8 @@ class YoutubeView:
         retHttp  = "<div id='Youtubeview'>\n";
         retHttp += YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
-            if("youtube#video" != Items.getVideoKind(videoItem) and
-                "youtube#activity" != Items.getVideoKind(videoItem)):
-                osDefine.Logger("Items.getVideoKind(videoItem) : " + Items.getVideoKind(videoItem));
-                continue;
-            retHttp +="<tr>"
-            retHttp +="<td class='column1'><img src=\"" + videoItem["snippet"]["thumbnails"]["default"]["url"] + "\"/></td>";
-            retHttp +="<td class='column2'>" + Items.getVideoId(videoItem) + "</td>";
-            retHttp +="<td class='column3'><a href=Play\?youtube="+ osDefine.Base64Encoding(Items.getVideoId(videoItem)) + "&title=" + osDefine.Base64Encoding(videoItem['snippet']['title']) + ">" + videoItem['snippet']['title'] + "</td>"
-            retHttp +="</tr>";
+            item = Item.getItem(videoItem);
+            retHttp += item.getTr();
         retHttp +="</table>";
         retHttp += "</div>\n";
         return retHttp;
@@ -87,11 +80,11 @@ class YoutubeView:
 
         activitiesUrl = "https://www.googleapis.com/youtube/v3/activities?" \
             + "regionCode=KR&"                                              \
-            + "part=snippet&"                                               \
+            + "part=contentDetails,snippet&"                                        \
             + "home=true&"                                                  \
             + "maxResults=50&"                                              \
             + "access_token=" + token;
-        
+        osDefine.Logger(activitiesUrl);
         retHttp += YoutubeView.getVideoTable(activitiesUrl);
         return retHttp;
     
@@ -201,7 +194,7 @@ class YoutubeView:
                 'client_id': '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com', 
                 'client_secret': '95_SJoiXXd8f4keeHUzy8O8s', 
                 'grant_type': 'authorization_code', 
-                'redirect_uri': 'https://pyyzzang.shop:8080/YoutubeRedirect'};
+                'redirect_uri': '%s/YoutubeRedirect' % osDefine.getRunIp(request)};
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
             acceseToken = AccessToken(**json.loads(res.text));
             redirectUrl = osDefine.getRunIp(request) + "/?token="+acceseToken.access_token;

@@ -1,3 +1,5 @@
+from ..module.osDefine import osDefine
+
 class Thumbnail:
     def __init__(self, url, width, height):
         self.url = url;
@@ -1232,21 +1234,77 @@ class pageInfo(object):
         self.resultsPerPage = resultsPerPage;
 
 class Item(object):
-        def __init__(self, kind):
-            self.kind = kind;
 
-class Items():
+    @staticmethod 
+    def getVideoKind(item):
+        if(type(item["id"]) is dict):
+            return item["id"]["kind"];
+        return item["kind"];
     @staticmethod
-    def getVideoId(videoItemDict):
-        if(type(videoItemDict["id"]) is dict):
-            return videoItemDict["id"]["videoId"];
-        return videoItemDict["id"];
+    def getItem(videoItem):
+        kind = Item.getVideoKind(videoItem);
+        
+        retItem = "";
+        if("youtube#video" == kind):
+            osDefine.Logger("kind youtube#video : " + kind);
+            retItem = Item_Video(videoItem);
+        elif("youtube#activity" == kind):
+            osDefine.Logger("kind youtube#activity : " + kind);
+            retItem = Item_Activiti(videoItem);
+        else:
+            osDefine.Logger("else");
+            retItem = Item(videoItem);
+        return retItem;
 
-    def getVideoKind(videoItemDict):
-        if(type(videoItemDict["id"]) is dict):
-            return videoItemDict["id"]["kind"];
-        return videoItemDict["kind"];
+    def __init__(self, item):
+        self.item = item;
 
+    def getVideoId(self):
+        raise NotImplementedError();
+    
+    def getUrl(self):
+        return self.item["snippet"]["thumbnails"]["default"]["url"];
+    
+    def getYoutubeId(self):
+        return osDefine.Base64Encoding(self.getVideoId());
+
+    def getTitleEncode(self):
+        return osDefine.Base64Encoding(self.getTitle());
+
+    def getTitle(self):
+        return self.item['snippet']['title'];
+    
+    def getTr(self):
+        retHttp = "";
+        try:
+            retHttp +="<tr>"
+            retHttp +="<td class='column1'><img src=\"" + self.getUrl() + "\"/></td>";
+            retHttp +="<td class='column2'>" + self.getVideoId() + "</td>";
+            retHttp +="<td class='column3'><a href=Play\?youtube="+ self.getYoutubeId() + "&title=" + self.getTitleEncode() + ">" + self.getTitle() + "</td>"
+            retHttp +="</tr>";
+            return retHttp;
+        except Exception as e:
+            osDefine.Logger(e);
+        return retHttp;
+
+class Item_Video(Item):
+    def __init__(self, item):
+        self.item = item;
+        super().__init__(item);
+
+    def getVideoId(self):
+        if(type(self.item["id"]) is dict):
+            return self.item["id"]["videoId"];
+        return self.item["id"];
+
+class Item_Activiti(Item): 
+    def __init__(self, item):
+        self.item = item;
+        super().__init__(item);
+    
+    def getVideoId(self):
+        return self.item["contentDetails"]["upload"]["videoId"];
+    
 class videos(object):
     def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = "", error=""):
         self.kind = kind;
