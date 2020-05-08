@@ -135,7 +135,6 @@ class fileListView(object):
         retHttp += "\n    RadioChecked(document.getElementById('FileRadio'));}";
         
         retHttp += "\nfunction RadioChecked(radio){";
-        retHttp += "\nalert(radio.value);"
         retHttp += "\nif(radio.value=='File')";
         retHttp += "\n{";
         retHttp += '\n    YoutubeTable.style.visibility = "collapse";';
