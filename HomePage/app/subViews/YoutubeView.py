@@ -4,6 +4,7 @@ import json
 from ..module.osDefine import osDefine
 from ..module.Youtube_Cipher import Cipher;
 from django.http import HttpResponse
+from enum import Enum;
 
 from  requests import get;
 import requests;
@@ -18,6 +19,22 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from ..Data.YoutubeToken import AccessToken;
+
+class YoutubeSearchType(Enum):
+    Search = 0;
+    MostPopular = Search + 1;
+    Activities = MostPopular + 1;
+    Subscript = Activities + 1;
+    
+
+    @staticmethod
+    def getTypeUrl(type, token):
+        typeDict = {
+            YoutubeSearchType.Search: "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s",
+            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr",
+            YoutubeSearchType.Activities: "https://www.googleapis.com/youtube/v3/activities?regionCode=KR&part=contentDetails,snippet&home=true&maxResults=50",
+            YoutubeSearchType.Subscript: "Search"};
+        return typeDict[type] + "&access_token=" + token;
 
 
 class YoutubeView:
@@ -76,15 +93,12 @@ class YoutubeView:
         return retHttp;
 
     @staticmethod
-    def getVideoList(token):
+    def getVideoList(token, type=YoutubeSearchType.Activities):
         retHttp =  YoutubeView.getSearchView();
 
-        activitiesUrl = "https://www.googleapis.com/youtube/v3/activities?" \
-            + "regionCode=KR&"                                              \
-            + "part=contentDetails,snippet&"                                \
-            + "home=true&"                                                  \
-            + "maxResults=50&"                                              \
-            + "access_token=" + token;
+        activitiesUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, token);
+
+        
         osDefine.Logger(activitiesUrl);
         retHttp += YoutubeView.getVideoTable(activitiesUrl);
         return retHttp;

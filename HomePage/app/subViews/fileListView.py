@@ -127,27 +127,28 @@ class fileListView(object):
         retHttp += "<script>function MoveTorrentPage(){ location.href = '/Torrent';}</script>"
         retHttp += playView.getPlayView("200px", "70%");
         
-        retHttp += '<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
-        retHttp += '<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
-        retHttp += "<script>";
-        retHttp += "function FormLoadFileListView(){"
-        retHttp += "    document.getElementById('FileRadio').checked = true;"
-        retHttp += "    RadioChecked(document.getElementById('FileRadio'));}";
+        retHttp += '\n<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
+        retHttp += '\n<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
+        retHttp += "\n<script>";
+        retHttp += "\nfunction FormLoadFileListView(){"
+        retHttp += "\n    document.getElementById('FileRadio').checked = true;"
+        retHttp += "\n    RadioChecked(document.getElementById('FileRadio'));}";
         
-        retHttp += "function RadioChecked(radio){";
-        retHttp += "if(radio.value=='File')";
-        retHttp += "{";
-        retHttp += '    YoutubeTable.style.visibility = "collapse";';
-        retHttp += '    SearchDiv.style.visibility = "collapse";';
-        retHttp += '    FileViewTable.style.visibility = "visible";';
-        retHttp += '}';
-        retHttp += 'else';
-        retHttp += '{';
-        retHttp += '    FileViewTable.style.visibility = "collapse";';
-        retHttp += '    YoutubeTable.style.visibility = "visible";';
-        retHttp += '    SearchDiv.style.visibility = "visible";';
-        retHttp += '}}';
-        retHttp += "</script>";
+        retHttp += "\nfunction RadioChecked(radio){";
+        retHttp += "\nalert(radio.value);"
+        retHttp += "\nif(radio.value=='File')";
+        retHttp += "\n{";
+        retHttp += '\n    YoutubeTable.style.visibility = "collapse";';
+        retHttp += '\n    SearchDiv.style.visibility = "collapse";';
+        retHttp += '\n    FileViewTable.style.visibility = "visible";';
+        retHttp += '\n}';
+        retHttp += '\nelse';
+        retHttp += '\n{';
+        retHttp += '\n    FileViewTable.style.visibility = "collapse";';
+        retHttp += '\n    YoutubeTable.style.visibility = "visible";';
+        retHttp += '\n    SearchDiv.style.visibility = "visible";';
+        retHttp += '\n}}';
+        retHttp += "\n</script>";
         return retHttp;
 
     @staticmethod
