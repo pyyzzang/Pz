@@ -35,7 +35,10 @@ class PlayInfo(object):
         return self.Volume;
     
     def getProgressValue(self):
-        return self.getPosition() * 100 / self.getDuration();
+        try :
+            return self.getPosition() * 100 / self.getDuration();
+        except Exception as e:
+            return 0;
 
     def getVideoPos(self, value):
         return value * self.getDuration() / 100;
