@@ -213,8 +213,8 @@ LOGGING = {
     }
 }
 
-#python3 manage.py crontab add     --- Register crontab 
-#python3 manage.py crontab remove  --- UnRegister crontab 
+#sudo python3 manage.py crontab add     --- Register crontab 
+#sudo python3 manage.py crontab remove  --- UnRegister crontab 
 
 
 #0 5 * * * : 매일 5시 0분에 실행.
@@ -232,6 +232,6 @@ CRONJOBS = [
     ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
     ('* 18 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
     ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
-    ('0 5 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
+    ('*/1 * * * *', 'app.cron.CronTab.PcReboot'),    #reboot
     ('10 5 * * *', 'app.cron.CronTab.Delete_DotVsCode'),    #delete .vscode folder 
 ]
