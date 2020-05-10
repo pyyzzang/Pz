@@ -232,6 +232,6 @@ CRONJOBS = [
     ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
     ('* 18 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
     ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
-    ('*/1 * * * *', 'app.cron.CronTab.PcReboot'),    #reboot
+    ('* 5 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
     ('10 5 * * *', 'app.cron.CronTab.Delete_DotVsCode'),    #delete .vscode folder 
 ]
