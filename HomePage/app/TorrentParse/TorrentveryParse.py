@@ -34,6 +34,14 @@ class TorrentveryParse(TorrentParse):
                 break;
         return retTitle;
 
+    def isMp4File(self, soup):
+        retExt = "";
+        for extValue in soup.find_all("div", class_="text-muted panel-heading3 tpanel-heading3 moreless"):
+            for subDiv in extValue.find_all("div"):
+                if(-1 < subDiv.text.find("mp4")):
+                    return True;
+        return False; 
+
     retryValue = 20;
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
@@ -49,7 +57,8 @@ class TorrentveryParse(TorrentParse):
                 osDefine.Logger("url : " + url);
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);              
-                if(False == TorrentParse.existsEqualsTorrent(title, genre)):
+                if(True == self.isMp4File(soup) 
+                    and False == TorrentParse.existsEqualsTorrent(title, genre)):
                     torrent.torrentInsert(None, title, magnet, genre);
                     #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
                     if(None != infos.findSimilarTorrintInfo(title)):
@@ -80,20 +89,22 @@ class TorrentveryParse(TorrentParse):
         osDefine.Logger("Start Craling");
 
         while(True):
+            FCM.SendFireBaseThread();
             tvParse = TorrentveryParse();
-            tvParse.getUpdateList("movieko", 1);
-            tvParse.getUpdateList("drama", 2);
-            tvParse.getUpdateList("ent", 3);
-            tvParse.getUpdateList("docu", 4);
-            tvParse.getUpdateList("tvend", 5);
+            #tvParse.getUpdateList("movieko", 1);
+            #tvParse.getUpdateList("drama", 2);
+            #tvParse.getUpdateList("ent", 3);
+            #tvParse.getUpdateList("docu", 4);
+            #tvParse.getUpdateList("tvend", 5);
             time.sleep(60 * 3);
-            osDefine.YoutubeTokenRefresh();
+            #osDefine.YoutubeTokenRefresh();
             
         return "";
     
     @staticmethod
     def RunCrawlingThread():
-        if(True == osDefine.getIsDev()):
+        #if(True == osDefine.getIsDev()):
+        if(False):
             osDefine.Logger("개발 모드");
         else:
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);

@@ -31,11 +31,6 @@ class FCM:
         
         return HttpResponse("");
 
-    @staticmethod
-    def SendFireBaseThreadStart():
-        t = threading.Thread(target=FCM.SendFireBaseThread);
-        t.start();
-
     cred = "";
     @staticmethod
     def SendFireBaseThread():
@@ -55,7 +50,6 @@ class FCM:
             for row in rows:
                 try:
                     # See documentation on defining a message payload.
-                    osDefine.Logger("Token : " + row[0].strip());
                     message = messaging.Message(
                         token=row[0].strip(),
                         data={
@@ -69,8 +63,6 @@ class FCM:
                     # Send a message to the device corresponding to the provided
                     # registration token.
                     response = messaging.send(message);
-                    # Response is a message ID string.
-                    osDefine.Logger('Successfully sent message:' + response);
                 except Exception as e:
                     osDefine.Logger(e);
             time.sleep(60 * 5);
@@ -82,7 +74,6 @@ class FCM:
             connection.InsertQueryExecute(query);
         except Exception as e:
             osDefine.Logger(e);
-        FCM.SendFireBaseThreadStart();
 
     @staticmethod
     def SendFireBaseTest(msg, title = "다운로드 완료"):
@@ -118,8 +109,6 @@ class FCM:
         # Send a message to the device corresponding to the provided
         # registration token.
         response = messaging.send(message)
-        # Response is a message ID string.
-        osDefine.Logger('Successfully sent message:' + response)
 
     @staticmethod
     def UpdateMsgStatus(value):
