@@ -83,17 +83,16 @@ class YoutubeView:
 
     @staticmethod
     def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
-        retHttp  = "<div id='Youtubeview'>\n";
-        retHttp += YoutubeView.getTableHead();
+        retHttp  = YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
             item = Item.getItem(videoItem);
             retHttp += item.getTr();
         retHttp +="</table>";
-        retHttp += "</div>\n";
         return retHttp;
 
     @staticmethod
-    def getVideoList(token, type=YoutubeSearchType.Activities):
+    def getVideoList(type=YoutubeSearchType.Activities):
+        token = osDefine.YoutubeToken;
         retHttp =  YoutubeView.getSearchView();
 
         activitiesUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, token);
@@ -191,9 +190,11 @@ class YoutubeView:
     @staticmethod
     def getSearchYoutube(searchValue):
         try:
-            searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
+            if(None == searchValue or "" == searchValue):
+                searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken);    
+            else:
+                searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
             retHttp = YoutubeView.getVideoTable(searchUrl)
-            osDefine.Logger(retHttp);
         except Exception as e:
             osDefine.Logger(e);
         return HttpResponse(retHttp);
@@ -203,18 +204,23 @@ class YoutubeView:
         code = "";
         try:
             code = request.GET.get("code");
+            if(None == code):            
+                oAuthUrl = "https://accounts.google.com/o/oauth2/auth?client_id=%s&redirect_uri=%s/YoutubeRedirect&response_type=code&scope=https://www.googleapis.com/auth/youtube" % (osDefine.YoutubeClientId, osDefine.getRunIp(request));
+                http = "<script>location.href=\"" + oAuthUrl + "\"</script>";
+                return HttpResponse(http);
+            
             osDefine.Logger("Code : " + str(code));
-
             data = {'code': code, 
-                'client_id': '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com', 
-                'client_secret': '95_SJoiXXd8f4keeHUzy8O8s', 
+                'client_id': osDefine.YoutubeClientId, 
+                'client_secret': osDefine.YoutubeClientSecret, 
                 'grant_type': 'authorization_code', 
                 'redirect_uri': '%s/YoutubeRedirect' % osDefine.getRunIp(request)};
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
             acceseToken = AccessToken(**json.loads(res.text));
-            redirectUrl = osDefine.getRunIp(request) + "/?token="+acceseToken.access_token;
-            http = "<script>location.href=\"" + redirectUrl + ";\"</script>";
-            return HttpResponse(http);
+            osDefine.YoutubeToken = acceseToken.access_token
+            redirectUrl = osDefine.getRunIp(request);
+
+            return HttpResponse("<script>location.href=\"" + redirectUrl + "\"</script>");
 
         except Exception as e:
             osDefine.Logger(e);

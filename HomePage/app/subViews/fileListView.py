@@ -62,7 +62,7 @@ class FileInfo:
             return "location.href='" + osDefine.getRunIp(self.request) + "/Play?file=" + self.getEncodingFileName() + "'";
 
     def getTr(self, fileCount, playInfo):
-        retHttp  = '<tr class="TableRow">';
+        retHttp  = "<tr id='TR_" + self.getEncodingFileName() + "' class='TableRow'>";
         retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
         retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" ;
         retHttp += "<div>" + self.getTitle() +"</div>";
@@ -84,7 +84,8 @@ class FileInfo:
         retHttp += ",error : function(data){"
         retHttp += "}"
         retHttp += ", success : function (data){"
-        retHttp += "window.location.reload();"
+        retHttp += "deleteTr = document.getElementById('TR_" + self.getEncodingFileName() + "');";
+        retHttp += "deleteTr.style.visibility=\"collapse\";";
         retHttp += "}})})})</script>"
 
         return retHttp;
@@ -92,12 +93,11 @@ class FileInfo:
 class fileListView(object):
     @staticmethod
     def getViewList(request):
-        youtubeToken = osDefine.getParameter(request, "token");
-        if(None == youtubeToken):
-            oAuthUrl = "https://accounts.google.com/o/oauth2/auth?client_id=456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com&redirect_uri=%s/YoutubeRedirect&response_type=code&scope=https://www.googleapis.com/auth/youtube" % osDefine.getRunIp(request);
-            http = "<script>location.href=\"" + oAuthUrl + "\"</script>";
-            osDefine.Logger("oAuth Url : " + http);
-            return HttpResponse(http);
+
+        if("" == osDefine.YoutubeToken):
+            retHttp = "<script>window.location.href='" + osDefine.getRunIp(request) + "/YoutubeRedirect';</script>";
+            osDefine.Logger(retHttp);
+            return HttpResponse(retHttp);
 
         fileListView.deleteEmptyFolder();
         try:
@@ -112,10 +112,11 @@ class fileListView(object):
             http += fileListView.getTitleHead();
             http += HtmlUtil.getBodyHead();
             http += fileListView.getVideoList(requestFile, request);
-            http += YoutubeView.getVideoList(youtubeToken);
-
+            http += "<div id='Youtubeview'></div>";
             http += HtmlUtil.getBodyTail();
             http += "</body>";
+            http += HtmlUtil.getLoadEvent();
+
         except Exception as e:
             osDefine.Logger(e);
             http = "<script>location.href=\"" + osDefine.getRunIp(request)+"\/Home\";</script>";
@@ -130,23 +131,28 @@ class fileListView(object):
         retHttp += '\n<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         retHttp += '\n<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
         retHttp += "\n<script>";
+        retHttp += "\n FormLoadFileListView();";
         retHttp += "\nfunction FormLoadFileListView(){"
         retHttp += "\n    document.getElementById('FileRadio').checked = true;"
         retHttp += "\n    RadioChecked(document.getElementById('FileRadio'));}";
         
         retHttp += "\nfunction RadioChecked(radio){";
-        retHttp += "\nif(radio.value=='File')";
+        retHttp += "\n FileViewTable = document.getElementById('FileViewTable');";
+        retHttp += "\n YoutubeTable = document.getElementById('Youtubeview');";
+        retHttp += "\n SearchDiv = document.getElementById('SearchDiv');";
+        retHttp += "\n if(radio.value=='File')";
         retHttp += "\n{";
+        retHttp += '\n    FileViewTable.style.visibility = "visible";';
         retHttp += '\n    YoutubeTable.style.visibility = "collapse";';
         retHttp += '\n    SearchDiv.style.visibility = "collapse";';
-        retHttp += '\n    FileViewTable.style.visibility = "visible";';
         retHttp += '\n}';
         retHttp += '\nelse';
         retHttp += '\n{';
         retHttp += '\n    FileViewTable.style.visibility = "collapse";';
         retHttp += '\n    YoutubeTable.style.visibility = "visible";';
         retHttp += '\n    SearchDiv.style.visibility = "visible";';
-        retHttp += '\n}}';
+        retHttp += '\n}';
+        retHttp += '}';
         retHttp += "\n</script>";
         return retHttp;
 

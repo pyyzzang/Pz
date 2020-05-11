@@ -1246,10 +1246,8 @@ class Item(object):
         
         retItem = "";
         if("youtube#video" == kind):
-            osDefine.Logger("kind youtube#video : " + kind);
             retItem = Item_Video(videoItem);
         elif("youtube#activity" == kind):
-            osDefine.Logger("kind youtube#activity : " + kind);
             retItem = Item_Activiti(videoItem);
         else:
             osDefine.Logger("else");

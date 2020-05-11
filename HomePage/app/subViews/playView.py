@@ -231,7 +231,7 @@ class playView(object):
         retHttp += "}" + "\n";
         retHttp += "});" + "\n";
         retHttp += "}" + "\n";
-        retHttp += "setInterval(UpdateTitle, 3000);";
+        retHttp += "setInterval(UpdateTitle, 5000);";
         retHttp += "</script>"
         return retHttp;
 
@@ -275,7 +275,7 @@ class playView(object):
         retHttp += "<span id='progressValue'></span>\n";
         retHttp += "<script>\n";
         retHttp += "UpdateProgress();"
-        retHttp += "setInterval(UpdateProgress, 1000);\n" #// 3000ms(3초)가 경과하면 ozit_timer_test() 함수를 실행합니다.
+        retHttp += "setInterval(UpdateProgress, 5000);\n" #// 3000ms(3초)가 경과하면 ozit_timer_test() 함수를 실행합니다.
         retHttp += "function UpdateProgress(){\n"
         retHttp += "    jsonData = {'API' : 'ProgressValue'};\n";
         retHttp += "    $.ajax({"+ "\n"; 

@@ -80,13 +80,21 @@ class TorrentveryParse(TorrentParse):
         osDefine.Logger("Start Craling");
 
         while(True):
+            '''
             tvParse = TorrentveryParse();
             tvParse.getUpdateList("movieko", 1);
             tvParse.getUpdateList("drama", 2);
             tvParse.getUpdateList("ent", 3);
             tvParse.getUpdateList("docu", 4);
             tvParse.getUpdateList("tvend", 5);
-            time.sleep(60 * 5);
+            time.sleep(60 * 3);
+            '''
+            try:
+                time.sleep(5);
+                osDefine.YoutubeTokenRefresh();
+            except Exception as e:
+                osDefine.Logger(e);
+            
         return "";
     
     @staticmethod

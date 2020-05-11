@@ -7,7 +7,7 @@ import re
 
 from requests import get
 from omxplayer.player import OMXPlayer
-from requests import get
+from requests import post;
 import subprocess
 import logging
 from ..Data.PlayInfo import PlayInfo
@@ -20,6 +20,7 @@ from urllib.parse import urlparse;
 from ..Define import Define;
 import datetime;
 
+
 class PlayMode:
     File = 0;
     Youtube = 1;
@@ -29,6 +30,9 @@ class osDefine:
     currentPlayer = 0;
     playFileName = 0;
     playTitle = 0;
+    YoutubeToken = "";
+    YoutubeClientId = '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com';
+    YoutubeClientSecret = "95_SJoiXXd8f4keeHUzy8O8s";
     @staticmethod 
     def getPlayFileName():
         if(0 == osDefine.playTitle or "" == osDefine.playTitle):
@@ -320,6 +324,35 @@ class osDefine:
         if(None == param):
             param = request.POST.get(name);
         return param;
-        
+    
+    @staticmethod
+    def YoutubeTokenRefresh():
+        if("" != osDefine.YoutubeToken):
+            response = get("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s"%osDefine.YoutubeToken);
+            osDefine.Logger(response.text);
+            accessToken = YoutubeValidToken(**json.loads(response.text));
+
+            if("" != accessToken.error):
+                osDefine.YoutubeToken = "";
+                return;
+
+            data = {'client_id': osDefine.YoutubeClientId, 
+                'client_secret': osDefine.YoutubeClientSecret, 
+                'grant_type': 'refresh_token', 
+                'refresh_token': osDefine.YoutubeToken};
+            
+            response = post("https://accounts.google.com/o/oauth2/token", data);
+            osDefine.Logger(response.text);
+
+
+class YoutubeValidToken():
+    def __init__(self, audience = "", user_id = "", scope = "", expires_in="", error="", issued_to="", access_type = ""):
+        self.audience = audience ;
+        self.user_id = user_id;
+        self.scope = scope;
+        self.expires_in = expires_in;
+        self.error=error;
+        self.issued_to = issued_to;
+        self.access_type = access_type;
 
 osDefine.Init();

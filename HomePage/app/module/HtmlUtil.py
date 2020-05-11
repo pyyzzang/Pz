@@ -51,3 +51,26 @@ class HtmlUtil:
         retHttp += '<script data-ad-client="ca-pub-7189432704232049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>';
         retHttp += ' </head>                                                                                                             ';
         return retHttp;
+    
+    @staticmethod
+    def getLoadEvent():
+        retHttp  = "";
+        retHttp += "<script>\n";
+        retHttp += "window.onload = function(){\n";
+        retHttp += "jsonData = {'API' : 'SearchYoutube'};\n";
+        retHttp += "$.ajax({\n"
+        retHttp += "type: 'get'\n"
+        retHttp += ", url: '/API'\n";
+        retHttp += ", dataType : 'html'\n"
+        retHttp += ", data:jsonData\n";
+        retHttp += ", error : function(){\n"
+        retHttp += "alert('fail!!');\n"
+        retHttp += "}\n"
+        retHttp += ", success : function(data){\n"
+        retHttp += "Youtubeview = document.getElementById('Youtubeview');";
+        retHttp += "Youtubeview.innerHTML = data;\n";
+        retHttp += "}\n"
+        retHttp += "});\n"
+        retHttp += "}\n";
+        retHttp += "</script>\n";
+        return retHttp;
