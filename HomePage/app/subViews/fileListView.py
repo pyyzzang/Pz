@@ -131,7 +131,6 @@ class fileListView(object):
         retHttp += '\n<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
         retHttp += '\n<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
         retHttp += "\n<script>";
-        retHttp += "\n FormLoadFileListView();";
         retHttp += "\nfunction FormLoadFileListView(){"
         retHttp += "\n    document.getElementById('FileRadio').checked = true;"
         retHttp += "\n    RadioChecked(document.getElementById('FileRadio'));}";

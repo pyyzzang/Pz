@@ -40,7 +40,7 @@ class YoutubeSearchType(Enum):
 class YoutubeView:
     @staticmethod
     def getTableHead():
-        retHttp  = '				<table id="YoutubeTable">                                                         \n';
+        retHttp  = '				<table id="YoutubeTable" style="visibility:hidden;">                                                         \n';
         retHttp += '					<thead>                                                     \n';
         retHttp += '						<tr class="table100-head">                              \n';
         retHttp += '							<th class="column1"></th>                       \n';
