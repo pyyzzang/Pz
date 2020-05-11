@@ -38,34 +38,32 @@ class FCM:
             FCM.cred = credentials.Certificate("/home/pi/Pz/FireBase/macro-aurora-227313-firebase-adminsdk-eq075-137ba0b44f.json");
             firebase_admin.initialize_app(FCM.cred);
 
-        while(True):
-            connection = SQLalchemy.GetDBConnection();
-            query = "select info.token, fcm.Title, fcm.Content, fcm.SendTime, fcm.MsgGUID from FCM as fcm, UserInfo as info where fcm.Id = info.id;";
-            rows = connection.QueryExecute(query);
-            osDefine.Logger(query);
+        connection = SQLalchemy.GetDBConnection();
+        query = "select info.token, fcm.Title, fcm.Content, fcm.SendTime, fcm.MsgGUID from FCM as fcm, UserInfo as info where fcm.Id = info.id;";
+        rows = connection.QueryExecute(query);
+        osDefine.Logger(query);
 
-            if(0 == rows.rowcount):
-                break;
+        if(0 == rows.rowcount):
+            break;
 
-            for row in rows:
-                try:
-                    # See documentation on defining a message payload.
-                    message = messaging.Message(
-                        token=row[0].strip(),
-                        data={
-                            "Title" : row[1].strip(),
-                            "Content" : row[2].strip(),
-                            "Time" : row[3].strip(),
-                            "MsgGUID" : row[4].strip(),
-                        },
-                    )
+        for row in rows:
+            try:
+                # See documentation on defining a message payload.
+                message = messaging.Message(
+                    token=row[0].strip(),
+                    data={
+                        "Title" : row[1].strip(),
+                        "Content" : row[2].strip(),
+                        "Time" : row[3].strip(),
+                        "MsgGUID" : row[4].strip(),
+                    },
+                )
 
-                    # Send a message to the device corresponding to the provided
-                    # registration token.
-                    response = messaging.send(message);
-                except Exception as e:
-                    osDefine.Logger(e);
-            time.sleep(60 * 5);
+                # Send a message to the device corresponding to the provided
+                # registration token.
+                response = messaging.send(message);
+            except Exception as e:
+                osDefine.Logger(e);
     @staticmethod
     def SendFireBase(msg, title = "다운로드 완료"):
         try:
