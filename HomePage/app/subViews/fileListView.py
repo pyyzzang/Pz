@@ -36,7 +36,7 @@ class FileInfo:
     def isDirectory(self):
         return os.path.isdir(self.getFullName());
     def visibleDeleteButton(self):
-        return "" == self.filePath and "Hidden" or "Visible";
+        return "" == self.filePath and "Hidden" or "";
     def getThumbNailId(self):
         return "Thumbnail" + (self.isDirectory() and "Dir" or "File");
     def getEncodingFileName(self):
@@ -70,7 +70,7 @@ class FileInfo:
             if("" != playInfo):
                 retHttp += "<div><progress class='VideoProgress' id=\"Pro_" + self.getEncodingFileName() +"\" max=100 value=" + str(playInfo.getProgressValue()) + " \"/></div>";
         retHttp += "</td>";
-        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id=File" + str(fileCount) + " style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
+        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id='File" + str(fileCount) + "' style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
         retHttp += "</tr>";
         retHttp += "<script type=\"text/javascript\">";
         retHttp += "$(function(){" 
@@ -150,6 +150,7 @@ class fileListView(object):
         retHttp += '\n{';
         retHttp += '\n    FileViewTable.style.visibility = "collapse";';
         retHttp += '\n    YoutubeTable.style.visibility = "visible";';
+        retHttp += '\n    alert(YoutubeTable.style.visibility)';
         retHttp += '\n}';
         retHttp += '}';
         retHttp += "\n</script>";
