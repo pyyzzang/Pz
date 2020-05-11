@@ -112,7 +112,10 @@ class fileListView(object):
             http += fileListView.getTitleHead();
             http += HtmlUtil.getBodyHead();
             http += fileListView.getVideoList(requestFile, request);
-            http += "<div id='Youtubeview'></div>";
+            http += "<div id='Youtubeview'>"
+            http +=  YoutubeView.getSearchView();
+            http += "</div>";
+
             http += HtmlUtil.getBodyTail();
             http += "</body>";
             http += HtmlUtil.getLoadEvent();
@@ -138,18 +141,15 @@ class fileListView(object):
         retHttp += "\nfunction RadioChecked(radio){";
         retHttp += "\n FileViewTable = document.getElementById('FileViewTable');";
         retHttp += "\n YoutubeTable = document.getElementById('Youtubeview');";
-        retHttp += "\n SearchDiv = document.getElementById('SearchDiv');";
         retHttp += "\n if(radio.value=='File')";
         retHttp += "\n{";
         retHttp += '\n    FileViewTable.style.visibility = "visible";';
         retHttp += '\n    YoutubeTable.style.visibility = "collapse";';
-        retHttp += '\n    SearchDiv.style.visibility = "collapse";';
         retHttp += '\n}';
         retHttp += '\nelse';
         retHttp += '\n{';
         retHttp += '\n    FileViewTable.style.visibility = "collapse";';
         retHttp += '\n    YoutubeTable.style.visibility = "visible";';
-        retHttp += '\n    SearchDiv.style.visibility = "visible";';
         retHttp += '\n}';
         retHttp += '}';
         retHttp += "\n</script>";

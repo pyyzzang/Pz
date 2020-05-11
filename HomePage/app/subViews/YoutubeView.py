@@ -52,7 +52,7 @@ class YoutubeView:
         return retHttp;
     @staticmethod
     def getSearchView():
-        retHttp = "<div id='SearchDiv'>\n";
+        retHttp = "<div id='SearchDiv' style='visibility:hidden;'>\n";
         retHttp += "<input type='text' id='txtSearch' />\n";
         retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
         retHttp += "</div>\n"
@@ -93,8 +93,6 @@ class YoutubeView:
     @staticmethod
     def getVideoList(type=YoutubeSearchType.Activities):
         token = osDefine.YoutubeToken;
-        retHttp =  YoutubeView.getSearchView();
-
         activitiesUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, token);
 
         
