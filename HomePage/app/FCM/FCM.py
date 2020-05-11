@@ -44,7 +44,7 @@ class FCM:
         osDefine.Logger(query);
 
         if(0 == rows.rowcount):
-            break;
+            return "";
 
         for row in rows:
             try:
@@ -62,6 +62,7 @@ class FCM:
                 # Send a message to the device corresponding to the provided
                 # registration token.
                 response = messaging.send(message);
+                osDefine.Logger(response);
             except Exception as e:
                 osDefine.Logger(e);
     @staticmethod

@@ -42,7 +42,7 @@ class TorrentveryParse(TorrentParse):
                     return True;
         return False; 
 
-    retryValue = 20;
+    retryValue = 5;
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
         url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
