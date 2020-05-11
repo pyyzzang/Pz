@@ -88,8 +88,6 @@ class TorrentveryParse(TorrentParse):
             tvParse.getUpdateList("tvend", 5);
             time.sleep(60 * 3);
             osDefine.YoutubeTokenRefresh();
-            except Exception as e:
-                osDefine.Logger(e);
             
         return "";
     
