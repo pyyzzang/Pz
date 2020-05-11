@@ -38,9 +38,6 @@ class torrentInfo():
         return self.count;
     
     def getSimilar(self, compareInfo):
-        fullTitleValue = SequenceMatcher(None, self.getFullName(), compareInfo.getFullName()).ratio();
-        if(0.8 < fullTitleValue):
-            return True;
         titleValue = SequenceMatcher(None, self.getTitle(), compareInfo.getTitle()).ratio();
         if(0.8 < titleValue):
             return True;
