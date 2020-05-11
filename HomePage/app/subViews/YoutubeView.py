@@ -121,8 +121,6 @@ class YoutubeView:
 
         index = 0;
         count = 0;
-        with open("/home/pi/Pz/scripts", "w") as f:
-            f.write(scripts);
         while(True):
             if('{' == scripts[index]):
                 count = 1;
@@ -142,9 +140,6 @@ class YoutubeView:
         config = scripts[0:index + 1];
         osDefine.Logger("Index : " + str(index));
 
-        with open("/home/pi/Pz/Youtube", "w") as f:
-            f.write(config);
-  
         jsonString = YoutubeRoot(**json.loads(config));
         root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
         retFormat = "";
