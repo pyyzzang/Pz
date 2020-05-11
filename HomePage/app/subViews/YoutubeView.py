@@ -40,7 +40,7 @@ class YoutubeSearchType(Enum):
 class YoutubeView:
     @staticmethod
     def getTableHead():
-        retHttp  = '				<table id="YoutubeTable" style="visibility:hidden;">                                                         \n';
+        retHttp  = '				<table id="YoutubeTable">                                                         \n';
         retHttp += '					<thead>                                                     \n';
         retHttp += '						<tr class="table100-head">                              \n';
         retHttp += '							<th class="column1"></th>                       \n';
@@ -52,7 +52,7 @@ class YoutubeView:
         return retHttp;
     @staticmethod
     def getSearchView():
-        retHttp = "<div id='SearchDiv' style='visibility:hidden;'>\n";
+        retHttp = "<div id='SearchDiv'>\n";
         retHttp += "<input type='text' id='txtSearch' />\n";
         retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
         retHttp += "</div>\n"
@@ -83,7 +83,8 @@ class YoutubeView:
 
     @staticmethod
     def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
-        retHttp  = YoutubeView.getTableHead();
+        retHttp  = YoutubeView.getSearchView();
+        retHttp += YoutubeView.getTableHead();
         for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
             item = Item.getItem(videoItem);
             retHttp += item.getTr();
@@ -192,6 +193,7 @@ class YoutubeView:
                 searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken);    
             else:
                 searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
+            osDefine.Logger("searchUrl : "  + searchUrl);
             retHttp = YoutubeView.getVideoTable(searchUrl)
         except Exception as e:
             osDefine.Logger(e);
@@ -215,6 +217,7 @@ class YoutubeView:
                 'redirect_uri': '%s/YoutubeRedirect' % osDefine.getRunIp(request)};
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
             acceseToken = AccessToken(**json.loads(res.text));
+            osDefine.Logger("res.text : " + res.text);
             osDefine.YoutubeToken = acceseToken.access_token
             redirectUrl = osDefine.getRunIp(request);
 

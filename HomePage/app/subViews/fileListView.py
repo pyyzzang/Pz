@@ -112,8 +112,7 @@ class fileListView(object):
             http += fileListView.getTitleHead();
             http += HtmlUtil.getBodyHead();
             http += fileListView.getVideoList(requestFile, request);
-            http += "<div id='Youtubeview'>"
-            http +=  YoutubeView.getSearchView();
+            http += "<div id='Youtubeview' style='visibility:hidden;'>"
             http += "</div>";
 
             http += HtmlUtil.getBodyTail();
