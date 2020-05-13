@@ -8,12 +8,10 @@ from ..Data.TorrentInfo import torrentInfo;
 
 class TorrentParse:
     def __init__(self):
-        os.system("sudo killall -9 /usr/lib/chromium-browser/chromium-browser-v7");
         os.system("sudo killall -9 chromedriver");
         os.system("sudo killall -9 chromium-browse")
 
     def __del__(self):
-        os.system("sudo killall -9 /usr/lib/chromium-browser/chromium-browser-v7");
         os.system("sudo killall -9 chromedriver");
         os.system("sudo killall -9 chromium-browse")
 
