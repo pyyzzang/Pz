@@ -34,6 +34,9 @@ class YoutubeSearchType(Enum):
             YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr",
             YoutubeSearchType.Activities: "https://www.googleapis.com/youtube/v3/activities?regionCode=KR&part=contentDetails,snippet&home=true&maxResults=50",
             YoutubeSearchType.Subscript: "Search"};
+
+        if(YoutubeSearchType.MostPopular == type):
+            return typeDict[type];
         return typeDict[type] + "&access_token=" + token;
 
 
