@@ -13,7 +13,7 @@ from ..FCM.FCM import FCM;
 from urllib.parse import unquote
 from datetime import datetime
 from ..Data.TorrentInfo import TorrentInfos;
-
+from django.shortcuts import render;
 
 class RowEnum(Enum):
     Title = 0
@@ -24,7 +24,7 @@ class RowEnum(Enum):
 
 class TorrentData:
     def __init__(self, title, magnetUrl, modifyDate, idx):
-        self.title = title;
+        self.title = title.strip();
         self.magnetUrl = magnetUrl.strip();
         self.modifyDate = modifyDate;
         self.idx = idx;
@@ -259,39 +259,24 @@ class torrent:
 
     @staticmethod
     def getTorrentTable(genre = ""):
-        osDefine.Logger("genre : " + str(genre));
-        ret = "<Table width:'100%' border='1'>";
         session = DBExecute.GetDBConnection();
         query = "select top 100 title, MagnetUrl, modifyDate, idx from Torrent ";
         if("" != genre and None != genre):
             query += " where genre='" + genre + "'";
         query += " order by modifyDate desc";
-        osDefine.Logger("query : " + query);
-        rows = session.QueryExecute(query);
-        ret += torrent.getTableHead();
         
+        rows = session.QueryExecute(query);
+        
+        torrentItems = [];
         for row in rows:
-            data = TorrentData.createTorrenData(row);
-            ret += data.getHttpRow();
-        ret += "</tbody></table>"
-        return ret;
+            item = TorrentData.createTorrenData(row);
+            torrentItems.append(item);
+        return torrentItems;
 
     @staticmethod
     def getTorrent(request):
-        ret = HtmlUtil.getHeader();
-        ret += torrent.getTorrentAddDiv();
-
-        ret += HtmlUtil.getBodyHead();
-        ret += torrent.getSelectBox();
-        ret += "<div id='TorrentTableDiv'>\n";
-        ret += torrent.getTorrentTable();
-        ret += "</div>\n";
-
-        ret += HtmlUtil.getBodyTail();
-        ret += "</html>"
-
-        
-        return HttpResponse(ret);
+        context = {"items" : torrent.getTorrentTable()};
+        return render(request, "TorrentView.html", context);
 
     @staticmethod
     def torrentUpdate(request):

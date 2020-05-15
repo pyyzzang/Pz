@@ -1,0 +1,108 @@
+<html>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>
+<script>function MoveTorrentPage(){ location.href = '/Home';}</script>
+<div style="position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0">
+    <div class="dialog_window" id="dialog_Window">
+        <div class="dialog_logo" id="upload_dialog_logo"></div>
+        <h2 class="dialog_heading">Upload Torrent Files</h2>
+        <form action="/Torrent/Upload" method="post" id="torrent_upload_form" enctype="multipart/form-data">
+            <div class="dialog_message">
+                <label\">제목을 입력하세요(*) : </label>
+                <input type="TextBox" name="torrentTitle" id="torrentTitle" autocomplete="off"/>
+                <P><label for="torrent_upload_file">Please select a torrent file to upload:</label>
+                <input type="file" name="torrent_files" id="torrent_files" multiple="multiple" />
+                <p><label for="torrent_upload_url" >Or enter a URL:</label>
+                <input type="url" name="torrent_upload_url" id="torrent_upload_url" autocomplete="off"/>
+            </div>
+        <button id="upload_confirm_button">Upload</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function genreChange(){
+        ganreSelect = document.getElementById('genreSelect');
+        $.ajax({
+            type: 'post',
+            data:{
+                'Value' : ganreSelect.options[ganreSelect.selectedIndex].value,
+            }
+            ,url: 'API?API=GENRE'
+            ,dataType : 'html'
+            ,error : function(){alert('errr')}
+            ,success : function(data){
+                TorrentTableDiv = document.getElementById('TorrentTableDiv');
+                TorrentTableDiv.innerHTML = data;
+            }
+        });
+    }
+</script>
+
+<script type="text/javascript"> 
+function TorrentDelete(magnet){
+    $.ajax({
+        type: 'post'
+        , data:{
+            'magnetUrl' : magnet
+        }
+        , url: 'Torrent/TorrentDelete'
+        , dataType : 'html'
+        , error : function(){
+            alert();
+        }
+        , success : function(data){
+            alert("토렌트 삭제 하였습니다.");
+            document.getElementById('TR_' + magnet).style.display = "none";
+        }
+    })
+}
+</script>
+        
+<script type="text/javascript">
+function TorrentAdd(magnet, title){
+    $.ajax({
+        type: 'post',
+        data:{
+            'magnetUrl' : magnet
+            , 'title' : title
+        }
+        , url: 'Torrent/TorrentAdd'
+        , dataType : 'html'
+        , error : function(){
+            alert('Error');
+        }
+        , success : function(data){
+            alert(title + " 토렌트 추가 하였습니다.");
+        }
+    })
+}</script>
+
+<div id='TorrentTableDiv'>
+    <Table width:'100%' style="border-collapse:collapse; border:1px solid rgb(119,119,119)">
+        <thead>
+            <tr class="table100-head" class="table100-head" style="border:1px solid rgb(119,119,119)">
+        	    <th class="column_Title">제목</th>
+        		<th class="column_Date"></th>
+        		<th class="column_Add"></th>
+        	</tr>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr Id="TR_{{item.magnetUrl}}" style="border-bottom:1px solid rgb(119,119,119)"><td><p Id="{{item.magnetUrl}}">{{item.title}}<p></td>
+            <td>{{item.modifyDate}}</td>
+            <td style='display:none'>{{item.magnetUrl}}</td>
+            <td><panel >
+            <input id="AddRow{{item.strIdx}}" OnClick="TorrentAdd('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 추가"></input>
+            <input id="AddRow{{item.strIdx}}" OnClick="TorrentDelete('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 삭제"></input>
+            </panel></td>
+            <!--self.getAjaxScript();-->
+            </tr>
+            <!--self.getHttpScript();-->
+        {% endfor %}
+    </Table>
+
+</div>
+
+</html>

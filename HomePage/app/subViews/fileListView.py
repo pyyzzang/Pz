@@ -9,7 +9,7 @@ from ..module.osDefine import PlayMode;
 from .YoutubeView import YoutubeView;
 from ..Data.PlayInfo import PlayInfos;
 from .playView import playView;
-from django.shortcuts import render
+from django.shortcuts import render;
 import uuid;
 
 class FileInfo:
