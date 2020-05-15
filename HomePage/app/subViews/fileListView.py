@@ -7,9 +7,10 @@ from ..module.strUtil import strUtil
 import base64
 from ..module.osDefine import PlayMode;
 from .YoutubeView import YoutubeView;
-from ..module.HtmlUtil import HtmlUtil;
 from ..Data.PlayInfo import PlayInfos;
 from .playView import playView;
+from django.shortcuts import render
+import uuid;
 
 class FileInfo:
     def __init__(self, filePath, dir, request):
@@ -17,6 +18,21 @@ class FileInfo:
         self.dir = dir;
         self.request = request;
         self.fileName, self.ext = os.path.splitext(filePath);
+        
+        self.encodeName = osDefine.Base64Encoding(self.getUrlPath());
+        self.thumbnailId = "Thumbnail" + (self.isDirectory() and "Dir" or "File");
+
+        self.id = str(uuid.uuid4());
+
+        title = strUtil.getMatchTitle(self.filePath);
+        if(" " == title):
+            title = self.filePath;
+        self.title = title;
+
+        self.link = self.getLink();
+    
+    def setPlayInfo(self, playInfo):
+        self.playInfo = playInfo;
     def __lt__(self, other):
         return self.getTitle() < other.getTitle(); 
     def getFileName(self):
@@ -25,12 +41,8 @@ class FileInfo:
         return self.dir + "/" + self.filePath;
     def getExt(self):
         return self.ext;
-
     def getTitle(self):
-        title = strUtil.getMatchTitle(self.filePath);
-        if(" " == title):
-            title = self.filePath;
-        return title;
+        return self.title;
     def isVideoFile(self):
         return self.getExt() in osDefine.SupportExt;
     def isDirectory(self):
@@ -38,7 +50,7 @@ class FileInfo:
     def visibleDeleteButton(self):
         return "" == self.filePath and "Hidden" or "";
     def getThumbNailId(self):
-        return "Thumbnail" + (self.isDirectory() and "Dir" or "File");
+        return self.thumbnailId;
     def getEncodingFileName(self):
         return osDefine.Base64Encoding(self.getUrlPath());
     def getUrlPath(self):
@@ -105,24 +117,9 @@ class fileListView(object):
             osDefine.Logger("requestFile : " + requestFile);
         except Exception:
             requestFile = "";
-
-        http = "";
-        try:
-            http = HtmlUtil.getHeader();
-            http += fileListView.getTitleHead();
-            http += HtmlUtil.getBodyHead();
-            http += fileListView.getVideoList(requestFile, request);
-            http += "<div id='Youtubeview' style='visibility:hidden;'>"
-            http += "</div>";
-
-            http += HtmlUtil.getBodyTail();
-            http += "</body>";
-            http += HtmlUtil.getLoadEvent();
-
-        except Exception as e:
-            osDefine.Logger(e);
-            http = "<script>location.href=\"" + osDefine.getRunIp(request)+"\/Home\";</script>";
-        return HttpResponse(http); 
+        fileItems = fileListView.getVideoList(requestFile, request);
+        context = {"fileItmes" : fileItems};
+        return render(request, "fileListView.html", context);
     @staticmethod
     def getTitleHead():
         retHttp  = '<body Onload="FormLoadFileListView()">';
@@ -177,30 +174,21 @@ class fileListView(object):
         fileCount = 0;      
         fileInfoList = []; 
         findDir = localFilePath + dirPath;
+        infos = PlayInfos.GetPlayInfos();
         for file in os.listdir(findDir):
                 info = FileInfo(file, findDir, request);
                 if(True == info.isVideoFile() or True == info.isDirectory()):
                     fileInfoList.append(info);
+                    info.setPlayInfo(infos.getPlayInfo(file));
 
         fileInfoList.sort();
         http = fileListView.getTableHead();
 
-        infos = PlayInfos.GetPlayInfos();
         if( "" != dirPath):
             osDefine.Logger("DirPath : " + dirPath);
             parentInfo = FileInfo("", findDir, request);
             fileInfoList.insert(0,parentInfo);
-        for info in fileInfoList:
-            try:
-                urlPath = info.getUrlPath();
-            except Exception as e:
-                osDefine.Logger(e);
-            playInfo = infos.getPlayInfo(urlPath, False);
-            http += info.getTr(fileCount, playInfo);
-            fileCount = fileCount + 1;
-        http += fileListView.getTableTail();
-        
-        return http;
+        return fileInfoList;
     
     @staticmethod
     def deleteEmptyFolder():

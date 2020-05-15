@@ -1,0 +1,117 @@
+<html>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <head>
+ 	    <meta charset="UTF-8">
+ 	    <link rel="stylesheet" type="text/css" href="/static/app/css/style.css?version=1.2">
+        <script data-ad-client="ca-pub-7189432704232049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    </head>
+
+    <body Onload="FormLoadFileListView()">
+    <input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input>
+    <p>
+    <script>
+        function MoveTorrentPage(){
+            location.href = '/Torrent';
+        }
+    </script>
+    {% if PlayingVideo %}
+        {% include "playView.html" %}
+    {% endif %}
+    
+    <input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>
+    <input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>
+    <script>
+        function FormLoadFileListView(){
+            document.getElementById('FileRadio').checked = true;
+            RadioChecked(document.getElementById('FileRadio'));
+        }
+        function RadioChecked(radio){
+            FileViewTable = document.getElementById('FileViewTable');
+            YoutubeTable = document.getElementById('Youtubeview');
+            
+            if(radio.value=='File'){
+                FileViewTable.style.visibility = "visible";
+                YoutubeTable.style.visibility = "collapse";
+            }
+            else{
+                FileViewTable.style.visibility = "collapse";
+                YoutubeTable.style.visibility = "visible";
+            }
+        }
+    </script>
+
+    <div class="limiter">
+        <div class="container-table100">
+            <div class="wrap-table100">
+                <div class="table100">
+
+                    <table class="ListView" id="FileViewTable">
+                        <thead>
+                            <tr class="TableRow">
+                                <th class="column_Thumbnail"></th>
+                                <th class="column_Title">제목</th>
+                                <th class="column_Delete"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for fileItem in fileItmes %}
+
+                            <tr id='TR_{{fileItem.id}}' class='TableRow'>
+                                <td class='column_Thumbnail' id='{{fileItem.thumbnailId}}'></td>
+                                <td class='column_Title' onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" OnClick={{fileItem.link}}>
+                                    <div>{{fileItem.title}}</div>
+                                    {% if fileItem.isVideoFile.playInfo %}
+                                        <div><progress class='VideoProgress' id="Pro_{{fileItem.encodeName}}" max=100 value={{fileItem.playInfo.Progress}}/></div>
+                                    {% endif %}
+                                </td>   
+                            <td class='column_Delete' id='deleteButton'><button id='File_{{fileItem.id}}' style="visibility:{{fileItem.enableDelete}}">삭제</button></td>
+                            </tr>
+                            <script type="text/javascript">
+                                    $(function(){$("#File_{{fileItem.id}}").click(function(){
+                                        if(false == confirm('{{fileItem.title}}을 삭제 하시겠습니까?')){return;}
+                                        $.ajax({
+                                            type:'get'
+                                            ,url:'Home/Delete'
+                                            ,dataType:'html'
+                                            ,data:{'fileName':"{{fileItem.encodeName}}"}
+                                            ,error : function(data){}
+                                            , success : function (data){
+                                                deleteTr = document.getElementById('TR_{{fileItem.encodeName}}');
+                                                deleteTr.style.visibility="collapse";
+                                            }
+                                        });
+                                    })})
+                            </script>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div id='Youtubeview' style='visibility:hidden;'>
+                    </div>
+
+                </div class="table100">
+            </div class="wrap-table100">
+        </div class="container-table100">
+    </div class="limiter">
+</body>
+
+<script>
+    window.onload = function(){
+        jsonData = {'API' : 'SearchYoutube'};
+        /*$.ajax({
+            type: 'get'
+            , url: '/API'
+            , dataType : 'html'
+            , data:jsonData
+            , error : function(){
+                alert('fail!!');
+            }
+            , success : function(data){
+                Youtubeview = document.getElementById('Youtubeview');
+                Youtubeview.innerHTML = data;
+            }
+        });
+        */
+    }
+</script>
+</html>

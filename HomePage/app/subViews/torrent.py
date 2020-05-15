@@ -9,7 +9,6 @@ import os;
 import subprocess;
 from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
-from ..module.HtmlUtil import HtmlUtil;
 from ..FCM.FCM import FCM;
 from urllib.parse import unquote
 from datetime import datetime

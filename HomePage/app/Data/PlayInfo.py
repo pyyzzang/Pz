@@ -7,17 +7,23 @@ from threading import Lock;
 infoLogger = logging.getLogger("HomePage");
 
 class PlayInfo(object):
-    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0, TotalTime = 0):
+    def __init__(self, Title, Position = 0, Duration = 0, Volume = 0, TotalTime = 0, Progress = 0):
         self.Title = Title;
         self.Position = Position;
         self.Duration = Duration;
         self.Volume = Volume;
+
+        self.setPosition(0);
         
     def getTitle(self):
         return self.Title;
     
     def setPosition(self, Position):
         self.Position = Position;
+        try:
+            self.Progress = self.getPosition() * 100 / self.getDuration();
+        except:
+            self.Progress = 0;
     
     def getPosition(self):
         return self.Position;
@@ -35,10 +41,7 @@ class PlayInfo(object):
         return self.Volume;
     
     def getProgressValue(self):
-        try :
-            return self.getPosition() * 100 / self.getDuration();
-        except Exception as e:
-            return 0;
+        return self.Progress;
 
     def getVideoPos(self, value):
         return value * self.getDuration() / 100;
