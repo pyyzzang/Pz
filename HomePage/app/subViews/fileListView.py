@@ -57,6 +57,21 @@ class FileInfo:
         if(-1 != self.dir.find(osDefine.LocalFilePath())):
             return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
         return self.filePath;
+    def getLink(self):
+        if("" == self.filePath):
+            localFilePath = osDefine.LocalFilePath();
+            parentPath = self.dir.replace(localFilePath, "");
+            splitParentPath = os.path.split(parentPath)[0];
+            osDefine.Logger("splitParentPath : " + splitParentPath);
+            
+            osPath = osDefine.Base64Encoding(splitParentPath);
+            if("/" != splitParentPath):
+                return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file=" + osPath + "'";
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Home'";
+        if True == self.isDirectory() :
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file="+ self.getEncodingFileName() + "'";
+        else:
+            return "location.href='" + osDefine.getRunIp(self.request) + "/Play?file=" + self.getEncodingFileName() + "'";
 
 class fileListView(object):
     @staticmethod
@@ -77,7 +92,7 @@ class fileListView(object):
         context = playView.getPlayViewContext("200px", "70%");
         context["fileItmes"] = fileItems;
         return render(request, "fileListView.html", context);
-    @staticmethod
+    
     @staticmethod
     def getVideoList(dirPath, request):
         localFilePath = osDefine.LocalFilePath()
@@ -92,7 +107,6 @@ class fileListView(object):
                     info.setPlayInfo(infos.getPlayInfo(file));
 
         fileInfoList.sort();
-        http = fileListView.getTableHead();
 
         if( "" != dirPath):
             osDefine.Logger("DirPath : " + dirPath);

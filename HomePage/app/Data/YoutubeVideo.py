@@ -1304,7 +1304,7 @@ class Item_Activiti(Item):
         return self.item["contentDetails"]["upload"]["videoId"];
     
 class videos(object):
-    def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = "", error=""):
+    def __init__(self, kind, etag, nextPageToken = "", pageInfo= "", items= "", regionCode = "", error=""):
         self.kind = kind;
         self.etag = etag;
         self.items = items;

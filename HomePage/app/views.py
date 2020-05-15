@@ -78,7 +78,6 @@ def API(request):
             "SearchYoutube":YoutubeView.getSearchYoutube,
             "SendFCM":FCM.SendFireBase,
             "UpdateMsgStatus":FCM.UpdateMsgStatus,
-            "GENRE":torrent.getTorrentTable,
             "ProgressValue":osDefine.getCurrentProgressValue,
             "SkipVideo":osDefine.SkipVideo,
         }; 

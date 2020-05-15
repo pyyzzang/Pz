@@ -258,7 +258,7 @@ class torrent:
         return retHttp;
 
     @staticmethod
-    def getTorrentTable(genre = ""):
+    def getTorrentTable(genre):
         session = DBExecute.GetDBConnection();
         query = "select top 100 title, MagnetUrl, modifyDate, idx from Torrent ";
         if("" != genre and None != genre):
@@ -275,7 +275,10 @@ class torrent:
 
     @staticmethod
     def getTorrent(request):
-        context = {"items" : torrent.getTorrentTable()};
+        value = request.GET.get("Value");
+        if(None == value):
+            value = request.POST.get("Value");
+        context = {"items" : torrent.getTorrentTable(value)};
         return render(request, "TorrentView.html", context);
 
     @staticmethod

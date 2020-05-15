@@ -40,6 +40,29 @@
     }
 </script>
 
+<div style="align-items:center;display:flex" >
+    <script>
+    function genreChange(){
+        ganreSelect = document.getElementById('genreSelect');
+        location.href = "/Torrent?Value=" + ganreSelect.options[ganreSelect.selectedIndex].value;
+    }
+    </script>
+
+    <select id='genreSelect' name='genreSelect' OnChange='genreChange()'>
+        <option value=''>장르</option>
+        <option value='1'>한국영화</option>
+        <option value='2'>드라마</option>
+        <option value='3'>예능</option>
+        <option value='4'>다큐</option>
+        <option value='5'>완결</option>
+        <option value='99'>기타</option>
+    </select>
+    &nbsp
+    &nbsp
+    <input type=""/>&nbsp
+    <input type="Button" OnClick="SearchClick();" Value="검색"/>
+</div>
+
 <script type="text/javascript"> 
 function TorrentDelete(magnet){
     $.ajax({
@@ -80,29 +103,7 @@ function TorrentAdd(magnet, title){
 }</script>
 
 <div id='TorrentTableDiv'>
-    <Table width:'100%' style="border-collapse:collapse; border:1px solid rgb(119,119,119)">
-        <thead>
-            <tr class="table100-head" class="table100-head" style="border:1px solid rgb(119,119,119)">
-        	    <th class="column_Title">제목</th>
-        		<th class="column_Date"></th>
-        		<th class="column_Add"></th>
-        	</tr>
-        </thead>
-        <tbody>
-        {% for item in items %}
-            <tr Id="TR_{{item.magnetUrl}}" style="border-bottom:1px solid rgb(119,119,119)"><td><p Id="{{item.magnetUrl}}">{{item.title}}<p></td>
-            <td>{{item.modifyDate}}</td>
-            <td style='display:none'>{{item.magnetUrl}}</td>
-            <td><panel >
-            <input id="AddRow{{item.strIdx}}" OnClick="TorrentAdd('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 추가"></input>
-            <input id="AddRow{{item.strIdx}}" OnClick="TorrentDelete('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 삭제"></input>
-            </panel></td>
-            <!--self.getAjaxScript();-->
-            </tr>
-            <!--self.getHttpScript();-->
-        {% endfor %}
-    </Table>
-
+    {% include "TorrentTable.html" %}
 </div>
 
 </html>

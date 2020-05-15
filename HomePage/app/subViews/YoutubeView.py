@@ -186,6 +186,7 @@ class YoutubeView:
 
     @staticmethod
     def getSearchYoutube(searchValue):
+        retHttp = "";
         try:
             if(None == searchValue or "" == searchValue):
                 searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken);    
