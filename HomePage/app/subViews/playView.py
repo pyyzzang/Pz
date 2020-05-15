@@ -17,28 +17,22 @@ class Person():
         self.Age = Age;
 
 class playView(object):
+
+    @staticmethod 
+    def getPlayViewContext(width="100%", height="100%"):
+        playVideo = False if ("" == osDefine.getPlayFileName()) else True;
+        context = {"PlayVideo" :  playVideo,
+            "height" : height,
+            "width" : width,
+            "fileName" : osDefine.getPlayFileName()};
+        return context;
     @staticmethod
     def getPlayView(request, height = "100%", width="100%"):
-        ret = "";
-        try:
-            if("" == osDefine.getPlayFileName()):
-                osDefine.Logger("Empty");
-                PersonList = [];
-                PersonList.append(Person("1", 10));
-                context = {"PersonList" : PersonList};
-                return render(request, "playView.html", context);
-            else:
-                osDefine.Logger("Not Empty");
-                context = {"Title" : "aa"};
-                return render(request, "playView.html", context);
-                return ret;
-        except Exception as e:
-            osDefine.Logger(e);
-        return ret;
+        playVideo = ("" == osDefine.getPlayFileName()) and False or True;
+        return render(request, "playView.html", playView.getPlayViewContext());
     
     @staticmethod
     def play(request):
-        #return HttpResponse(osDefine.LocalFilePath()+ "\\" + playVideo.GET["file"].replace('"',''));
         filePath = request.GET.get("file", "");
         if (filePath != ""):
             osDefine.PlayFile(filePath);

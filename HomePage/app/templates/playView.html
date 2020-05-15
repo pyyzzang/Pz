@@ -1,8 +1,9 @@
 <html> <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <Head> <link rel='stylesheet' href='/static/app/css/style.css'> </Had>
-<div style="visibility:hidden">
+{% if PlayVideo %}
+<div>
     <div id="PlayControler"> </div>
-        <font><label>제목 : </label><label id="TitleLabel"> aa</label></font>
+        <font><label>제목 : </label><label id="TitleLabel">{{fileName}}</label></font>
         <body>
     <div class='main' style='top:-100'>
         <script type="text/javascript">
@@ -241,3 +242,4 @@
     </div>
 </div>
 </html>
+{% endif %}

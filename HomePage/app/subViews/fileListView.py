@@ -57,50 +57,6 @@ class FileInfo:
         if(-1 != self.dir.find(osDefine.LocalFilePath())):
             return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
         return self.filePath;
-    def getLink(self):
-        if("" == self.filePath):
-            localFilePath = osDefine.LocalFilePath();
-            parentPath = self.dir.replace(localFilePath, "");
-            splitParentPath = os.path.split(parentPath)[0];
-            osDefine.Logger("splitParentPath : " + splitParentPath);
-            
-            osPath = osDefine.Base64Encoding(splitParentPath);
-            if("/" != splitParentPath):
-                return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file=" + osPath + "'";
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Home'";
-        if True == self.isDirectory() :
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file="+ self.getEncodingFileName() + "'";
-        else:
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Play?file=" + self.getEncodingFileName() + "'";
-
-    def getTr(self, fileCount, playInfo):
-        retHttp  = "<tr id='TR_" + self.getEncodingFileName() + "' class='TableRow'>";
-        retHttp += "<td class='column_Thumbnail' id='" + self.getThumbNailId() + "'></td>";
-        retHttp += "<td class='column_Title' onMouseOver=\"this.style.background='#8693ca'\" onmouseout=\"this.style.background='white'\"  OnClick=\"" + self.getLink() + "\">" ;
-        retHttp += "<div>" + self.getTitle() +"</div>";
-        if(True == self.isVideoFile()):
-            if("" != playInfo):
-                retHttp += "<div><progress class='VideoProgress' id=\"Pro_" + self.getEncodingFileName() +"\" max=100 value=" + str(playInfo.getProgressValue()) + " \"/></div>";
-        retHttp += "</td>";
-        retHttp += "<td class='column_Delete' id='deleteButton'>" + "<button id='File" + str(fileCount) + "' style=\"visibility:" + self.visibleDeleteButton() + "\"'>삭제</button>" + " </td>";
-        retHttp += "</tr>";
-        retHttp += "<script type=\"text/javascript\">";
-        retHttp += "$(function(){" 
-        retHttp += "$(\"#File"+str(fileCount)+"\").click(function(){"
-        retHttp += "if(false == confirm('"+ self.getTitle() + "을 삭제 하시겠습니까?')){return;}"
-        retHttp += "$.ajax({"
-        retHttp += "type:'get'"
-        retHttp += ",url:'Home/Delete'"
-        retHttp += ",dataType:'html'"
-        retHttp += ",data:{'fileName':'"+self.getEncodingFileName()+"'}"
-        retHttp += ",error : function(data){"
-        retHttp += "}"
-        retHttp += ", success : function (data){"
-        retHttp += "deleteTr = document.getElementById('TR_" + self.getEncodingFileName() + "');";
-        retHttp += "deleteTr.style.visibility=\"collapse\";";
-        retHttp += "}})})})</script>"
-
-        return retHttp;
 
 class fileListView(object):
     @staticmethod
@@ -118,56 +74,10 @@ class fileListView(object):
         except Exception:
             requestFile = "";
         fileItems = fileListView.getVideoList(requestFile, request);
-        context = {"fileItmes" : fileItems};
+        context = playView.getPlayViewContext("200px", "70%");
+        context["fileItmes"] = fileItems;
         return render(request, "fileListView.html", context);
     @staticmethod
-    def getTitleHead():
-        retHttp  = '<body Onload="FormLoadFileListView()">';
-        retHttp += "<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>";
-        retHttp += "<script>function MoveTorrentPage(){ location.href = '/Torrent';}</script>"
-        retHttp += playView.getPlayView("200px", "70%");
-        
-        retHttp += '\n<input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>';
-        retHttp += '\n<input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>';
-        retHttp += "\n<script>";
-        retHttp += "\nfunction FormLoadFileListView(){"
-        retHttp += "\n    document.getElementById('FileRadio').checked = true;"
-        retHttp += "\n    RadioChecked(document.getElementById('FileRadio'));}";
-        
-        retHttp += "\nfunction RadioChecked(radio){";
-        retHttp += "\n FileViewTable = document.getElementById('FileViewTable');";
-        retHttp += "\n YoutubeTable = document.getElementById('Youtubeview');";
-        retHttp += "\n if(radio.value=='File')";
-        retHttp += "\n{";
-        retHttp += '\n    FileViewTable.style.visibility = "visible";';
-        retHttp += '\n    YoutubeTable.style.visibility = "collapse";';
-        retHttp += '\n}';
-        retHttp += '\nelse';
-        retHttp += '\n{';
-        retHttp += '\n    FileViewTable.style.visibility = "collapse";';
-        retHttp += '\n    YoutubeTable.style.visibility = "visible";';
-        retHttp += '\n    alert(YoutubeTable.style.visibility)';
-        retHttp += '\n}';
-        retHttp += '}';
-        retHttp += "\n</script>";
-        return retHttp;
-
-    @staticmethod
-    def getTableHead():
-        retHttp  = '				<table class="ListView" id="FileViewTable">                                                         ';
-        retHttp += '					<thead>                                                     ';
-        retHttp += '						<tr class="TableRow">                              ';
-        retHttp += '							<th class="column_Thumbnail"></th>                       ';
-        retHttp += '							<th class="column_Title">제목</th>                   ';
-        retHttp += '							<th class="column_Delete"></th>                       ';
-        retHttp += '						</tr>                                                   ';
-        retHttp += '					</thead>                                                    ';
-        retHttp += '                    <tbody>                                                     ';
-        return retHttp;
-    @staticmethod
-    def getTableTail():
-        return "</tbody></table>";
-
     @staticmethod
     def getVideoList(dirPath, request):
         localFilePath = osDefine.LocalFilePath()

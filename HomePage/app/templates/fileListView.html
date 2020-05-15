@@ -14,7 +14,7 @@
             location.href = '/Torrent';
         }
     </script>
-    {% if PlayingVideo %}
+    {% if PlayVideo %}
         {% include "playView.html" %}
     {% endif %}
     
@@ -98,7 +98,7 @@
 <script>
     window.onload = function(){
         jsonData = {'API' : 'SearchYoutube'};
-        /*$.ajax({
+        $.ajax({
             type: 'get'
             , url: '/API'
             , dataType : 'html'
@@ -111,7 +111,6 @@
                 Youtubeview.innerHTML = data;
             }
         });
-        */
     }
 </script>
 </html>
