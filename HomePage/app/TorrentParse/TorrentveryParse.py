@@ -43,9 +43,10 @@ class TorrentveryParse(TorrentParse):
         return False; 
 
     retryValue = 5;
+    url = 'https://torrentvery2.com/torrent_%s/%s';
     def getUpdateList(self, param, genre):
         index = int(torrent.getMeta("%s" % param));
-        url = 'https://torrentvery.com/torrent_%s/%s' %(param, index);
+        url = TorrentveryParse.url %(param, index);
         response = requests.get(url);
         soup = BeautifulSoup(response.text, 'html.parser')
         insertMagnet = "";
@@ -77,7 +78,7 @@ class TorrentveryParse(TorrentParse):
                     break;
             finally:
                 index = index + 1;
-                url = 'https://torrentvery.com/torrent_%s/%s' % (param, index);
+                url = TorrentveryParse.url % (param, index);
                 response = requests.get(url);
                 soup = BeautifulSoup(response.text, 'html.parser');
                 
@@ -103,7 +104,8 @@ class TorrentveryParse(TorrentParse):
     
     @staticmethod
     def RunCrawlingThread():
-        if(True == osDefine.getIsDev()):
+        #if(True == osDefine.getIsDev()):
+        if(False):
             osDefine.Logger("개발 모드");
         else:
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
