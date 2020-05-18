@@ -41,6 +41,7 @@ urlpatterns = [
     url(r'Torrent', app.views.Torrent, name='Torrent'),
     url(r'RegisterToken', app.views.RegisterToken, name='RegisterToken'),
     url(r'YoutubeRedirect', app.views.YoutubeRedirect, name='YoutubeRedirect'),
+    url(r'Setting', app.views.Setting, name='Setting'),
     
     
 ]

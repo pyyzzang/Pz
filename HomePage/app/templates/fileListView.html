@@ -8,8 +8,13 @@
 
     <body Onload="FormLoadFileListView()">
     <input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input>
+    <input type='button' value='설정' onclick='OpenSetting();'></input>
     <p>
     <script>
+        function OpenSetting(){
+            window.open("/Setting", "a", "width=400, height=300, left=100, top=50");
+        }
+
         function MoveTorrentPage(){
             location.href = '/Torrent';
         }

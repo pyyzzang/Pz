@@ -12,10 +12,14 @@ from .subViews.playView import playView
 from .subViews.playerMove import playerMove
 from .subViews.torrent import torrent
 from .subViews.testView import testView
+from .subViews.Settings import Settings;
 from .FCM.FCM import FCM
 from .module.osDefine import osDefine;
 from django.http import HttpResponse
 from .TorrentParse.TorrentveryParse import TorrentveryParse;
+from .Data.TorrentInfo import TorrentInfos;
+
+import inspect;
 
 def home(request):
     return fileListView.getViewList(request);
@@ -69,6 +73,8 @@ def TorrentUpdate(request):
     return torrent.torrentUpdate(request);
 def RegisterToken(request):
     return FCM.RegisterToken(request);
+def Setting(request):
+    return Settings.ShowPopup(request);
 def API(request):
     executeFunc = "";
     value = "";
@@ -80,6 +86,7 @@ def API(request):
             "UpdateMsgStatus":FCM.UpdateMsgStatus,
             "ProgressValue":osDefine.getCurrentProgressValue,
             "SkipVideo":osDefine.SkipVideo,
+            "DeleteTorrentInfo":TorrentInfos.Delete,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
         value = request.GET.get("Value");

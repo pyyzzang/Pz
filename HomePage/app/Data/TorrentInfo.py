@@ -7,14 +7,14 @@ import json;
 from difflib import SequenceMatcher
 
 class torrentInfo():
-    def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1):
+    def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1, similarTitle = ""):
         self.fullName = fullName;
         self.title = strUtil.getMatchTitle(self.fullName);
         self.similarTitle = strUtil.getSimilarTitle(self.fullName);
         self.season  = strUtil.getSeason(self.fullName);
         self.episode = strUtil.getEpisode(self.fullName);
         self.date = strUtil.getDate(self.fullName);
-        self.count = 1;
+        self.count = count;
     
     def getFullName(self):
         return self.fullName;
@@ -83,6 +83,14 @@ class TorrentInfos(object):
             
             with open(TorrentInfos.TorrentInfoFile, "w") as fileTorrentInfo:
                 json.dump(self, fileTorrentInfo, default=lambda o: o.__dict__);
+    
+    def deleteInfo(self, title):
+        for info in self.infos:
+            if(title == info.getTitle()):
+                self.infos.remove(info);
+                break;
+        self.saveFile();
+        return title;
 
     def findSimilarTorrintInfo(self, title, isCrate = False):
         addInfo = torrentInfo(title);
@@ -118,3 +126,12 @@ class TorrentInfos(object):
         info = torrentInfos.findSimilarTorrintInfo(title, True);
         torrentInfos.saveFile();
         return info;
+    
+    @staticmethod 
+    def Delete(title):
+        try:
+            infos = TorrentInfos.GetTorrentInfos();
+            infos.deleteInfo(title);
+        except Exception as e:
+            osDefine.Logger(e);
+        return title;
