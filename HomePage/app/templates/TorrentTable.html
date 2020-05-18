@@ -8,13 +8,18 @@
     </thead>
     <tbody>
     {% for item in items %}
-        <tr Id="TR_{{item.magnetUrl}}" style="border-bottom:1px solid rgb(119,119,119)"><td><p Id="{{item.magnetUrl}}">{{item.title}}<p></td>
-        <td>{{item.modifyDate}}</td>
-        <td style='display:none'>{{item.magnetUrl}}</td>
-        <td><panel >
-        <input id="AddRow{{item.strIdx}}" OnClick="TorrentAdd('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 추가"></input>
-        <input id="AddRow{{item.strIdx}}" OnClick="TorrentDelete('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 삭제"></input>
-        </panel></td>
+        <tr onmouseover="this.style.background='#ddd'" onmouseout="this.style.background='white'" Id="TR_{{item.magnetUrl}}" style="border-bottom:1px solid rgb(119,119,119)">
+            <td>
+                <p Id="{{item.magnetUrl}}">{{item.title}}<p>
+            </td>
+            <td>{{item.modifyDate}}</td>
+            <td style='display:none'>{{item.magnetUrl}}</td>
+            <td>
+                <panel >
+                    <input id="AddRow{{item.strIdx}}" OnClick="TorrentAdd('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 추가"></input>
+                    <input id="AddRow{{item.strIdx}}" OnClick="TorrentDelete('{{item.magnetUrl}}','{{item.title}}')" type="Button" Value="토렌트 삭제"></input>
+                </panel>
+            </td>
         <!--self.getAjaxScript();-->
         </tr>
         <!--self.getHttpScript();-->
