@@ -59,8 +59,26 @@
     </select>
     &nbsp
     &nbsp
-    <input type=""/>&nbsp
+    <input type="text" id="SearchTorrent" Name="SearchTorrent" />&nbsp
     <input type="Button" OnClick="SearchClick();" Value="검색"/>
+    <script>
+        function SearchClick(){
+            searchTorrent = document.getElementById("SearchTorrent");
+            if("" == searchTorrent.value){
+                alert("검색어를 입력하세요");
+                return ;
+            }
+            var myForm = document.popForm;
+            var url = "/SearchTorrent";
+            window.open("" ,"popForm", "");
+            myForm.action =url;
+            myForm.method="post";
+            myForm.target="popForm";
+            myForm.SearchValue = searchTorrent.value;
+            myForm.submit();
+
+        }
+    </script>
 </div>
 
 <script type="text/javascript"> 

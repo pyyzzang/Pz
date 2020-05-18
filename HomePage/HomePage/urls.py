@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'Test', app.views.test, name='test'),
     url(r'Home', app.views.home, name='Home'),
     url(r'API', app.views.API, name='API'),
+    url(r'SearchTorrent', app.views.SearchTorrent, name='SearchTorrent'),
     url(r'Torrent/Upload', app.views.TorrentUpload, name='TorrentUpload'),
     url(r'Torrent/TorrentAdd', app.views.TorrentAdd, name='TorrentAdd'),
     url(r'Torrent/TorrentDelete', app.views.TorrentDelete, name='TorrentDelete'),
@@ -42,6 +43,8 @@ urlpatterns = [
     url(r'RegisterToken', app.views.RegisterToken, name='RegisterToken'),
     url(r'YoutubeRedirect', app.views.YoutubeRedirect, name='YoutubeRedirect'),
     url(r'Setting', app.views.Setting, name='Setting'),
+    
+    
     
     
 ]

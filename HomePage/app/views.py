@@ -75,6 +75,9 @@ def RegisterToken(request):
     return FCM.RegisterToken(request);
 def Setting(request):
     return Settings.ShowPopup(request);
+def SearchTorrent(request):
+    return torrent.SearchTorrent(request);
+
 def API(request):
     executeFunc = "";
     value = "";

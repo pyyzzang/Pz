@@ -41,9 +41,9 @@ class torrentInfo():
         self.count = self.count + 1;
         return self.count;
     
-    def getSimilar(self, compareInfo):
+    def getSimilar(self, compareInfo, compareValue = 0.8):
         titleValue = SequenceMatcher(None, self.getSimilarTitle(), compareInfo.getSimilarTitle()).ratio();
-        if(0.8 < titleValue):
+        if(compareValue < titleValue):
             return True;
         return False;
 

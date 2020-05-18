@@ -13,6 +13,7 @@ from ..FCM.FCM import FCM;
 from urllib.parse import unquote
 from datetime import datetime
 from ..Data.TorrentInfo import TorrentInfos;
+from ..Data.TorrentInfo import torrentInfo;
 from django.shortcuts import render;
 
 class RowEnum(Enum):
@@ -397,5 +398,27 @@ class torrent:
     def updateDramaIndex(index):
         metaName = "drama";
         return torrent.updateTorrentIndex(index, metaName);
+
+    @staticmethod
+    def SearchTorrent(request):
+        findTitle = osDefine.getParameter(request,"SearchTorrent");
+        findTitle = "삼시";
+        findInfo = torrentInfo(findTitle);
+        connection = DBExecute.GetDBConnection();
+        rows = connection.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        dicData = {};
+        for row in rows:
+            if True == findInfo.getSimilar(torrentInfo(row[RowEnum.Title.value].strip()), 0.4):
+                dicData[row[RowEnum.MagnetUrl.value]] = TorrentData.createTorrenData(row);
+
+        rows = connection.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent where title like '%" + findTitle + "%'");
+        for row in rows:
+            if False == (row[RowEnum.MagnetUrl.value] in dicData.keys()):
+                dicData[row[RowEnum.MagnetUrl.value]] = TorrentData.createTorrenData(row);
+        
+        torrentData = list(dicData.values());
+
+        context = {"infos" : torrentData};
+        return render(request, "SearchTorrent.html", context);
             
 

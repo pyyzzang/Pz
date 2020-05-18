@@ -1,0 +1,32 @@
+
+<html>
+    <div>
+        <table>
+            <tr></tr>
+            <tr>제목</tr>
+            <tr></tr>
+        
+            {% for info in infos %}
+            <tr>
+                <td><input type="checkbox"/></td>
+                <td>{{info.title}}</td>
+                <td><input type="Button" Value="추가"></td>
+            </tr>
+            {% endfor %}
+        
+        </table>
+    </div>
+<div>
+<input type="button" value="추가" onClick="AddTorrent()"/>
+<input type="button" value="닫기" onClick="Close();"/>
+
+<script>
+    function AddTorrent(){
+        alert(AddTorrent);
+    }
+    function Close(){
+        windows.close();
+    }
+</script>
+</div>
+</html>
