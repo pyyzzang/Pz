@@ -10,6 +10,7 @@ class torrentInfo():
     def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1):
         self.fullName = fullName;
         self.title = strUtil.getMatchTitle(self.fullName);
+        self.similarTitle = strUtil.getSimilarTitle(self.fullName);
         self.season  = strUtil.getSeason(self.fullName);
         self.episode = strUtil.getEpisode(self.fullName);
         self.date = strUtil.getDate(self.fullName);
@@ -20,6 +21,9 @@ class torrentInfo():
         
     def getTitle(self):
         return self.title;
+
+    def getSimilarTitle(self):
+        return self.similarTitle;
 
     def getSeason(self):
         return self.season;
@@ -38,7 +42,7 @@ class torrentInfo():
         return self.count;
     
     def getSimilar(self, compareInfo):
-        titleValue = SequenceMatcher(None, self.getTitle(), compareInfo.getTitle()).ratio();
+        titleValue = SequenceMatcher(None, self.getSimilarTitle(), compareInfo.getSimilarTitle()).ratio();
         if(0.8 < titleValue):
             return True;
         return False;
