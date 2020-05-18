@@ -19,6 +19,22 @@
 	background-repeat: no-repeat;
 }
 
+#Setting{
+	background-image : url("../Image/Setting.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	width:40px;
+	height:40px;
+}
+
+#Torrent{
+	background-image : url("../Image/Torrent.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	width:40px;
+	height:40px;
+}
+
 #playLink{
 	width : 70%;
 }
