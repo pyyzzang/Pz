@@ -59,16 +59,22 @@
     </select>
     &nbsp
     &nbsp
-    <input type="text" id="SearchTorrent" Name="SearchTorrent" />&nbsp
-    <input type="Button" OnClick="SearchClick();" Value="검색"/>
+    <input type="text" id="SearchText" Name="SearchTorrent" onkeydown="JavaScript:SearchTextInput();" />&nbsp
+    <input type="Button" id="SearchButton" OnClick="SearchClick();" Value="검색"/>
     <script>
+        function SearchTextInput(){
+            if(13 == event.keyCode){
+                searchButton = document.getElementById("SearchButton");
+                searchButton.click();
+            }
+        }
         function SearchClick(){
-            searchTorrent = document.getElementById("SearchTorrent");
-            if("" == searchTorrent.value){
+            searchTxt = document.getElementById("SearchText").value;
+            if("" == searchTxt){
                 alert("검색어를 입력하세요");
                 return ;
             }
-            var url = "/SearchTorrent?SearchTorrent=%EC%82%BC%EC%8B%9C";
+            var url = "/SearchTorrent?SearchTorrent=" + searchTxt;
             var name = "검색";
             var option = "width = 700, height = 500, top = 100, left = 200, location = no"
             window.open(url, name, option);
