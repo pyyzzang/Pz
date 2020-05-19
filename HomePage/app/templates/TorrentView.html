@@ -68,15 +68,10 @@
                 alert("검색어를 입력하세요");
                 return ;
             }
-            var myForm = document.popForm;
-            var url = "/SearchTorrent";
-            window.open("" ,"popForm", "");
-            myForm.action =url;
-            myForm.method="post";
-            myForm.target="popForm";
-            myForm.SearchValue = searchTorrent.value;
-            myForm.submit();
-
+            var url = "/SearchTorrent?SearchTorrent=%EC%82%BC%EC%8B%9C";
+            var name = "검색";
+            var option = "width = 700, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
         }
     </script>
 </div>
@@ -100,25 +95,6 @@ function TorrentDelete(magnet){
     })
 }
 </script>
-        
-<script type="text/javascript">
-function TorrentAdd(magnet, title){
-    $.ajax({
-        type: 'post',
-        data:{
-            'magnetUrl' : magnet
-            , 'title' : title
-        }
-        , url: 'Torrent/TorrentAdd'
-        , dataType : 'html'
-        , error : function(){
-            alert('Error');
-        }
-        , success : function(data){
-            alert(title + " 토렌트 추가 하였습니다.");
-        }
-    })
-}</script>
 
 <div id='TorrentTableDiv'>
     {% include "TorrentTable.html" %}

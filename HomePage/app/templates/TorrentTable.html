@@ -25,3 +25,23 @@
         <!--self.getHttpScript();-->
     {% endfor %}
 </Table>
+  
+<script type="text/javascript">
+    function TorrentAdd(magnet, title){
+        $.ajax({
+            type: 'post',
+            data:{
+                'magnetUrl' : magnet
+                , 'title' : title
+            }
+            , url: 'Torrent/TorrentAdd'
+            , dataType : 'html'
+            , error : function(){
+                alert('Error');
+            }
+            , success : function(data){
+                alert(title + " 토렌트 추가 하였습니다.");
+            }
+        })
+    }
+</script>
