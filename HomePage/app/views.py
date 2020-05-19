@@ -77,6 +77,8 @@ def Setting(request):
     return Settings.ShowPopup(request);
 def SearchTorrent(request):
     return torrent.SearchTorrent(request);
+def LogFile(request):
+    return HttpResponse(osDefine.SaveLogFile(request));
 
 def API(request):
     executeFunc = "";

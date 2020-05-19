@@ -343,6 +343,21 @@ class osDefine:
             
             response = post("https://accounts.google.com/o/oauth2/token", data);
             osDefine.Logger(response.text);
+    
+    @staticmethod
+    def SaveLogFile(request):
+        try:
+            fileBinary = request.FILES[0];
+            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload");
+            f = open(tmpTorrentFile, 'wb+');
+            for chunk in fileBinary.chunks():
+                f.write(chunk)
+            f.close();
+        except Exception as e:
+            osDefine.Logger("Exception");
+            osDefine.Logger(e);
+            return "Exception";
+        return "Success";
 
 
 class YoutubeValidToken():

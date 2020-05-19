@@ -108,7 +108,6 @@ class TorrentveryParse(TorrentParse):
     def RunCrawlingThread():
         if(True == osDefine.getIsDev()):
             osDefine.Logger("개발 모드");
-            FCM.SendFireBaseThread();
         else:
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
             t.start();

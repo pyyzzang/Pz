@@ -43,6 +43,7 @@ urlpatterns = [
     url(r'RegisterToken', app.views.RegisterToken, name='RegisterToken'),
     url(r'YoutubeRedirect', app.views.YoutubeRedirect, name='YoutubeRedirect'),
     url(r'Setting', app.views.Setting, name='Setting'),
+    url(r'LogFile', app.views.LogFile, name='LogFile'),
     
     
     
