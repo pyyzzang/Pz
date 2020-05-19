@@ -28,6 +28,8 @@ class FCM:
         updateQuery = ("insert into UserInfo values('%s' , '%s')")% (id, token);
         osDefine.Logger(updateQuery);
         connection.InsertQueryExecute(updateQuery)            
+
+        RegisterToken.SendFireBaseThread();
         
         return HttpResponse("");
 
@@ -107,7 +109,9 @@ class FCM:
     
         # Send a message to the device corresponding to the provided
         # registration token.
-        response = messaging.send(message)
+        response = messaging.send(message);
+
+        RegisterToken.SendFireBaseThread();
 
     @staticmethod
     def UpdateMsgStatus(value):
