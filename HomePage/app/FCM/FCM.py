@@ -29,7 +29,7 @@ class FCM:
         osDefine.Logger(updateQuery);
         connection.InsertQueryExecute(updateQuery)            
 
-        RegisterToken.SendFireBaseThread();
+        FCM.SendFireBaseThread();
         
         return HttpResponse("");
 
@@ -111,7 +111,7 @@ class FCM:
         # registration token.
         response = messaging.send(message);
 
-        RegisterToken.SendFireBaseThread();
+        FCM.SendFireBaseThread();
 
     @staticmethod
     def UpdateMsgStatus(value):

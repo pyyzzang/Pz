@@ -10,6 +10,7 @@ import threading;
 import requests;
 from ..FCM.FCM import FCM;
 
+
 class TorrentveryParse(TorrentParse):
     def __init__(self):
         TorrentParse.__init__(self);
@@ -90,6 +91,7 @@ class TorrentveryParse(TorrentParse):
         osDefine.Logger("Start Craling");
 
         while(True):
+            FCM.SendFireBaseThread();
             tvParse = TorrentveryParse();
             tvParse.getUpdateList("movieko", 1);
             tvParse.getUpdateList("drama", 2);
@@ -98,7 +100,7 @@ class TorrentveryParse(TorrentParse):
             tvParse.getUpdateList("tvend", 5);
             time.sleep(60 * 3);
             osDefine.YoutubeTokenRefresh();
-            FCM.SendFireBaseThread();
+            
             
         return "";
     
@@ -106,6 +108,7 @@ class TorrentveryParse(TorrentParse):
     def RunCrawlingThread():
         if(True == osDefine.getIsDev()):
             osDefine.Logger("개발 모드");
+            FCM.SendFireBaseThread();
         else:
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
             t.start();
