@@ -12,8 +12,6 @@ class PlayInfo(object):
         self.Position = Position;
         self.Duration = Duration;
         self.Volume = Volume;
-
-        self.setPosition(0);
         
     def getTitle(self):
         return self.Title;
@@ -74,7 +72,7 @@ class PlayInfos(object):
             retPlayInfo = PlayInfo(playFileName);
             self.playInfos.append(retPlayInfo);
         except Exception as e:
-            infoLogger.info("GetPlayInfo : " + e);
+            infoLogger.info(e);
         return retPlayInfo;
 
     def removeInfo(self, removeInfo):
