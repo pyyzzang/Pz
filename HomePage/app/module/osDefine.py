@@ -131,6 +131,7 @@ class osDefine:
         osDefine.palyFileName = 0;
         osDefine.currentPlayer = 0;
         osDefine.playTitle = 0;
+        osDefine.playFileName = 0;
         
     @staticmethod
     def Base64Encoding(utfString):
@@ -197,7 +198,6 @@ class osDefine:
         while(osDefine.playFileName == currentPlayFile):
             saveInfos = PlayInfos.GetPlayInfos();
             osDefine.CurPlayInfo = saveInfos.getPlayInfo(osDefine.playTitle, True);
-
             osDefine.CurPlayInfo.setPosition(osDefine.currentPlayer.position());
             osDefine.CurPlayInfo.setDuration(osDefine.currentPlayer.duration());
             osDefine.CurPlayInfo.setVolume(osDefine.currentPlayer.volume());
@@ -252,8 +252,10 @@ class osDefine:
     def PlayerPlay():
         playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playTitle);
         osDefine.Logger("PlayerPlay : " + str(osDefine.playTitle));
-        
+
         if( "" != playInfo):
+            osDefine.Logger("getPosition___ : " + str(playInfo.getPosition()));
+
             if( playInfo.getPosition() + 10 < playInfo.getDuration()):
                 osDefine.currentPlayer.set_position(playInfo.getPosition());
             
