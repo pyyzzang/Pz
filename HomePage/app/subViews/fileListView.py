@@ -55,7 +55,7 @@ class FileInfo:
         return osDefine.Base64Encoding(self.getUrlPath());
     def getUrlPath(self):
         if(-1 != self.dir.find(osDefine.LocalFilePath())):
-            return self.dir.replace(osDefine.LocalFilePath(), '') + '/' + self.filePath;
+            return self.dir.replace(osDefine.LocalFilePath(), '') + self.filePath;
         return self.filePath;
     def getLink(self):
         if("" == self.filePath):
@@ -102,8 +102,12 @@ class fileListView(object):
         infos = PlayInfos.GetPlayInfos();
         for file in os.listdir(findDir):
                 info = FileInfo(file, findDir, request);
-                if(True == info.isVideoFile() or True == info.isDirectory()):
+                if(True == info.isVideoFile() or False == info.isDirectory()):
                     fileInfoList.append(info);
+                    logInfo = infos.getPlayInfo(file);
+                    if("" != logInfo):
+                        osDefine.Logger(logInfo.getProgressValue());
+                        
                     info.setPlayInfo(infos.getPlayInfo(file));
 
         fileInfoList.sort();

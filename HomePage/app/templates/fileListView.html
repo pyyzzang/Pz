@@ -65,8 +65,8 @@
                                 <td class='column_Thumbnail' id='{{fileItem.thumbnailId}}'></td>
                                 <td class='column_Title' onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" OnClick={{fileItem.link}}>
                                     <div>{{fileItem.title}}</div>
-                                    {% if fileItem.isVideoFile.playInfo %}
-                                        <div><progress class='VideoProgress' id="Pro_{{fileItem.encodeName}}" max=100 value={{fileItem.playInfo.Progress}}/></div>
+                                    {% if fileItem.playInfo %}
+                                        <div><progress class='VideoProgress' id="Pro_{{fileItem.encodeName}}" max=100 value="{{fileItem.playInfo.Progress}}"/></div>
                                     {% endif %}
                                 </td>   
                             <td class='column_Delete' id='deleteButton'><button id='File_{{fileItem.id}}' style="visibility:{{fileItem.enableDelete}}">삭제</button></td>

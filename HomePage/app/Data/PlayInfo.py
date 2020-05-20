@@ -12,6 +12,7 @@ class PlayInfo(object):
         self.Position = Position;
         self.Duration = Duration;
         self.Volume = Volume;
+        self.Progress = Progress;
         
     def getTitle(self):
         return self.Title;
