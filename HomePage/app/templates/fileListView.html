@@ -61,9 +61,9 @@
                         <tbody>
                             {% for fileItem in fileItmes %}
 
-                            <tr id='TR_{{fileItem.id}}' class='TableRow'>
+                            <tr id='TR_{{fileItem.id}}' class='TableRow' onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" >
                                 <td class='column_Thumbnail' id='{{fileItem.thumbnailId}}'></td>
-                                <td class='column_Title' onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" OnClick={{fileItem.link}}>
+                                <td class='column_Title' OnClick={{fileItem.link}}>
                                     <div>{{fileItem.title}}</div>
                                     {% if fileItem.playInfo %}
                                         <div><progress class='VideoProgress' id="Pro_{{fileItem.encodeName}}" max=100 value="{{fileItem.playInfo.Progress}}"/></div>
@@ -81,7 +81,7 @@
                                             ,data:{'fileName':"{{fileItem.encodeName}}"}
                                             ,error : function(data){}
                                             , success : function (data){
-                                                deleteTr = document.getElementById('TR_{{fileItem.encodeName}}');
+                                                deleteTr = document.getElementById('TR_{{fileItem.id}}');
                                                 deleteTr.style.visibility="collapse";
                                             }
                                         });
