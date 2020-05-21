@@ -36,13 +36,19 @@
             </thead>
             <tbody>
                 {% for item in YoutubeItems %}
-                    <tr onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" >
+                    <tr onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" OnClick="TD_Click('Play\?youtube={{item.getYoutubeId}}&title={{item.getTitleEncode}}');" style="cursor:pointer;" >
                         <td class='column1'><img src="{{item.getUrl}}"/></td>
-                        <td class='column3'><a href="Play\?youtube={{item.getYoutubeId}}&title={{item.getTitleEncode}}"/>{{item.getTitle}}</td>
+                        <td class='column3'>{{item.getTitle}}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <script>
+        function TD_Click(url){
+            document.location.href = url;
+        }
+
+        </script>
     </div>    
 
 
