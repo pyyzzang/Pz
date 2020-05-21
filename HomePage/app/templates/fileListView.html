@@ -9,6 +9,28 @@
     <body Onload="FormLoadFileListView()">
     <input type='button' onclick='MoveTorrentPage();' id="Torrent"></input>
     <input type='button' onclick='OpenSetting();' id="Setting"></input>
+
+    <label name="CPU_Temp" id="CPU_Temp">°C</label>
+
+    <script>
+        function UpdateTemp(){
+            jsonData = {'API' : 'CPUTemp'};
+            $.ajax({
+                type: 'get'
+                , url: '/API'
+                , dataType : 'html'
+                , data:jsonData
+                , error : function(){
+                    alert('fail!!');
+                }
+                , success : function(data){
+                    CPU_Temp = document.getElementById('CPU_Temp');
+                    CPU_Temp.textContent = data + "°C";
+                }
+            });
+        }
+    </script>
+
     <p>
     <script>
         function OpenSetting(){
@@ -25,6 +47,7 @@
     
     <input name="ViewType" id="FileRadio" Value="File" type="radio" OnChange="RadioChecked(this)"> 파일 </input>
     <input name="ViewType" Value="Youtube" type="radio" OnChange="RadioChecked(this)" >Youtube</input>
+    
     <script>
         function FormLoadFileListView(){
             document.getElementById('FileRadio').checked = true;
@@ -116,10 +139,11 @@
             }
             , success : function(data){
                 Youtubeview = document.getElementById('Youtubeview');
-                alert(data);
                 Youtubeview.innerHTML = data;
             }
         });
+
+        setInterval(UpdateTemp, 1000);
     }
 </script>
 </html>

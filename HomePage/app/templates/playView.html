@@ -169,10 +169,11 @@
 
         </div>
         </body>
-
+        
         <script>
+        /*
         function UpdateTitle(){
-            /*
+            
             $.ajax({
                 type: 'get'
                 , url: '/Play/CurFileName'
@@ -188,9 +189,10 @@
                     }
                 }
             });
-            */
+        
         }
         setInterval(UpdateTitle, 5000);
+        */
         </script>
         <p>
 
@@ -199,6 +201,7 @@
         <span id='progressValue'></span>
         <script>
             UpdateProgress();
+            
             setInterval(UpdateProgress, 500); // 3000ms(3초)가 경과하면 ozit_timer_test() 함수를 실행합니다.
 
             function UpdateProgress(){

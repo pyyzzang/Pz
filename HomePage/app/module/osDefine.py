@@ -19,7 +19,10 @@ import time;
 from urllib.parse import urlparse;
 from ..Define import Define;
 import datetime;
-
+import smtplib
+from email.mime.text import MIMEText
+import os, threading
+from django.http import HttpResponse
 
 class PlayMode:
     File = 0;
@@ -217,7 +220,7 @@ class osDefine:
     def ProgressValue(request):
         if("" == osDefine.CurPlayInfo):
             return -1;
-        return int(osDefine.CurPlayInfo.getProgressValue());
+        return HttpResponse(int(osDefine.CurPlayInfo.getProgressValue()));
 
     @staticmethod 
     def playNextVideo():
@@ -255,8 +258,6 @@ class osDefine:
         osDefine.Logger("PlayerPlay : " + str(osDefine.playTitle));
 
         if( "" != playInfo):
-            osDefine.Logger("getPosition___ : " + str(playInfo.getPosition()));
-
             if( playInfo.getPosition() + 10 < playInfo.getDuration()):
                 osDefine.currentPlayer.set_position(playInfo.getPosition());
             
@@ -361,6 +362,13 @@ class osDefine:
             osDefine.Logger(e);
             return "Exception";
         return "Success";
+    
+    @staticmethod
+    def CPUTemp(request):
+        temp = os.popen("vcgencmd measure_temp").readline()
+        result = temp.replace("temp=","").replace("'C", "")
+        return HttpResponse(result);
+
 
 
 class YoutubeValidToken():
