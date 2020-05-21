@@ -103,7 +103,10 @@ class TorrentveryParse(TorrentParse):
     
     @staticmethod
     def RunCrawlingThread():
-        TorrentveryParse.CrawlingTorrent();
+        if(True == osDefine.getIsDev()):
+            osDefine.Logger("개발 모드");
+        else:
+            TorrentveryParse.CrawlingTorrent();
         
 TorrentveryParse.RunCrawlingThread();
 
