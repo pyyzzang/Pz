@@ -362,12 +362,16 @@ class osDefine:
             osDefine.Logger(e);
             return "Exception";
         return "Success";
+
+    @staticmethod
+    def CPUTempStr():
+        temp = os.popen("vcgencmd measure_temp").readline()
+        result = temp.replace("temp=","").replace("'C", "")
+        return result;
     
     @staticmethod
     def CPUTemp(request):
-        temp = os.popen("vcgencmd measure_temp").readline()
-        result = temp.replace("temp=","").replace("'C", "")
-        return HttpResponse(result);
+        return HttpResponse(osDefine.CPUTempStr());
 
 
 

@@ -91,6 +91,7 @@ class fileListView(object):
         fileItems = fileListView.getVideoList(requestFile, request);
         context = playView.getPlayViewContext("200px", "70%");
         context["fileItmes"] = fileItems;
+        context["CPUTemp"] = osDefine.CPUTempStr();
         return render(request, "fileListView.html", context);
     
     @staticmethod
