@@ -32,7 +32,7 @@ class YoutubeSearchType(Enum):
     def getTypeUrl(type, token):
         typeDict = {
             YoutubeSearchType.Search: "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s",
-            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr",
+            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&maxResults=50",
             YoutubeSearchType.Activities: "https://www.googleapis.com/youtube/v3/activities?regionCode=KR&part=contentDetails,snippet&home=true&maxResults=50",
             YoutubeSearchType.Subscript: "Search"};
 
