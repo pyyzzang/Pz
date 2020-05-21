@@ -27,8 +27,8 @@ class torrent:
 
         currentTime = datetime.now();
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
-        #if (10 < currentTime.hour and currentTime.hour < 24):
-        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
+        if (10 < currentTime.hour and currentTime.hour < 24):
+            addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
         osDefine.Logger("ExecuteCommand : " + addCmd);
         os.system(addCmd);
         return addCmd;
@@ -100,81 +100,6 @@ class torrent:
 
         osDefine.Logger("torrentUpload_magnet : " + magnet);
         return torrent.torrentInsert(request, title=Title, magnet=magnet);
-
-        
-
-    @staticmethod 
-    def getTorrentAddDiv():
-        retHttp  = "<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>";
-        retHttp += "<script>function MoveTorrentPage(){ location.href = '/Home';}</script>"
-        retHttp += "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
-        retHttp += "<div class=\"dialog_window\" id=\"dialog_Window\">";
-        retHttp += "<div class=\"dialog_logo\" id=\"upload_dialog_logo\"></div>";
-        retHttp += "<h2 class=\"dialog_heading\">Upload Torrent Files</h2>";
-        retHttp += "<form action=\"/Torrent/Upload\" method=\"post\" id=\"torrent_upload_form\"";
-        retHttp += "enctype=\"multipart/form-data\">";
-        retHttp += "<div class=\"dialog_message\">";
-        retHttp += "<label\">제목을 입력하세요(*) : </label>";
-        retHttp += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\" autocomplete=\"off\"/>";
-        retHttp += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
-        retHttp += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
-        retHttp += "<p><label for=\"torrent_upload_url\" >Or enter a URL:</label>";
-        retHttp += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\" autocomplete=\"off\"/>";
-        retHttp +=  "</div>"
-        retHttp += "<button id=\"upload_confirm_button\">Upload</button>";
-        retHttp += "</form>"
-        retHttp += "</div>"
-        retHttp += "</div>"
-        return retHttp;
-
-    @staticmethod
-    def getTableHead():
-        retHttp  = '				<table class="ListView">                                                         ';
-        retHttp += '					<thead>                                                     ';
-        retHttp += '						<tr class="table100-head">                              ';
-        retHttp += '							<th class="column_Title">제목</th>                       ';
-        retHttp += '							<th class="column_Date"></th>                           ';
-        retHttp += '							<th class="column_Add"></th>                           ';
-        retHttp += '						</tr>                                                   ';
-        retHttp += '					</thead>                                                    ';
-        retHttp += '                    <tbody>                                                     ';
-        return retHttp;
-
-    @staticmethod
-    def getSelectBox():
-        retHttp = "";
-
-        retHttp += "<script>\n";
-        retHttp += "function genreChange()\n";
-        retHttp += "{\n";
-        retHttp += "    ganreSelect = document.getElementById('genreSelect');\n";
-        retHttp += "    $.ajax({\n";
-        retHttp += "    type: 'post', \n"
-        retHttp += "    data:{\n"
-        retHttp += "    'Value' : ganreSelect.options[ganreSelect.selectedIndex].value,\n";
-        retHttp += "    },\n";
-        retHttp += "    url: 'API?API=GENRE',\n";
-        retHttp += "    dataType : 'html',\n"
-        retHttp += "    error : function(){alert('errr')},\n";
-        retHttp += "    success : function(data){\n"
-        retHttp += "        TorrentTableDiv = document.getElementById('TorrentTableDiv');\n"
-        retHttp += "        TorrentTableDiv.innerHTML = data\n";
-        retHttp += "    }\n";
-        retHttp += "    });\n";
-        retHttp += "}\n";
-        retHttp += "</script>\n"
-
-        retHttp += "<select id='genreSelect' name='genreSelect' OnChange='genreChange()'>\n";
-        retHttp += "    <option value=''>장르</option>\n";
-        retHttp += "    <option value='1'>한국영화</option>\n";
-        retHttp += "    <option value='2'>드라마</option>\n";
-        retHttp += "    <option value='3'>예능</option>\n";
-        retHttp += "    <option value='4'>다큐</option>\n";
-        retHttp += "    <option value='5'>완결</option>\n";
-        retHttp += "    <option value='99'>기타</option>\n";
-        retHttp += "</select>\n"
-        
-        return retHttp;
 
     @staticmethod
     def getTorrentTable(genre):
