@@ -23,7 +23,7 @@
 
         <script type="text/javascript">
             $(function(){
-                $("#Back10Button").click(function(){
+                $("#Back600Button").click(function(){
                     $.ajax({
                         type: 'get'
                         , url: '/Play/Back'
@@ -46,26 +46,6 @@
                         , error : function(){}
                         , success : function(data){}
                     })
-                })
-            })
-        </script>
-        <div class='buttonDiv'><button id='Back10Button' class='back10'/>	</div>
-
-        <script type="text/javascript">
-            $(function(){
-                $("#ReplayButton").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Replay'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){
-                            replayDiv = document.getElementById('Replay');
-                            pauseDiv = document.getElementById('Pause');
-                            replayDiv.style.visibility='hidden';
-                            pauseDiv.style.visibility='visible';
-                        }
-                    });
                 })
             })
         </script>
