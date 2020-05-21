@@ -19,6 +19,7 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from ..Data.YoutubeToken import AccessToken;
+from django.shortcuts import render;
 
 class YoutubeSearchType(Enum):
     Search = 0;
@@ -41,75 +42,15 @@ class YoutubeSearchType(Enum):
 
 
 class YoutubeView:
-    @staticmethod
-    def getTableHead():
-        retHttp  = '				<table id="YoutubeTable">                                                         \n';
-        retHttp += '					<thead>                                                     \n';
-        retHttp += '						<tr class="table100-head">                              \n';
-        retHttp += '							<th class="column1"></th>                       \n';
-        retHttp += '							<th class="column2"></th>                   \n';
-        retHttp += '							<th class="column3">제목</th>                       \n';
-        retHttp += '						</tr>                                                   \n';
-        retHttp += '					</thead>                                                    \n';
-        retHttp += '                    <tbody>                                                     \n';
-        return retHttp;
-    @staticmethod
-    def getSearchView():
-        retHttp = "<div id='SearchDiv'>\n";
-        retHttp += "<input type='text' id='txtSearch' />\n";
-        retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
-        retHttp += "</div>\n"
-        retHttp += "<script type='text/javascript'>\n";
-        retHttp += "$(function(){\n"
-        retHttp += "$(\"#btnSearch\").click(function(){\n"
-        retHttp += "searchValue = document.getElementById('txtSearch').value;\n"
-        retHttp += "jsonData = {'API' : 'SearchYoutube', 'Value' : searchValue};\n";
-        retHttp += "$.ajax({\n"
-        retHttp += "type: 'get'\n"
-        retHttp += ", url: '/API'\n";
-        retHttp += ", dataType : 'html'\n";
-        retHttp += ", data:jsonData\n";
-        retHttp += ", error : function(request,status,error){\n"
-        retHttp += "alert(request);\n";
-        retHttp += "alert(status);\n";
-        retHttp += "alert(error);\n";
-        retHttp += "}\n"
-        retHttp += ", success : function(data){\n"
-        retHttp += "Youtubeview = document.getElementById('Youtubeview');";
-        retHttp += "Youtubeview.innerHTML = data;\n";
-        retHttp += "}\n"
-        retHttp += "});\n"
-        retHttp += "})\n"
-        retHttp += "})\n"
-        retHttp += "</script>\n"
-        return retHttp;
-
-    @staticmethod
-    def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
-        retHttp  = YoutubeView.getSearchView();
-        retHttp += YoutubeView.getTableHead();
-        for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
-            item = Item.getItem(videoItem);
-            retHttp += item.getTr();
-        retHttp +="</table>";
-        return retHttp;
-
-    @staticmethod
-    def getVideoList(type=YoutubeSearchType.Activities):
-        token = osDefine.YoutubeToken;
-        activitiesUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, token);
-
-        
-        osDefine.Logger(activitiesUrl);
-        retHttp += YoutubeView.getVideoTable(activitiesUrl);
-        return retHttp;
     
     @staticmethod
     def getYoutubeVideos(searchUrl):
-
         downloadString = get(searchUrl);
         decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
-        return decoded_videos.items;
+        retList = [];
+        for item in decoded_videos.items:
+            retList.append(Item.getItem(item));
+        return retList;
     @staticmethod
     def play(youtubeId, title):
         youtubeId = osDefine.Base64Decoding(youtubeId);
@@ -185,18 +126,20 @@ class YoutubeView:
         print ("Playlists:\n", "\n".join(playlists), "\n")
 
     @staticmethod
-    def getSearchYoutube(searchValue):
-        retHttp = "";
+    def SearchYoutube(request):
         try:
+            searchValue = osDefine.getParameter(request, "Value");
             if(None == searchValue or "" == searchValue):
                 searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken);    
             else:
                 searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
-            osDefine.Logger("searchUrl : "  + searchUrl);
-            retHttp = YoutubeView.getVideoTable(searchUrl)
+            osDefine.Logger(searchUrl);
+            youtubeItems = YoutubeView.getYoutubeVideos(searchUrl)
+            context = {"YoutubeItems" : youtubeItems};
+            return render(request, "YoutubeViewTable.html", context);
         except Exception as e:
             osDefine.Logger(e);
-        return HttpResponse(retHttp);
+        return HttpResponse("");
 
     @staticmethod
     def Redirect(request):

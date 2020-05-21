@@ -86,10 +86,8 @@ class TorrentveryParse(TorrentParse):
         return log;
     
     @staticmethod
-    def CrawlingTorrent(param = ""):
+    def CrawlingTorrent(request):
         
-        osDefine.Logger("Start Craling");
-
         FCM.SendFireBaseThread();
         tvParse = TorrentveryParse();
         tvParse.getUpdateList("movieko", 1);
@@ -99,7 +97,7 @@ class TorrentveryParse(TorrentParse):
         tvParse.getUpdateList("tvend", 5);
         osDefine.YoutubeTokenRefresh();
             
-        return "";
+        return HttpResponse("");
     
     @staticmethod
     def RunCrawlingThread():

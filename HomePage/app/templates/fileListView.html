@@ -98,6 +98,9 @@
             </div class="wrap-table100">
         </div class="container-table100">
     </div class="limiter">
+
+    <div id='TorrentTableDiv'>
+    </div>
 </body>
 
 <script>
@@ -113,6 +116,7 @@
             }
             , success : function(data){
                 Youtubeview = document.getElementById('Youtubeview');
+                alert(data);
                 Youtubeview.innerHTML = data;
             }
         });

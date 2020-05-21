@@ -68,8 +68,9 @@ class FCM:
             except Exception as e:
                 osDefine.Logger(e);
     @staticmethod
-    def SendFireBase(msg, title = "다운로드 완료"):
+    def SendFireBase(request, title = "다운로드 완료"):
         try:
+            msg = osDefine.getParameter(request);
             connection = SQLalchemy.GetDBConnection();
             query = "insert into FCM values ('%s', '%s', '%s', '%s', '%s')" % ("1", title, msg, datetime.now().strftime("%Y.%m.%d %H:%M:%S"), str(uuid.uuid4()));
             connection.InsertQueryExecute(query);
@@ -114,7 +115,8 @@ class FCM:
         FCM.SendFireBaseThread();
 
     @staticmethod
-    def UpdateMsgStatus(value):
+    def UpdateMsgStatus(request):
+        value = osDefine.getParameter(request);
         connection = SQLalchemy.GetDBConnection();
         query = "delete FCM where MsgGUID='%s'" % value;
         osDefine.Logger(query);

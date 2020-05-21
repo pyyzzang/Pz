@@ -52,7 +52,8 @@ class osDefine:
         osDefine.CurPlayInfo.setPosition(cur);
     
     @staticmethod
-    def SkipVideo(value):
+    def SkipVideo(request):
+        value = osDefine.getParameter(request);
         osDefine.Logger("value : " + str(value));
         try:
             skipPos = osDefine.CurPlayInfo.getVideoPos(int(value));
@@ -213,7 +214,7 @@ class osDefine:
         osDefine.CurPlayInfo = "";
 
     @staticmethod
-    def getCurrentProgressValue(param):
+    def ProgressValue(request):
         if("" == osDefine.CurPlayInfo):
             return -1;
         return int(osDefine.CurPlayInfo.getProgressValue());

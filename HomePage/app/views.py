@@ -86,19 +86,16 @@ def API(request):
     try:
         switcher={
             "CrawlingTorrent":TorrentveryParse.CrawlingTorrent,
-            "SearchYoutube":YoutubeView.getSearchYoutube,
+            "SearchYoutube":YoutubeView.SearchYoutube,
             "SendFCM":FCM.SendFireBase,
             "UpdateMsgStatus":FCM.UpdateMsgStatus,
-            "ProgressValue":osDefine.getCurrentProgressValue,
+            "ProgressValue":osDefine.ProgressValue,
             "SkipVideo":osDefine.SkipVideo,
-            "DeleteTorrentInfo":TorrentInfos.Delete,
+            "DeleteTorrentInfo":TorrentInfos.DeleteTorrentInfo,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
-        value = request.GET.get("Value");
-        if(None == value):
-            value = request.POST.get("Value");
     except Exception as e:
         osDefine.Logger(e);
     if("" == executeFunc):
         return HttpResponse("Error");
-    return HttpResponse(executeFunc(value));
+    return executeFunc(request);
