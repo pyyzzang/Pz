@@ -90,27 +90,20 @@ class TorrentveryParse(TorrentParse):
         
         osDefine.Logger("Start Craling");
 
-        while(True):
-            FCM.SendFireBaseThread();
-            tvParse = TorrentveryParse();
-            tvParse.getUpdateList("movieko", 1);
-            tvParse.getUpdateList("drama", 2);
-            tvParse.getUpdateList("ent", 3);
-            tvParse.getUpdateList("docu", 4);
-            tvParse.getUpdateList("tvend", 5);
-            time.sleep(60 * 3);
-            osDefine.YoutubeTokenRefresh();
-            
+        FCM.SendFireBaseThread();
+        tvParse = TorrentveryParse();
+        tvParse.getUpdateList("movieko", 1);
+        tvParse.getUpdateList("drama", 2);
+        tvParse.getUpdateList("ent", 3);
+        tvParse.getUpdateList("docu", 4);
+        tvParse.getUpdateList("tvend", 5);
+        osDefine.YoutubeTokenRefresh();
             
         return "";
     
     @staticmethod
     def RunCrawlingThread():
-        if(True == osDefine.getIsDev()):
-            osDefine.Logger("개발 모드");
-        else:
-            t = threading.Thread(target=TorrentveryParse.CrawlingTorrent);
-            t.start();
+        TorrentveryParse.CrawlingTorrent();
         
 TorrentveryParse.RunCrawlingThread();
 
