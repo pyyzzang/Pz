@@ -103,7 +103,7 @@ class fileListView(object):
         infos = PlayInfos.GetPlayInfos();
         for file in os.listdir(findDir):
                 info = FileInfo(file, findDir, request);
-                if(True == info.isVideoFile() or False == info.isDirectory()):
+                if(True == info.isVideoFile() or True == info.isDirectory()):
                     fileInfoList.append(info);
                     logInfo = infos.getPlayInfo(file);
                     if("" != logInfo):
