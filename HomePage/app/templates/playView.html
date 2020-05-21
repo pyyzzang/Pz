@@ -6,117 +6,131 @@
         <font><label>제목 : </label><label id="TitleLabel">{{fileName}}</label></font>
         <body>
     <div class='main' style='top:-100'>
-        <script type="text/javascript">
-            $(function(){
-                $("#Back600Button").click(function(){
-                    $.ajax({ 
-                        type: 'get'
-                        , url: '/Play/Back600'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){}
-                    });
-                })
-            });
-        </script>
-        <div class='buttonDiv'><button id='Back600Button' class='back600'>	</div> 
-
-        <script type="text/javascript">
-            $(function(){
-                $("#Back600Button").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Back'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){}
-                    });
-                })
-            })
-        </script>
-       	<div class='buttonDiv'><button id='Back10Button' class='back10'/>	</div>
-
-        <script type="text/javascript">
-            $(function(){
-                $("#Back10Button").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Back'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){}
+        
+        <div class='buttonDiv'><button id='Back600Button' class='back600'>	
+            <script type="text/javascript">
+                $(function(){
+                    $("#Back600Button").click(function(){
+                        $.ajax({ 
+                            type: 'get'
+                            , url: '/Play/Back600'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){}
+                        });
+                    })
+                });
+            </script>
+        </div> 
+        
+        <div class='buttonDiv'><button id='Back10Button' class='back10'/>	
+            <script type="text/javascript">
+                $(function(){
+                    $("#Back10Button").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Back'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){}
+                        });
                     })
                 })
-            })
-        </script>
-        <div id='Replay' class='buttonDiv' style='visibility:visible'><button id='ReplayButton' class='play' /> </div>
+            </script>
+        </div>
 
-        <script type="text/javascript">
-            $(function(){
-                $("#PauseButton").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Pause'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){
-                            replayDiv = document.getElementById('Replay');
-                            pauseDiv = document.getElementById('Pause');
-                            replayDiv.style.visibility='visible';
-                            pauseDiv.style.visibility='hidden';
-                        }
-                    });
-                })
-            })
-        </script>
-        <div id='Pause' class='buttonDiv'><button id='PauseButton' class='pause' />	</div>
-
-        <script type="text/javascript">
-            $(function(){
-                $("#StopButton").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Stop'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){
-                            window.location.href = '/Home';
-                        }
+        <div id='Replay' class='buttonDiv' style='visibility:visible'><button id='ReplayButton' class='play' /> 
+            <script type="text/javascript">
+                $(function(){
+                    $("#ReplayButton").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Replay'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){
+                                replayDiv = document.getElementById('Replay');
+                                pauseDiv = document.getElementById('Pause');
+                                replayDiv.style.visibility='hidden';
+                                pauseDiv.style.visibility='visible';
+                            }
+                        });
                     })
                 })
-            })
-        </script>
-        <div class='buttonDiv'><button id='StopButton' class='stop'/>	</div>
+            </script>
+        </div>
 
-        <script type="text/javascript">
-            $(function(){
-                $("#Skip10Button").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url : '/Play/Skip'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){}
-                    });
+        
+        <div id='Pause' class='buttonDiv'><button id='PauseButton' class='pause' />
+            <script type="text/javascript">
+                $(function(){
+                    $("#PauseButton").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Pause'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){
+                                replayDiv = document.getElementById('Replay');
+                                pauseDiv = document.getElementById('Pause');
+                                replayDiv.style.visibility='visible';
+                                pauseDiv.style.visibility='hidden';
+                            }
+                        });
+                    })
                 })
-            })
-        </script>
-        <div class='buttonDiv'><button id='Skip10Button' class='skip10'/>	</div> 
+            </script>
+        </div>
 
-        <script type="text/javascript">
-            $(function(){
-                $("#Skip600Button").click(function(){
-                    $.ajax({
-                        type: 'get'
-                        , url: '/Play/Skip600'
-                        , dataType : 'html'
-                        , error : function(){}
-                        , success : function(data){}
-                    });
+        <div class='buttonDiv'><button id='StopButton' class='stop'/>
+            <script type="text/javascript">
+                $(function(){
+                    $("#StopButton").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Stop'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){
+                                window.location.href = '/Home';
+                            }
+                        })
+                    })
                 })
-            })
-        </script>
-        <div class='buttonDiv'><button id='Skip600Button' class='skip600'/>	</div>  
+            </script>
+        </div>
+
+        <div class='buttonDiv'><button id='Skip10Button' class='skip10'/>
+            <script type="text/javascript">
+                $(function(){
+                    $("#Skip10Button").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Skip'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){}
+                        });
+                    })
+                })
+            </script>
+        </div> 
+
+        <div class='buttonDiv'><button id='Skip600Button' class='skip600'/>	
+            <script type="text/javascript">
+                $(function(){
+                    $("#Skip600Button").click(function(){
+                        $.ajax({
+                            type: 'get'
+                            , url: '/Play/Skip600'
+                            , dataType : 'html'
+                            , error : function(){}
+                            , success : function(data){}
+                        });
+                    })
+                })
+            </script>
+        </div>  
 
         </div>
         <div class='Empty20'>
