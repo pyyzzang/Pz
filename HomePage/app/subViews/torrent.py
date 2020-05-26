@@ -205,22 +205,6 @@ class torrent:
         torrent.SMI2SRT(osDefine.LocalFilePath());
         return HttpResponse("");
 
-    @staticmethod
-    def getMeta(param):
-        connection = DBExecute.GetDBConnection();
-        selectQuery = "select value from meta where name='%sindex'" % param;
-        rows = connection.QueryExecute(selectQuery);
-        listRow = list(rows);
-        return str(listRow[0][0]).strip();
-
-    @staticmethod
-    def updateTorrentIndex(index, metaName):
-        connection = DBExecute.GetDBConnection();
-        if(int(index) > 100):
-            selectQuery = ("update meta set value='%s' where name='%sIndex'" % (index, metaName));
-            osDefine.Logger(selectQuery);
-            rows = connection.InsertQueryExecute(selectQuery);
-        return torrent.getMeta(metaName);
 
     @staticmethod
     def updateEntIndex(index):
