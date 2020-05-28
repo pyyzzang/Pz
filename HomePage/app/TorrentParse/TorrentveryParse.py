@@ -72,6 +72,7 @@ class TorrentveryParse(TorrentParse):
         if(True == osDefine.getIsDev()):
             osDefine.Logger("개발 모드");
         else:
-            TorrentveryParse.CrawlingTorrent();
+            osDefine.Logger("크롤링 TorrentVery 모드");
+            #TorrentveryParse.CrawlingTorrent();
         
 #TorrentSir5Parse.RunCrawlingThread();

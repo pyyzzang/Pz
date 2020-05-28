@@ -65,7 +65,8 @@ class TorrentSir5Parse(TorrentParse):
         if(True == osDefine.getIsDev()):
             osDefine.Logger("TorrentSir5 개발 모드");
         else:
-            t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent);
-            t.start()
+            osDefine.Logger("크롤링 TorrentSir 모드");
+            #t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent);
+            #t.start()
 
 TorrentSir5Parse.RunCrawlingThread();
