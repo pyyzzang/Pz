@@ -113,7 +113,7 @@ class FCM:
     
         # Send a message to the device corresponding to the provided
         # registration token.
-        response = messaging.send(message)
+        messaging.send(message)
 
         FCM.SendFireBaseThread()
 
@@ -123,7 +123,7 @@ class FCM:
         connection = SQLalchemy.GetDBConnection()
         query = "delete FCM where MsgGUID='%s'" % value
         osDefine.Logger(query)
-        rows = connection.InsertQueryExecute(query)
+        connection.InsertQueryExecute(query)
 
     
 
