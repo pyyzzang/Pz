@@ -99,4 +99,7 @@ def API(request):
         osDefine.Logger(e);
     if("" == executeFunc):
         return HttpResponse("Error");
-    return executeFunc(request);
+    retValue = executeFunc(request);
+    if(True == isinstance(retValue, HttpResponse)):
+        return retValue;
+    return HttpResponse(retValue);

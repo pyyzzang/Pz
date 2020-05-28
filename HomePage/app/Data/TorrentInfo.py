@@ -130,7 +130,7 @@ class TorrentInfos(object):
     @staticmethod 
     def DeleteTorrentInfo(request):
         try:
-            title = osDefine.getParameter("Value");
+            title = osDefine.getParameter(request, "Value");
             infos = TorrentInfos.GetTorrentInfos();
             infos.deleteInfo(title);
         except Exception as e:
