@@ -68,14 +68,17 @@ class FCM:
             except Exception as e:
                 osDefine.Logger(e);
     @staticmethod
-    def SendFireBase(request, title = "다운로드 완료"):
+    def SendFireBase_Msg(msg, title = "다운로드 완료"):
         try:
-            msg = osDefine.getParameter(request);
             connection = SQLalchemy.GetDBConnection();
             query = "insert into FCM values ('%s', '%s', '%s', '%s', '%s')" % ("1", title, msg, datetime.now().strftime("%Y.%m.%d %H:%M:%S"), str(uuid.uuid4()));
             connection.InsertQueryExecute(query);
         except Exception as e:
             osDefine.Logger(e);
+    @staticmethod
+    def SendFireBase(request, title = "다운로드 완료"):
+        msg = osDefine.getParameter(request);
+        FCM.SendFireBase_Msg(msg=msg, title = title);
 
     @staticmethod
     def SendFireBaseTest(msg, title = "다운로드 완료"):

@@ -10,6 +10,7 @@ from bs4 import BeautifulSoup
 from ..Data.TorrentInfo import torrentInfo;
 from ..Data.TorrentInfo import TorrentInfos;
 from ..subViews.torrent import torrent;
+import sys;
 
 class TorrentParse:
     def __init__(self):
@@ -69,7 +70,7 @@ class TorrentParse:
             rows = connection.InsertQueryExecute(selectQuery);
         return self.getMeta(metaName);
 
-    def getUpdateList(self, param, genre):
+    def getUpdateList(self, param, genre, limitCount = sys.maxsize):
         index = int(self.getMeta("%s" % param));
         url = self.getUrl();
         url = url % (param, index);
@@ -91,16 +92,20 @@ class TorrentParse:
         reTryCount = self.reTryCount();
         while True:
             try:
-                sleep(10);
+
+                if( limitCount <= 0):
+                    return ;
+                limitCount = limitCount - 1;
                 osDefine.Logger("url : " + url);
                 magnet = self.getMagnet(soup);
                 title = self.getTitle(soup);       
 
+                saveFilePath = "/home/pi/Pz/HomePage/log/Tmp/%s_%s.html" % (param, index);
+                f = open(saveFilePath, 'w');
+                f.write(response.text);
+                f.close()
+
                 if("" == title or "" == magnet):
-                    saveFilePath = "/home/pi/Pz/HomePage/log/Tmp/%s.html" % index;
-                    f = open(saveFilePath, 'w');
-                    f.write(response.text);
-                    f.close()
                     raise Exception("Title and Magnet Empty");
 
                 osDefine.Logger("IsMp4 : " + str(self.isMP4(soup) ));
@@ -114,7 +119,7 @@ class TorrentParse:
                     torrent.torrentInsert(None, title, magnet, genre);
                     #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
                     if(None != infos.findSimilarTorrintInfo(title)):
-                        FCM.SendFireBase(msg = title + "다운로드를 실행합니다.", title ="다운로드 실행");
+                        FCM.SendFireBase_Msg(msg = title + "다운로드를 실행합니다.", title ="다운로드 실행");
                         osDefine.Logger("Send FCM and Auto Add");
                         torrent.torrentRemoteAdd(magnet, title);
 
@@ -127,7 +132,7 @@ class TorrentParse:
                 if(0 >= reTryCount):
                     break;
             finally:
-                index = index + 1;
+                index = index - 1;
                 url = self.getUrl() % (param, index);
                 response = requests.get(url);
                 soup = BeautifulSoup(response.text, 'html.parser');
