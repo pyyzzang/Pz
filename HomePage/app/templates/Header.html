@@ -1,0 +1,43 @@
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/app/css/style.css?version=1.2">
+   <script data-ad-client="ca-pub-7189432704232049" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<div>
+    <input type='button' id="MoveVideoPage" onclick='MoveHomePage();'></input>
+    <input type='button' onclick='MoveTorrentPage();' id="Torrent"></input>
+    <input type='button' onclick='OpenSetting();' id="Setting"></input>
+    <label name="CPU_Temp" id="CPU_Temp">{{CPUTemp}}°C</label>
+</div>
+
+<script>
+    setInterval(UpdateTemp, 1000);
+    function MoveHomePage(){
+        location.href = '/Home';
+    }
+
+    function UpdateTemp(){
+        jsonData = {'API' : 'CPUTemp'};
+        $.ajax({
+            type: 'get'
+            , url: '/API'
+            , dataType : 'html'
+            , data:jsonData
+            , error : function(){
+            }
+            , success : function(data){
+                CPU_Temp = document.getElementById('CPU_Temp');
+                CPU_Temp.textContent = data + "°C";
+            }
+        });
+    }
+</script>
+<p>
+<script>
+    function OpenSetting(){
+        window.open("/Setting", "a", "width=400, height=300, left=100, top=50");
+    }
+    function MoveTorrentPage(){
+        location.href = '/Torrent';
+    }
+</script>

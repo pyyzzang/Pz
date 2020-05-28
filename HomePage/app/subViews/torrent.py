@@ -123,6 +123,7 @@ class torrent:
         if(None == value):
             value = request.POST.get("Value");
         context = {"items" : torrent.getTorrentTable(value)};
+        context["CPUTemp"] = osDefine.CPUTempStr();
         return render(request, "TorrentView.html", context);
 
     @staticmethod
