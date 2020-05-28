@@ -4,6 +4,47 @@
     <link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">
 
     <div>
+        <input type="text" id="SearchText" Name="SearchTorrent" onkeydown="JavaScript:SearchTextInput();" />&nbsp
+        <input type="Button" id="SearchButton" OnClick="SearchClick();" Value="검색"/><p/>
+        <script>
+            SearchText = document.getElementById("SearchText");
+            var paramValue = getParam('SearchTorrent');  
+            SearchText.value = decodeURIComponent(paramValue);
+
+            function getParam(sname) {
+                var params = location.search.substr(location.search.indexOf("?") + 1);
+                var sval = "";
+                params = params.split("&");
+                for (var i = 0; i < params.length; i++) {
+                    temp = params[i].split("=");
+                    if ([temp[0]] == sname) { 
+                        sval = temp[1]; 
+                    }
+                }
+                return sval;
+            }
+
+            function SearchTextInput(){
+                if(13 == event.keyCode){
+                    searchButton = document.getElementById("SearchButton");
+                    searchButton.click();
+                }
+            }
+            function SearchClick(){
+                searchTxt = document.getElementById("SearchText").value;
+                if("" == searchTxt){
+                    alert("검색어를 입력하세요");
+                    return ;
+                }
+                var url = "/SearchTorrent?SearchTorrent=" + searchTxt;
+                var name = "검색";
+                var option = "width = 700, height = 500, top = 100, left = 200, location = no"
+                window.open(url, name, option);
+            }
+        </script>
+    </div>
+
+    <div>
         <table class="TabTable">
             <tr>
                 <td class="TabTableTd"></td>
@@ -14,13 +55,16 @@
         
             {% for info in infos %}
             <tr onmouseover="this.style.background='#ddd'" onmouseout="this.style.background='white'">
-                <td class="TabTableTd"><input type="checkbox" name="CheckedTorrent" Value="{{info.magnetUrl}}"/></td>
-                <td class="TabTableTd">{{info.title}}</td>
+                <td class="TabTableTd"><input type="checkbox" id="checkBox_{{info.magnetUrl}}" name="CheckedTorrent" Value="{{info.magnetUrl}}"/></td>
+                <td class="TabTableTd" onClick="TdClick('checkBox_{{info.magnetUrl}}')">{{info.title}}</td>
                 <td class="TabTableTd"><input id="{{info.magnetUrl}}" type="Button" Value="추가" OnClick="TorrentAdd('{{info.magnetUrl}}', '{{info.title}}')"></td>
             </tr>
             {% endfor %}
 
             <script>
+                function TdClick(id){
+                    document.getElementById(id).checked=!document.getElementById(id).checked;
+                }
                 function TorrentAdd(magnet, title){
                     $.ajax({
                         type: 'post',
