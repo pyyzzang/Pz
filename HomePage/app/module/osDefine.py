@@ -7,7 +7,7 @@ import re
 
 from requests import get
 from omxplayer.player import OMXPlayer
-from requests import get
+from requests import post;
 import subprocess
 import logging
 from ..Data.PlayInfo import PlayInfo
@@ -19,6 +19,10 @@ import time;
 from urllib.parse import urlparse;
 from ..Define import Define;
 import datetime;
+import smtplib
+from email.mime.text import MIMEText
+import os, threading
+from django.http import HttpResponse
 
 class PlayMode:
     File = 0;
@@ -29,6 +33,9 @@ class osDefine:
     currentPlayer = 0;
     playFileName = 0;
     playTitle = 0;
+    YoutubeToken = "";
+    YoutubeClientId = '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com';
+    YoutubeClientSecret = "95_SJoiXXd8f4keeHUzy8O8s";
     @staticmethod 
     def getPlayFileName():
         if(0 == osDefine.playTitle or "" == osDefine.playTitle):
@@ -48,7 +55,8 @@ class osDefine:
         osDefine.CurPlayInfo.setPosition(cur);
     
     @staticmethod
-    def SkipVideo(value):
+    def SkipVideo(request):
+        value = osDefine.getParameter(request);
         osDefine.Logger("value : " + str(value));
         try:
             skipPos = osDefine.CurPlayInfo.getVideoPos(int(value));
@@ -127,6 +135,7 @@ class osDefine:
         osDefine.palyFileName = 0;
         osDefine.currentPlayer = 0;
         osDefine.playTitle = 0;
+        osDefine.playFileName = 0;
         
     @staticmethod
     def Base64Encoding(utfString):
@@ -193,7 +202,6 @@ class osDefine:
         while(osDefine.playFileName == currentPlayFile):
             saveInfos = PlayInfos.GetPlayInfos();
             osDefine.CurPlayInfo = saveInfos.getPlayInfo(osDefine.playTitle, True);
-
             osDefine.CurPlayInfo.setPosition(osDefine.currentPlayer.position());
             osDefine.CurPlayInfo.setDuration(osDefine.currentPlayer.duration());
             osDefine.CurPlayInfo.setVolume(osDefine.currentPlayer.volume());
@@ -209,10 +217,10 @@ class osDefine:
         osDefine.CurPlayInfo = "";
 
     @staticmethod
-    def getCurrentProgressValue(param):
+    def ProgressValue(request):
         if("" == osDefine.CurPlayInfo):
             return -1;
-        return int(osDefine.CurPlayInfo.getProgressValue());
+        return HttpResponse(int(osDefine.CurPlayInfo.getProgressValue()));
 
     @staticmethod 
     def playNextVideo():
@@ -248,7 +256,7 @@ class osDefine:
     def PlayerPlay():
         playInfo = PlayInfos.GetPlayInfos().getPlayInfo(osDefine.playTitle);
         osDefine.Logger("PlayerPlay : " + str(osDefine.playTitle));
-        
+
         if( "" != playInfo):
             if( playInfo.getPosition() + 10 < playInfo.getDuration()):
                 osDefine.currentPlayer.set_position(playInfo.getPosition());
@@ -320,6 +328,61 @@ class osDefine:
         if(None == param):
             param = request.POST.get(name);
         return param;
-        
+    
+    @staticmethod
+    def YoutubeTokenRefresh():
+        if("" != osDefine.YoutubeToken):
+            response = get("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s"%osDefine.YoutubeToken);
+            osDefine.Logger(response.text);
+            accessToken = YoutubeValidToken(**json.loads(response.text));
+
+            if("" != accessToken.error):
+                osDefine.YoutubeToken = "";
+                return;
+
+            data = {'client_id': osDefine.YoutubeClientId, 
+                'client_secret': osDefine.YoutubeClientSecret, 
+                'grant_type': 'refresh_token', 
+                'refresh_token': osDefine.YoutubeToken};
+            
+            response = post("https://accounts.google.com/o/oauth2/token", data);
+            osDefine.Logger(response.text);
+    
+    @staticmethod
+    def SaveLogFile(request):
+        try:
+            fileBinary = request.FILES[0];
+            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload");
+            f = open(tmpTorrentFile, 'wb+');
+            for chunk in fileBinary.chunks():
+                f.write(chunk)
+            f.close();
+        except Exception as e:
+            osDefine.Logger("Exception");
+            osDefine.Logger(e);
+            return "Exception";
+        return "Success";
+
+    @staticmethod
+    def CPUTempStr():
+        temp = os.popen("vcgencmd measure_temp").readline()
+        result = temp.replace("temp=","").replace("'C", "")
+        return result;
+    
+    @staticmethod
+    def CPUTemp(request):
+        return HttpResponse(osDefine.CPUTempStr());
+
+
+
+class YoutubeValidToken():
+    def __init__(self, audience = "", user_id = "", scope = "", expires_in="", error="", issued_to="", access_type = ""):
+        self.audience = audience ;
+        self.user_id = user_id;
+        self.scope = scope;
+        self.expires_in = expires_in;
+        self.error=error;
+        self.issued_to = issued_to;
+        self.access_type = access_type;
 
 osDefine.Init();

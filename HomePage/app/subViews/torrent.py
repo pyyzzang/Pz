@@ -2,103 +2,21 @@
 from django.http import HttpResponse
 
 from ..module.DBExecute import DBExecute;
-from enum import Enum;
 import datetime;
 import base64;
 import os;
 import subprocess;
 from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
-from ..module.HtmlUtil import HtmlUtil;
 from ..FCM.FCM import FCM;
 from urllib.parse import unquote
 from datetime import datetime
 from ..Data.TorrentInfo import TorrentInfos;
+from ..Data.TorrentInfo import torrentInfo;
+from django.shortcuts import render;
+from ..Data.TorrentData import TorrentData;
+from ..Data.TorrentData import RowEnum;
 
-
-class RowEnum(Enum):
-    Title = 0
-    MagnetUrl = Title + 1;
-    ModifyDate = MagnetUrl + 1;
-    idx = ModifyDate + 1;
-    ThumbnailImage = idx + 1;
-
-class TorrentData:
-    def __init__(self, title, magnetUrl, modifyDate, idx):
-        self.title = title;
-        self.magnetUrl = magnetUrl.strip();
-        self.modifyDate = modifyDate;
-        self.idx = idx;
-
-    def getTitle(self):
-        return self.title.strip();
-        
-    def getModifyDate(self):
-        return self.modifyDate.strftime("%Y년 %m월 %d일");
-    def getMagnetUrl(self):
-        return self.magnetUrl;
-    def getIdx(self):
-        return self.idx;
-    def getStrIdx(self):
-        return str(self.getIdx());
-
-    def getHttpScript(self):
-
-        focusFunc = "FocusOut" + self.getMagnetUrl();
-        ret = "<script>";
-        ret += "function " +focusFunc + "(){";
-        ret += "$.ajax({";
-        ret += "type: 'post', "
-        ret += "data:{"
-        ret += "'magnetUrl' : '"+ self.getMagnetUrl() + "',";
-        ret += "'Title' : document.getElementById('" +self.getMagnetUrl() + "').textContent},";
-        ret += "url: 'Torrent/TorrentUpdate',";
-        ret += "dataType : 'html',"
-        ret += "error : function(){},";
-        ret += "success : function(data){}";
-        ret += "});}";
-        ret += "</script>";
-
-
-        
-        ret += "<script>";
-        ret += "$(function(){$(\"#" + self.getMagnetUrl() + "\").dblclick(function(){";
-        ret += "var pPanel = document.getElementById(\"" + self.getMagnetUrl() + "\");";
-        ret += "pPanel.contentEditable = true;";
-        ret += "pPanel.removeEventListener('focusout', " + focusFunc + ");";
-        ret += "pPanel.addEventListener('focusout', " + focusFunc + ");";
-        ret += "})})";
-        ret += "</script>";
-
-        return ret;
-
-    def getAjaxScript(self):
-        #ret = "<script type=\"text/javascript\">$(function(){$(\"#AddRow"+self.getStrIdx()+"\").click(function(){$.ajax({type: 'post', data:{'magnetUrl' : '"+self.getMagnetUrl()+"', 'title' : '" + self.getTitle() + "'}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(\"토렌트 추가 하였습니다.\");}});})})</script>";
-        ret = "\n<script type=\"text/javascript\"> function TorrentDelete(magnet){$.ajax({type: 'post', data:{'magnetUrl' : magnet}, url: 'Torrent/TorrentDelete', dataType : 'html', error : function(){	alert();}, success : function(data){alert(\"토렌트 삭제 하였습니다.\"); document.getElementById('TR_' + magnet).style.display = \"none\";}})}</script>\n";
-        ret += "\n<script type=\"text/javascript\"> function TorrentAdd(magnet, title){ $.ajax({type: 'post', data:{'magnetUrl' : magnet, 'title' : title}, url: 'Torrent/TorrentAdd', dataType : 'html', error : function(){	alert('Error');}, success : function(data){alert(title + \" 토렌트 추가 하였습니다.\");}})}</script>\n";
-        return ret;
-
-    def getHttpRow(self):
-        ret = "<tr  Id=\"TR_" + self.getMagnetUrl() + "\"><td><p Id=\"" + self.getMagnetUrl() + "\">" + self.getTitle() + "<p></td>\n";
-        ret += "<td>" + self.getModifyDate() + "</td>\n";
-        ret += "<td style='display:none'>" + self.getMagnetUrl() + "</td>\n";
-        ret += "<td><panel >\n";
-        ret += "<input id=\"AddRow" + self.getStrIdx() + "\" OnClick=\"TorrentAdd('" + self.getMagnetUrl() + "','"+ self.getTitle() + "');\" type=\"Button\" Value=\"토렌트 추가\"></input>\n";
-        ret += "<input id=\"Delete" + self.getStrIdx() + "\" OnClick=\"TorrentDelete('" + self.getMagnetUrl() + "')\" type=\"Button\" Value=\"토렌트 삭제\"></input>\n";
-        ret += "</panel></td>\n";
-        ret += self.getAjaxScript();
-        ret += "</tr>\n";
-        ret += self.getHttpScript();
-        return ret;
-    
-    @staticmethod
-    def createTorrenData(row):
-        retData = TorrentData(
-        DBExecute.ConvetHangul(row[RowEnum.Title.value]),
-        row[RowEnum.MagnetUrl.value],
-        row[RowEnum.ModifyDate.value],
-        row[RowEnum.idx.value]);
-        return retData;
 
 class torrent:
 
@@ -109,8 +27,8 @@ class torrent:
 
         currentTime = datetime.now();
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
-        #if (10 < currentTime.hour and currentTime.hour < 24):
-        addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
+        if (10 < currentTime.hour and currentTime.hour < 24):
+            addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
         osDefine.Logger("ExecuteCommand : " + addCmd);
         os.system(addCmd);
         return addCmd;
@@ -183,116 +101,29 @@ class torrent:
         osDefine.Logger("torrentUpload_magnet : " + magnet);
         return torrent.torrentInsert(request, title=Title, magnet=magnet);
 
-        
-
-    @staticmethod 
-    def getTorrentAddDiv():
-        retHttp  = "<input type='button' value='Torrent 페이지로' onclick='MoveTorrentPage();'></input><p>";
-        retHttp += "<script>function MoveTorrentPage(){ location.href = '/Home';}</script>"
-        retHttp += "<div style=\"position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0\">";
-        retHttp += "<div class=\"dialog_window\" id=\"dialog_Window\">";
-        retHttp += "<div class=\"dialog_logo\" id=\"upload_dialog_logo\"></div>";
-        retHttp += "<h2 class=\"dialog_heading\">Upload Torrent Files</h2>";
-        retHttp += "<form action=\"/Torrent/Upload\" method=\"post\" id=\"torrent_upload_form\"";
-        retHttp += "enctype=\"multipart/form-data\">";
-        retHttp += "<div class=\"dialog_message\">";
-        retHttp += "<label\">제목을 입력하세요(*) : </label>";
-        retHttp += "<input type=\"TextBox\" name=\"torrentTitle\" id=\"torrentTitle\" autocomplete=\"off\"/>";
-        retHttp += "<P><label for=\"torrent_upload_file\">Please select a torrent file to upload:</label>";
-        retHttp += "<input type=\"file\" name=\"torrent_files\" id=\"torrent_files\" multiple=\"multiple\" />";
-        retHttp += "<p><label for=\"torrent_upload_url\" >Or enter a URL:</label>";
-        retHttp += "<input type=\"url\" name=\"torrent_upload_url\" id=\"torrent_upload_url\" autocomplete=\"off\"/>";
-        retHttp +=  "</div>"
-        retHttp += "<button id=\"upload_confirm_button\">Upload</button>";
-        retHttp += "</form>"
-        retHttp += "</div>"
-        retHttp += "</div>"
-        return retHttp;
-
     @staticmethod
-    def getTableHead():
-        retHttp  = '				<table class="ListView">                                                         ';
-        retHttp += '					<thead>                                                     ';
-        retHttp += '						<tr class="table100-head">                              ';
-        retHttp += '							<th class="column_Title">제목</th>                       ';
-        retHttp += '							<th class="column_Date"></th>                           ';
-        retHttp += '							<th class="column_Add"></th>                           ';
-        retHttp += '						</tr>                                                   ';
-        retHttp += '					</thead>                                                    ';
-        retHttp += '                    <tbody>                                                     ';
-        return retHttp;
-
-    @staticmethod
-    def getSelectBox():
-        retHttp = "";
-
-        retHttp += "<script>\n";
-        retHttp += "function genreChange()\n";
-        retHttp += "{\n";
-        retHttp += "    ganreSelect = document.getElementById('genreSelect');\n";
-        retHttp += "    $.ajax({\n";
-        retHttp += "    type: 'post', \n"
-        retHttp += "    data:{\n"
-        retHttp += "    'Value' : ganreSelect.options[ganreSelect.selectedIndex].value,\n";
-        retHttp += "    },\n";
-        retHttp += "    url: 'API?API=GENRE',\n";
-        retHttp += "    dataType : 'html',\n"
-        retHttp += "    error : function(){alert('errr')},\n";
-        retHttp += "    success : function(data){\n"
-        retHttp += "        TorrentTableDiv = document.getElementById('TorrentTableDiv');\n"
-        retHttp += "        TorrentTableDiv.innerHTML = data\n";
-        retHttp += "    }\n";
-        retHttp += "    });\n";
-        retHttp += "}\n";
-        retHttp += "</script>\n"
-
-        retHttp += "<select id='genreSelect' name='genreSelect' OnChange='genreChange()'>\n";
-        retHttp += "    <option value=''>장르</option>\n";
-        retHttp += "    <option value='1'>한국영화</option>\n";
-        retHttp += "    <option value='2'>드라마</option>\n";
-        retHttp += "    <option value='3'>예능</option>\n";
-        retHttp += "    <option value='4'>다큐</option>\n";
-        retHttp += "    <option value='5'>완결</option>\n";
-        retHttp += "    <option value='99'>기타</option>\n";
-        retHttp += "</select>\n"
-        
-        return retHttp;
-
-    @staticmethod
-    def getTorrentTable(genre = ""):
-        osDefine.Logger("genre : " + str(genre));
-        ret = "<Table width:'100%' border='1'>";
+    def getTorrentTable(genre):
         session = DBExecute.GetDBConnection();
         query = "select top 100 title, MagnetUrl, modifyDate, idx from Torrent ";
         if("" != genre and None != genre):
             query += " where genre='" + genre + "'";
         query += " order by modifyDate desc";
-        osDefine.Logger("query : " + query);
-        rows = session.QueryExecute(query);
-        ret += torrent.getTableHead();
         
+        rows = session.QueryExecute(query);
+        
+        torrentItems = [];
         for row in rows:
-            data = TorrentData.createTorrenData(row);
-            ret += data.getHttpRow();
-        ret += "</tbody></table>"
-        return ret;
+            item = TorrentData.createTorrenData(row);
+            torrentItems.append(item);
+        return torrentItems;
 
     @staticmethod
     def getTorrent(request):
-        ret = HtmlUtil.getHeader();
-        ret += torrent.getTorrentAddDiv();
-
-        ret += HtmlUtil.getBodyHead();
-        ret += torrent.getSelectBox();
-        ret += "<div id='TorrentTableDiv'>\n";
-        ret += torrent.getTorrentTable();
-        ret += "</div>\n";
-
-        ret += HtmlUtil.getBodyTail();
-        ret += "</html>"
-
-        
-        return HttpResponse(ret);
+        value = request.GET.get("Value");
+        if(None == value):
+            value = request.POST.get("Value");
+        context = {"items" : torrent.getTorrentTable(value)};
+        return render(request, "TorrentView.html", context);
 
     @staticmethod
     def torrentUpdate(request):
@@ -374,22 +205,6 @@ class torrent:
         torrent.SMI2SRT(osDefine.LocalFilePath());
         return HttpResponse("");
 
-    @staticmethod
-    def getMeta(param):
-        connection = DBExecute.GetDBConnection();
-        selectQuery = "select value from meta where name='%sindex'" % param;
-        rows = connection.QueryExecute(selectQuery);
-        listRow = list(rows);
-        return str(listRow[0][0]).strip();
-
-    @staticmethod
-    def updateTorrentIndex(index, metaName):
-        connection = DBExecute.GetDBConnection();
-        if(int(index) > 100):
-            selectQuery = ("update meta set value='%s' where name='%sIndex'" % (index, metaName));
-            osDefine.Logger(selectQuery);
-            rows = connection.InsertQueryExecute(selectQuery);
-        return torrent.getMeta(metaName);
 
     @staticmethod
     def updateEntIndex(index):
@@ -410,5 +225,26 @@ class torrent:
     def updateDramaIndex(index):
         metaName = "drama";
         return torrent.updateTorrentIndex(index, metaName);
+
+    @staticmethod
+    def SearchTorrent(request):
+        findTitle = osDefine.getParameter(request,"SearchTorrent");
+        findInfo = torrentInfo(findTitle);
+        connection = DBExecute.GetDBConnection();
+        rows = connection.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent");
+        dicData = {};
+        for row in rows:
+            if True == findInfo.getSimilar(torrentInfo(row[RowEnum.Title.value].strip()), 0.4):
+                dicData[row[RowEnum.MagnetUrl.value]] = TorrentData.createTorrenData(row);
+
+        rows = connection.QueryExecute("select title, MagnetUrl, modifyDate, idx from Torrent where title like '%" + findTitle + "%'");
+        for row in rows:
+            if False == (row[RowEnum.MagnetUrl.value] in dicData.keys()):
+                dicData[row[RowEnum.MagnetUrl.value]] = TorrentData.createTorrenData(row);
+        
+        torrentData = list(dicData.values());
+
+        context = {"infos" : torrentData};
+        return render(request, "SearchTorrent.html", context);
             
 

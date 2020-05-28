@@ -7,19 +7,23 @@ import json;
 from difflib import SequenceMatcher
 
 class torrentInfo():
-    def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1):
+    def __init__(self, fullName = "", title = "", season = "", episode = "", date = "", count = 1, similarTitle = ""):
         self.fullName = fullName;
         self.title = strUtil.getMatchTitle(self.fullName);
+        self.similarTitle = strUtil.getSimilarTitle(self.fullName);
         self.season  = strUtil.getSeason(self.fullName);
         self.episode = strUtil.getEpisode(self.fullName);
         self.date = strUtil.getDate(self.fullName);
-        self.count = 1;
+        self.count = count;
     
     def getFullName(self):
         return self.fullName;
         
     def getTitle(self):
         return self.title;
+
+    def getSimilarTitle(self):
+        return self.similarTitle;
 
     def getSeason(self):
         return self.season;
@@ -37,12 +41,9 @@ class torrentInfo():
         self.count = self.count + 1;
         return self.count;
     
-    def getSimilar(self, compareInfo):
-        fullTitleValue = SequenceMatcher(None, self.getFullName(), compareInfo.getFullName()).ratio();
-        if(0.8 < fullTitleValue):
-            return True;
-        titleValue = SequenceMatcher(None, self.getTitle(), compareInfo.getTitle()).ratio();
-        if(0.8 < titleValue):
+    def getSimilar(self, compareInfo, compareValue = 0.8):
+        titleValue = SequenceMatcher(None, self.getSimilarTitle(), compareInfo.getSimilarTitle()).ratio();
+        if(compareValue < titleValue):
             return True;
         return False;
 
@@ -82,6 +83,14 @@ class TorrentInfos(object):
             
             with open(TorrentInfos.TorrentInfoFile, "w") as fileTorrentInfo:
                 json.dump(self, fileTorrentInfo, default=lambda o: o.__dict__);
+    
+    def deleteInfo(self, title):
+        for info in self.infos:
+            if(title == info.getTitle()):
+                self.infos.remove(info);
+                break;
+        self.saveFile();
+        return title;
 
     def findSimilarTorrintInfo(self, title, isCrate = False):
         addInfo = torrentInfo(title);
@@ -117,3 +126,13 @@ class TorrentInfos(object):
         info = torrentInfos.findSimilarTorrintInfo(title, True);
         torrentInfos.saveFile();
         return info;
+    
+    @staticmethod 
+    def DeleteTorrentInfo(request):
+        try:
+            title = osDefine.getParameter("Value");
+            infos = TorrentInfos.GetTorrentInfos();
+            infos.deleteInfo(title);
+        except Exception as e:
+            osDefine.Logger(e);
+        return title;

@@ -4,6 +4,7 @@ import json
 from ..module.osDefine import osDefine
 from ..module.Youtube_Cipher import Cipher;
 from django.http import HttpResponse
+from enum import Enum;
 
 from  requests import get;
 import requests;
@@ -18,82 +19,38 @@ from apiclient.discovery import build
 from apiclient.errors import HttpError
 from oauth2client.tools import argparser
 from ..Data.YoutubeToken import AccessToken;
+from django.shortcuts import render;
+
+class YoutubeSearchType(Enum):
+    Search = 0;
+    MostPopular = Search + 1;
+    Activities = MostPopular + 1;
+    Subscript = Activities + 1;
+    
+
+    @staticmethod
+    def getTypeUrl(type, token):
+        typeDict = {
+            YoutubeSearchType.Search: "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s",
+            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&maxResults=50",
+            YoutubeSearchType.Activities: "https://www.googleapis.com/youtube/v3/activities?regionCode=KR&part=contentDetails,snippet&home=true&maxResults=50",
+            YoutubeSearchType.Subscript: "Search"};
+
+        if(YoutubeSearchType.MostPopular == type):
+            return typeDict[type];
+        return typeDict[type] + "&access_token=" + token;
 
 
 class YoutubeView:
-    @staticmethod
-    def getTableHead():
-        retHttp  = '				<table id="YoutubeTable">                                                         \n';
-        retHttp += '					<thead>                                                     \n';
-        retHttp += '						<tr class="table100-head">                              \n';
-        retHttp += '							<th class="column1"></th>                       \n';
-        retHttp += '							<th class="column2"></th>                   \n';
-        retHttp += '							<th class="column3">제목</th>                       \n';
-        retHttp += '						</tr>                                                   \n';
-        retHttp += '					</thead>                                                    \n';
-        retHttp += '                    <tbody>                                                     \n';
-        return retHttp;
-    @staticmethod
-    def getSearchView():
-        retHttp = "";
-        retHttp += "<input type='text' id='txtSearch' />\n";
-        retHttp += "<input type='button' id='btnSearch' value='검색'/>\n";
-        retHttp += "<script type='text/javascript'>\n";
-        retHttp += "$(function(){\n"
-        retHttp += "$(\"#btnSearch\").click(function(){\n"
-        retHttp += "searchValue = document.getElementById('txtSearch').value;\n"
-        retHttp += "jsonData = {'API' : 'SearchYoutube', 'Value' : searchValue};\n";
-        retHttp += "$.ajax({\n"
-        retHttp += "type: 'get'\n"
-        retHttp += ", url: '/API'\n";
-        retHttp += ", dataType : 'html'\n";
-        retHttp += ", data:jsonData\n";
-        retHttp += ", error : function(request,status,error){\n"
-        retHttp += "alert(request);\n";
-        retHttp += "alert(status);\n";
-        retHttp += "alert(error);\n";
-        retHttp += "}\n"
-        retHttp += ", success : function(data){\n"
-        retHttp += "Youtubeview = document.getElementById('Youtubeview');";
-        retHttp += "Youtubeview.innerHTML = data;\n";
-        retHttp += "}\n"
-        retHttp += "});\n"
-        retHttp += "})\n"
-        retHttp += "})\n"
-        retHttp += "</script>\n"
-        return retHttp;
-
-    @staticmethod
-    def getVideoTable(searchUrl = "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr"):
-        retHttp  = "<div id='Youtubeview'>\n";
-        retHttp += YoutubeView.getTableHead();
-        for (videoItem) in YoutubeView.getYoutubeVideos(searchUrl):
-            item = Item.getItem(videoItem);
-            retHttp += item.getTr();
-        retHttp +="</table>";
-        retHttp += "</div>\n";
-        return retHttp;
-
-    @staticmethod
-    def getVideoList(token):
-        retHttp =  YoutubeView.getSearchView();
-
-        activitiesUrl = "https://www.googleapis.com/youtube/v3/activities?" \
-            + "regionCode=KR&"                                              \
-            + "part=contentDetails,snippet&"                                        \
-            + "home=true&"                                                  \
-            + "maxResults=50&"                                              \
-            + "access_token=" + token;
-        osDefine.Logger(activitiesUrl);
-        retHttp += YoutubeView.getVideoTable(activitiesUrl);
-        return retHttp;
     
     @staticmethod
     def getYoutubeVideos(searchUrl):
-
         downloadString = get(searchUrl);
         decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')));
-        return decoded_videos.items;
+        retList = [];
+        for item in decoded_videos.items:
+            retList.append(Item.getItem(item));
+        return retList;
     @staticmethod
     def play(youtubeId, title):
         youtubeId = osDefine.Base64Decoding(youtubeId);
@@ -108,8 +65,6 @@ class YoutubeView:
 
         index = 0;
         count = 0;
-        with open("/home/pi/Pz/scripts", "w") as f:
-            f.write(scripts);
         while(True):
             if('{' == scripts[index]):
                 count = 1;
@@ -129,9 +84,6 @@ class YoutubeView:
         config = scripts[0:index + 1];
         osDefine.Logger("Index : " + str(index));
 
-        with open("/home/pi/Pz/Youtube", "w") as f:
-            f.write(config);
-  
         jsonString = YoutubeRoot(**json.loads(config));
         root = PlayerResponse(**json.loads(jsonString.args["player_response"]));
         retFormat = "";
@@ -174,32 +126,44 @@ class YoutubeView:
         print ("Playlists:\n", "\n".join(playlists), "\n")
 
     @staticmethod
-    def getSearchYoutube(searchValue):
+    def SearchYoutube(request):
         try:
-            searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
-            retHttp = YoutubeView.getVideoTable(searchUrl)
-            osDefine.Logger(retHttp);
+            searchValue = osDefine.getParameter(request, "Value");
+            if(None == searchValue or "" == searchValue):
+                searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken);    
+            else:
+                searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue;
+            osDefine.Logger(searchUrl);
+            youtubeItems = YoutubeView.getYoutubeVideos(searchUrl)
+            context = {"YoutubeItems" : youtubeItems};
+            return render(request, "YoutubeViewTable.html", context);
         except Exception as e:
             osDefine.Logger(e);
-        return HttpResponse(retHttp);
+        return HttpResponse("");
 
     @staticmethod
     def Redirect(request):
         code = "";
         try:
             code = request.GET.get("code");
+            if(None == code):            
+                oAuthUrl = "https://accounts.google.com/o/oauth2/auth?client_id=%s&redirect_uri=%s/YoutubeRedirect&response_type=code&scope=https://www.googleapis.com/auth/youtube" % (osDefine.YoutubeClientId, osDefine.getRunIp(request));
+                http = "<script>location.href=\"" + oAuthUrl + "\"</script>";
+                return HttpResponse(http);
+            
             osDefine.Logger("Code : " + str(code));
-
             data = {'code': code, 
-                'client_id': '456241762082-m621opd3ej2g3kcdm0ajai5rv6h37una.apps.googleusercontent.com', 
-                'client_secret': '95_SJoiXXd8f4keeHUzy8O8s', 
+                'client_id': osDefine.YoutubeClientId, 
+                'client_secret': osDefine.YoutubeClientSecret, 
                 'grant_type': 'authorization_code', 
                 'redirect_uri': '%s/YoutubeRedirect' % osDefine.getRunIp(request)};
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data);
             acceseToken = AccessToken(**json.loads(res.text));
-            redirectUrl = osDefine.getRunIp(request) + "/?token="+acceseToken.access_token;
-            http = "<script>location.href=\"" + redirectUrl + ";\"</script>";
-            return HttpResponse(http);
+            osDefine.Logger("res.text : " + res.text);
+            osDefine.YoutubeToken = acceseToken.access_token
+            redirectUrl = osDefine.getRunIp(request);
+
+            return HttpResponse("<script>location.href=\"" + redirectUrl + "\"</script>");
 
         except Exception as e:
             osDefine.Logger(e);

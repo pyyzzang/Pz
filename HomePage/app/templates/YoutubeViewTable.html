@@ -1,0 +1,54 @@
+<div id='SearchDiv'>
+    <input type='text' id='txtSearch' />
+    <input type='button' id='btnSearch' value='검색'/>
+</div>
+<script type='text/javascript'>
+    $(function(){
+        $("#btnSearch").click(function(){
+            searchValue = document.getElementById('txtSearch').value;
+            jsonData = {'API' : 'SearchYoutube', 'Value' : searchValue};
+            $.ajax({
+                type: 'get'
+                , url: '/API'
+                , dataType : 'html'
+                , data:jsonData
+                , error : function(request,status,error){
+                    alert(request);
+                    alert(status);
+                    alert(error);
+                }
+                , success : function(data){
+                    Youtubeview = document.getElementById('Youtubeview');
+                    Youtubeview.innerHTML = data;
+                }
+            });
+        })
+    })
+    </script>
+
+    <div id='YoutubeTableDiv'>
+        <table id="YoutubeTable">
+            <thead>
+                <tr class="table100-head">
+                    <th class="column1"></th>
+                    <th class="column3">제목</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in YoutubeItems %}
+                    <tr onMouseOver="this.style.background='#8693ca'" onmouseout="this.style.background='white'" OnClick="TD_Click('Play\?youtube={{item.getYoutubeId}}&title={{item.getTitleEncode}}');" style="cursor:pointer;" >
+                        <td class='column1'><img src="{{item.getUrl}}"/></td>
+                        <td class='column3'>{{item.getTitle}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <script>
+        function TD_Click(url){
+            document.location.href = url;
+        }
+
+        </script>
+    </div>    
+
+

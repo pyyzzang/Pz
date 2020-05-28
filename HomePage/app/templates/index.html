@@ -1,0 +1,11 @@
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+
+{% for person in PersonList %}
+    <input type="Button" id="File{{person.Name}}" name="File{{person.Name}}" Value={{person.Name}}></input>
+    <script type="text/javascript">
+        $(function(){$("#File{{person.Name}}").click(function()
+        {
+            alert("{{person.Name}}");
+        })})
+    </script>
+{% endfor %}

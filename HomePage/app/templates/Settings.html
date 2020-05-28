@@ -1,0 +1,73 @@
+<html>
+
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">
+
+    <div class="tab">
+        <button class="tablinks" onclick="OpenTab('TorrentInfo')">선호 토렌트</button>       
+    </div>
+    <div id="TorrentInfo" class="tabcontent" sytle="display:visible">
+        <div class="TabTitle">
+            <p>토렌트 추가 리스트</p>
+        </div>
+        <Table class="TabTable">
+            <Tr >
+                <Td class="TabTableTd">제목</Td>
+                <Td class="TabTableTd"></Td>
+            </Tr>
+
+            {% for torrent in torrentInfos %}
+            <tr id="TD_{{torrent.title}}" name="TD_{{torrent.title}}" onmouseover="this.style.background='#ddd'" onmouseout="this.style.background='white'">
+                <Td class="TabTableTd">{{torrent.similarTitle}}</Td>
+                <Td class="TabTableTd"><input type="Button" Value="삭제" OnClick="DeleteTorrenInfo('{{torrent.title}}');"></Td>
+            </tr>
+            {% endfor %}
+        </Table>
+
+        <script>
+            function DeleteTorrenInfo(title){
+                $.ajax({
+                    type: 'post',
+                    data:{
+                        'Value' : title,
+                    }
+                    ,url: 'API?API=DeleteTorrentInfo'
+                    ,dataType : 'html'
+                    ,error : function(){alert('errr')}
+                    ,success : function(data){
+                        TorrentTableDiv = document.getElementById('TD_'+title);
+                        TorrentTableDiv.style.visibility = "collapse";
+
+                    }
+                });
+            }
+        </script>
+    </div>
+
+    <div class="TabCloseButton">
+        <input type="button" OnClick="Close();" Value="닫기">
+            <script>
+                function Close(){
+                    window.close();
+                }
+        </script>
+    </div>
+    
+
+    <script>
+        function OpenTab(tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+        }
+        OpenTab('TorrentInfo');
+    </script>
+
+</html>

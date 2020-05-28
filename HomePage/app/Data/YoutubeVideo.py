@@ -1246,10 +1246,8 @@ class Item(object):
         
         retItem = "";
         if("youtube#video" == kind):
-            osDefine.Logger("kind youtube#video : " + kind);
             retItem = Item_Video(videoItem);
         elif("youtube#activity" == kind):
-            osDefine.Logger("kind youtube#activity : " + kind);
             retItem = Item_Activiti(videoItem);
         else:
             osDefine.Logger("else");
@@ -1274,19 +1272,6 @@ class Item(object):
     def getTitle(self):
         return self.item['snippet']['title'];
     
-    def getTr(self):
-        retHttp = "";
-        try:
-            retHttp +="<tr>"
-            retHttp +="<td class='column1'><img src=\"" + self.getUrl() + "\"/></td>";
-            retHttp +="<td class='column2'>" + self.getVideoId() + "</td>";
-            retHttp +="<td class='column3'><a href=Play\?youtube="+ self.getYoutubeId() + "&title=" + self.getTitleEncode() + ">" + self.getTitle() + "</td>"
-            retHttp +="</tr>";
-            return retHttp;
-        except Exception as e:
-            osDefine.Logger(e);
-        return retHttp;
-
 class Item_Video(Item):
     def __init__(self, item):
         self.item = item;
@@ -1306,7 +1291,7 @@ class Item_Activiti(Item):
         return self.item["contentDetails"]["upload"]["videoId"];
     
 class videos(object):
-    def __init__(self, kind, etag, nextPageToken, pageInfo, items, regionCode = "", error=""):
+    def __init__(self, kind, etag, nextPageToken = "", pageInfo= "", items= "", regionCode = "", error=""):
         self.kind = kind;
         self.etag = etag;
         self.items = items;

@@ -9,6 +9,7 @@ class strUtil:
     @staticmethod
     def init():
         strUtil.titlePattern = '.+.E\d+'
+        strUtil.similarTitlePattern = "[ ㄱ-ㅣ가-힣]+";
 
     @staticmethod
     def isMatchTitle(title):
@@ -16,6 +17,16 @@ class strUtil:
         if(re.search(strUtil.titlePattern, title)):
             return True
         return False
+    
+    @staticmethod
+    def getSimilarTitle(title):
+        strUtil.init()
+        fileName = os.path.split(title)[1]
+        result = strUtil.getRegulaString(fileName, strUtil.similarTitlePattern)
+        length = len(result)
+        if(0 != length):
+            return result[0]
+        return fileName
 
     @staticmethod
     def getRegulaString(str, pattern):

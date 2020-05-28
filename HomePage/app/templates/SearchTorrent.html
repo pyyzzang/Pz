@@ -1,0 +1,61 @@
+
+<html>
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/app/css/main.css?version=1.2">
+
+    <div>
+        <table class="TabTable">
+            <tr>
+                <td class="TabTableTd"></td>
+                <td class="TabTableTd">제목</td>
+                <td class="TabTableTd"></td>
+            </tr>
+            
+        
+            {% for info in infos %}
+            <tr onmouseover="this.style.background='#ddd'" onmouseout="this.style.background='white'">
+                <td class="TabTableTd"><input type="checkbox" name="CheckedTorrent" Value="{{info.magnetUrl}}"/></td>
+                <td class="TabTableTd">{{info.title}}</td>
+                <td class="TabTableTd"><input id="{{info.magnetUrl}}" type="Button" Value="추가" OnClick="TorrentAdd('{{info.magnetUrl}}', '{{info.title}}')"></td>
+            </tr>
+            {% endfor %}
+
+            <script>
+                function TorrentAdd(magnet, title){
+                    $.ajax({
+                        type: 'post',
+                        data:{
+                            'magnetUrl' : magnet
+                            , 'title' : title
+                        }
+                        , url: 'Torrent/TorrentAdd'
+                        , dataType : 'html'
+                        , error : function(){
+                            alert('Error');
+                        }
+                        , success : function(data){
+                            alert(title + " 토렌트 추가 하였습니다.");
+                        }
+                    })
+                }
+            </script>
+        </table>
+    </div>
+<div>
+<input type="button" value="추가" onClick="AddTorrent()"/>
+<input type="button" value="닫기" onClick="Close();"/>
+
+<script>
+    function AddTorrent(){
+        var checkBoxList = $('input[name=CheckedTorrent]:checked').serialize();
+	    checkBoxList.split('&').forEach(value => {
+    		findId = value.split('=')[1];
+		    document.getElementById(findId).click();
+	    });
+    }
+    function Close(){
+        windows.close();
+    }
+</script>
+</div>
+</html>

@@ -1,0 +1,109 @@
+<html>
+<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/app/css/style.css?version=1.2">
+<input type='button' id="MoveVideoPage" onclick='MoveTorrentPage();'></input><p>
+<script>function MoveTorrentPage(){ location.href = '/Home';}</script>
+<div style="position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0">
+    <div class="dialog_window" id="dialog_Window">
+        <div class="dialog_logo" id="upload_dialog_logo"></div>
+        <h2 class="dialog_heading">Upload Torrent Files</h2>
+        <form action="/Torrent/Upload" method="post" id="torrent_upload_form" enctype="multipart/form-data">
+            <div class="dialog_message">
+                <label\">제목을 입력하세요(*) : </label>
+                <input type="TextBox" name="torrentTitle" id="torrentTitle" autocomplete="off"/>
+                <P><label for="torrent_upload_file">Please select a torrent file to upload:</label>
+                <input type="file" name="torrent_files" id="torrent_files" multiple="multiple" />
+                <p><label for="torrent_upload_url" >Or enter a URL:</label>
+                <input type="url" name="torrent_upload_url" id="torrent_upload_url" autocomplete="off"/>
+            </div>
+        <button id="upload_confirm_button">Upload</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function genreChange(){
+        ganreSelect = document.getElementById('genreSelect');
+        $.ajax({
+            type: 'post',
+            data:{
+                'Value' : ganreSelect.options[ganreSelect.selectedIndex].value,
+            }
+            ,url: 'API?API=GENRE'
+            ,dataType : 'html'
+            ,error : function(){alert('errr')}
+            ,success : function(data){
+                TorrentTableDiv = document.getElementById('TorrentTableDiv');
+                TorrentTableDiv.innerHTML = data;
+            }
+        });
+    }
+</script>
+
+<div style="align-items:center;display:flex" >
+    <script>
+    function genreChange(){
+        ganreSelect = document.getElementById('genreSelect');
+        location.href = "/Torrent?Value=" + ganreSelect.options[ganreSelect.selectedIndex].value;
+    }
+    </script>
+
+    <select id='genreSelect' name='genreSelect' OnChange='genreChange()'>
+        <option value=''>장르</option>
+        <option value='1'>한국영화</option>
+        <option value='2'>드라마</option>
+        <option value='3'>예능</option>
+        <option value='4'>다큐</option>
+        <option value='5'>완결</option>
+        <option value='99'>기타</option>
+    </select>
+    &nbsp
+    &nbsp
+    <input type="text" id="SearchText" Name="SearchTorrent" onkeydown="JavaScript:SearchTextInput();" />&nbsp
+    <input type="Button" id="SearchButton" OnClick="SearchClick();" Value="검색"/>
+    <script>
+        function SearchTextInput(){
+            if(13 == event.keyCode){
+                searchButton = document.getElementById("SearchButton");
+                searchButton.click();
+            }
+        }
+        function SearchClick(){
+            searchTxt = document.getElementById("SearchText").value;
+            if("" == searchTxt){
+                alert("검색어를 입력하세요");
+                return ;
+            }
+            var url = "/SearchTorrent?SearchTorrent=" + searchTxt;
+            var name = "검색";
+            var option = "width = 700, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
+        }
+    </script>
+</div>
+
+<script type="text/javascript"> 
+function TorrentDelete(magnet){
+    $.ajax({
+        type: 'post'
+        , data:{
+            'magnetUrl' : magnet
+        }
+        , url: 'Torrent/TorrentDelete'
+        , dataType : 'html'
+        , error : function(){
+            alert();
+        }
+        , success : function(data){
+            alert("토렌트 삭제 하였습니다.");
+            document.getElementById('TR_' + magnet).style.display = "none";
+        }
+    })
+}
+</script>
+
+<div id='TorrentTableDiv'>
+    {% include "TorrentTable.html" %}
+</div>
+
+</html>
