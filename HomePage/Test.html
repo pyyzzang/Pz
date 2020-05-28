@@ -1,0 +1,37 @@
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+    var firebaseConfig = {
+        apiKey: "AIzaSyCOdKHT7ZmC9u3UCKC2wn2mQ0n613vsrkI",
+        authDomain: "macro-aurora-227313.firebaseapp.com",
+        databaseURL: "https://macro-aurora-227313.firebaseio.com",
+        projectId: "macro-aurora-227313",
+        storageBucket: "macro-aurora-227313.appspot.com",
+        messagingSenderId: "456241762082",
+        appId: "1:456241762082:web:346ddf648901dee5705f7b",
+        measurementId: "G-D5T1WZNJ7P"
+    };
+
+    var admin = require('firebase-admin');
+    var admin = require("firebase-admin");
+
+    var serviceAccount = require("path/to/serviceAccountKey.json");
+
+    admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        databaseURL: "https://macro-aurora-227313.firebaseio.com"
+    });
+
+    // Retrieve Firebase Messaging object.
+    const messaging = firebase.messaging();
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+</script>

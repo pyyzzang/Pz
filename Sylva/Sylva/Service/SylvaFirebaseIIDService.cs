@@ -36,10 +36,18 @@ namespace Sylva.Service
 
         private void DbUpdateWorker_DoWork(object sender, DoWorkEventArgs e)
         {
-            System.Collections.Specialized.NameValueCollection sendValue = new System.Collections.Specialized.NameValueCollection();
-            sendValue.Add("id", "1");
-            sendValue.Add("token", e.Argument.ToString());
-            HttpUtil.SendMessage(UpdateUserInfo, true, sendValue);
+            try
+            {
+                System.Collections.Specialized.NameValueCollection sendValue = new System.Collections.Specialized.NameValueCollection();
+                sendValue.Add("id", "1");
+                sendValue.Add("token", e.Argument.ToString());
+                HttpUtil.SendMessage(UpdateUserInfo, true, sendValue);
+            }catch(Exception ex)
+            {
+                Sylva.Util.Log.Write("Exception : " + e.Result);
+
+            }
+            
         }
 
         void SendRegistrationToServer(string token)

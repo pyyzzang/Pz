@@ -32,8 +32,22 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="app\cron\CronTab.py" />
+    <Compile Include="app\cron\TorrentAllPause.py" />
+    <Compile Include="app\cron\TorrentAllStart.py" />
+    <Compile Include="app\Data\PlayInfo.py" />
+    <Compile Include="app\Data\TorrentInfo.py" />
+    <Compile Include="app\Data\YoutubeToken.py" />
+    <Compile Include="app\Data\YoutubeVideo.py" />
+    <Compile Include="app\Define.py" />
+    <Compile Include="app\FCM\FCM.py" />
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
+    <Compile Include="app\module\DBExecute.py" />
+    <Compile Include="app\module\HtmlUtil.py" />
+    <Compile Include="app\module\osDefine.py" />
+    <Compile Include="app\module\strUtil.py" />
+    <Compile Include="app\module\Youtube_Cipher.py" />
     <Compile Include="app\subViews\fileListView.py">
       <SubType>Code</SubType>
     </Compile>
@@ -49,9 +63,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\tests.py" />
+    <Compile Include="app\TorrentParse\TorrentParse.py" />
+    <Compile Include="app\TorrentParse\TorrentveryParse.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
+    <Compile Include="HomePage\TransmissionSH\UpdateThumbnail.py" />
     <Compile Include="manage.py" />
     <Compile Include="HomePage\__init__.py" />
     <Compile Include="HomePage\settings.py" />
@@ -60,7 +77,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
+    <Folder Include="app\cron\" />
+    <Folder Include="app\Data\" />
+    <Folder Include="app\FCM\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\module\" />
     <Folder Include="app\subViews\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
@@ -69,11 +90,15 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="app\TorrentParse\" />
     <Folder Include="HomePage\" />
+    <Folder Include="HomePage\TransmissionSH\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\templates\app\Click.html" />
     <Content Include="app\templates\app\test.html" />
+    <Content Include="HomePage\TransmissionSH\AutoDelete.sh" />
+    <Content Include="HomePage\TransmissionSH\Test.sh" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
