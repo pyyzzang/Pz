@@ -49,8 +49,10 @@ class TorrentSir5Parse(TorrentParse):
         TorrentParse.CrawlingTorrent()
         while(True):
             tsParse = TorrentSir5Parse()
-            tsParse.getUpdateList("entertain", 3, 1000)
-            tsParse.getUpdateList("tv", 4, 1000)
+            #tsParse.getUpdateList("movie", 1)
+            tsParse.getUpdateList("drama", 2)
+            tsParse.getUpdateList("entertain", 3)
+            tsParse.getUpdateList("tv", 4)
             
             time.sleep(60)
         '''
@@ -64,9 +66,11 @@ class TorrentSir5Parse(TorrentParse):
     def RunCrawlingThread():
         if(True == osDefine.getIsDev()):
             osDefine.Logger("TorrentSir5 개발 모드")
+            t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
+            t.start()
         else:
             osDefine.Logger("크롤링 TorrentSir 모드")
-            #t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
-            #t.start()
+            t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
+            t.start()
 
 TorrentSir5Parse.RunCrawlingThread()
