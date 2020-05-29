@@ -55,19 +55,10 @@ class TorrentSir5Parse(TorrentParse):
             tsParse.getUpdateList("tv", 4)
             
             time.sleep(60)
-        '''
-        tsParse.getUpdateList("drama", 2)
-        tsParse.getUpdateList("ent", 3)
-        tsParse.getUpdateList("docu", 4)
-        tsParse.getUpdateList("tvend", 5)
-        '''
-
-    @staticmethod
+    staticmethod
     def RunCrawlingThread():
         if(True == osDefine.getIsDev()):
             osDefine.Logger("TorrentSir5 개발 모드")
-            t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
-            t.start()
         else:
             osDefine.Logger("크롤링 TorrentSir 모드")
             t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
