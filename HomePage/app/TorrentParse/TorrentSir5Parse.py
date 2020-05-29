@@ -47,14 +47,13 @@ class TorrentSir5Parse(TorrentParse):
     @staticmethod
     def CrawlingTorrent():
         TorrentParse.CrawlingTorrent()
-        while(True):
-            tsParse = TorrentSir5Parse()
-            #tsParse.getUpdateList("movie", 1)
-            tsParse.getUpdateList("drama", 2)
-            tsParse.getUpdateList("entertain", 3)
-            tsParse.getUpdateList("tv", 4)
+        
+        tsParse = TorrentSir5Parse()
+        #tsParse.getUpdateList("movie", 1)
+        tsParse.getUpdateList("drama", 2)
+        tsParse.getUpdateList("entertain", 3)
+        tsParse.getUpdateList("tv", 4)
             
-            time.sleep(60)
     staticmethod
     def RunCrawlingThread():
         if(True == osDefine.getIsDev()):
