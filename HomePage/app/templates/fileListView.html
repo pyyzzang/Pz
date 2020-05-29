@@ -7,39 +7,7 @@
     </head>
 
     <body Onload="FormLoadFileListView()">
-    <input type='button' onclick='MoveTorrentPage();' id="Torrent"></input>
-    <input type='button' onclick='OpenSetting();' id="Setting"></input>
-
-    <label name="CPU_Temp" id="CPU_Temp">{{CPUTemp}}°C</label>
-
-    <script>
-        function UpdateTemp(){
-            jsonData = {'API' : 'CPUTemp'};
-            $.ajax({
-                type: 'get'
-                , url: '/API'
-                , dataType : 'html'
-                , data:jsonData
-                , error : function(){
-                }
-                , success : function(data){
-                    CPU_Temp = document.getElementById('CPU_Temp');
-                    CPU_Temp.textContent = data + "°C";
-                }
-            });
-        }
-    </script>
-
-    <p>
-    <script>
-        function OpenSetting(){
-            window.open("/Setting", "a", "width=400, height=300, left=100, top=50");
-        }
-
-        function MoveTorrentPage(){
-            location.href = '/Torrent';
-        }
-    </script>
+    {% include "Header.html" %}
     {% if PlayVideo %}
         {% include "playView.html" %}
     {% endif %}
@@ -141,8 +109,6 @@
                 Youtubeview.innerHTML = data;
             }
         });
-
-        setInterval(UpdateTemp, 1000);
     }
 </script>
 </html>

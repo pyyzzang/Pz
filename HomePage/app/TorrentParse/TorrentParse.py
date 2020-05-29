@@ -28,7 +28,7 @@ class TorrentParse:
         pass;
 
     def reTryCount(self):
-        return 100;
+        return 20;
     
     def isMP4(self, soup):
         pass;
@@ -132,7 +132,7 @@ class TorrentParse:
                 if(0 >= reTryCount):
                     break;
             finally:
-                index = index - 1;
+                index = index + 1;
                 url = self.getUrl() % (param, index);
                 response = requests.get(url);
                 soup = BeautifulSoup(response.text, 'html.parser');

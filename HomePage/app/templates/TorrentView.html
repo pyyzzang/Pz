@@ -1,8 +1,7 @@
 <html>
 <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/app/css/style.css?version=1.2">
-<input type='button' id="MoveVideoPage" onclick='MoveTorrentPage();'></input><p>
-<script>function MoveTorrentPage(){ location.href = '/Home';}</script>
+{% include "Header.html" %}
 <div style="position: relative; left:0px; top: 0px;border:1px solid rgb(119,119,119); background-color: #FFFFF0">
     <div class="dialog_window" id="dialog_Window">
         <div class="dialog_logo" id="upload_dialog_logo"></div>
