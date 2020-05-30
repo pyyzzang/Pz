@@ -351,8 +351,8 @@ class osDefine:
     @staticmethod
     def SaveLogFile(request):
         try:
-            fileBinary = request.FILES[0];
-            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/LastUpload");
+            fileBinary = request.FILES["logFile"];
+            tmpTorrentFile = os.path.join(osDefine.getRunDir(), "HomePage/app/static/Tmp/" + fileBinary.name);
             f = open(tmpTorrentFile, 'wb+');
             for chunk in fileBinary.chunks():
                 f.write(chunk)
