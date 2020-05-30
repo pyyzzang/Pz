@@ -41,7 +41,15 @@ class playView(object):
             title = osDefine.Base64Decoding(request.GET.get("title", ""));
             osDefine.Logger("title : " + title);    
             YoutubeView.play(filePath, title);
-        return playView.getPlayView(request);
+        #return playView.getPlayView(request);
+        folder = os.path.dirname(filePath)
+        if("" == folder):
+            url = "/Home"
+        else:
+            url = "/Home?file=" +folder;
+
+        context = {"URL" : url }
+        return render(request, "Redirect.html", context);
 
     @staticmethod
     def moveVideo(keyMove):
