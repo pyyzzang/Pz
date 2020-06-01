@@ -59,7 +59,6 @@ namespace Sylva.Util
             {
                 requestStream.Write(boundaryBytes, 0, boundaryBytes.Length);
 
-                //string header = "Content-Disposition: form-data; name=\"" + pair.Key + "\"; filename=\"" + file.Name + "\"\r\nContent-Type: " + file.ContentType + "\r\n\r\n";
                 string header = "Content-Disposition: form-data; name=\"logFile\"; filename=\"" + Path.GetFileName(__filePath ) + "\";\r\nContent-Type:multipart/form-data;\r\n\r\n";
                 byte[] bytes = System.Text.Encoding.UTF8.GetBytes(header);
                 requestStream.Write(bytes, 0, bytes.Length);

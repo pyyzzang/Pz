@@ -56,14 +56,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="app\subViews\playView.py" />
+    <Compile Include="app\subViews\Settings.py" />
     <Compile Include="app\subViews\testView.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\subViews\torrent.py" />
     <Compile Include="app\subViews\VideoControl.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="app\subViews\YoutubeView.py" />
+    <Compile Include="app\subViews\__init__.py" />
     <Compile Include="app\tests.py" />
     <Compile Include="app\TorrentParse\TorrentParse.py" />
+    <Compile Include="app\TorrentParse\TorrentSir5Parse.py" />
     <Compile Include="app\TorrentParse\TorrentveryParse.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
@@ -74,6 +79,7 @@
     <Compile Include="HomePage\settings.py" />
     <Compile Include="HomePage\urls.py" />
     <Compile Include="HomePage\wsgi.py" />
+    <Compile Include="Test.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />

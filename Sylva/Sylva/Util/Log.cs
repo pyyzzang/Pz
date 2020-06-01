@@ -41,7 +41,14 @@ namespace Sylva.Util
         private static string LogUploadUrl { get { return "{0}/LogFile"; } }
         private static void UploadFile()
         {
-            HttpUtil.UploadFile(LogUploadUrl, FileHelper.LogPath);
+            try
+            {
+                HttpUtil.UploadFile(LogUploadUrl, FileHelper.LogPath);
+            }catch( System.Exception e)
+            {
+
+            }
+
         }
 
         private void WriteLog(string __msg)

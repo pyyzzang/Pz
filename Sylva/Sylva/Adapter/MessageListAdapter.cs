@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.IO;
 using Android.App;
 using Android.OS;
@@ -6,10 +7,12 @@ using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
 using Firebase.Messaging;
+using Java.Interop;
+using static Android.Views.View;
 
 namespace Sylva.Data
 {
-    public class MessageListAdapter: ArrayAdapter
+    public class MessageListAdapter : ArrayAdapter
     {
         FCM_List _FCM_List
         {
@@ -21,7 +24,7 @@ namespace Sylva.Data
         {
             get
             {
-                if(null == _MainHandler)
+                if (null == _MainHandler)
                     _MainHandler = new Handler(Looper.MainLooper);
                 return _MainHandler;
             }
@@ -34,7 +37,7 @@ namespace Sylva.Data
 
         public void AddReceiveMsg(FCM_Message __addMsg)
         {
-            if(true == _FCM_List.ExistFCM(__addMsg))
+            if (true == _FCM_List.ExistFCM(__addMsg))
             {
                 return;
             }
@@ -53,7 +56,7 @@ namespace Sylva.Data
             mainActivity.Noti(_FCM_List[0].Date, _FCM_List[0].Body);
         }
 
-        public MessageListAdapter(MainActivity __mainActivity): base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
+        public MessageListAdapter(MainActivity __mainActivity) : base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
         {
             mainActivity = __mainActivity;
             this.AddAll(_FCM_List);
@@ -73,13 +76,41 @@ namespace Sylva.Data
                 {
                     txtViewBody.Text = msg.Body;
                 }
-                if(null != txtViewDate)
+                if (null != txtViewDate)
                 {
                     txtViewDate.Text = msg.Date;
                 }
             }
+
+            v.Click += V_Click;
+
             return v;
         }
+
+        private View CurrentView { get; set; }
+
+        private void UpdateButtonStatus(View __view , ViewStates __states)
+        {
+            Button btn = __view.FindViewById<Button>(Resource.Id.btnDelete);
+            btn.Visibility = __states;
+        }
+
+        private void V_Click(object sender, EventArgs e)
+        {
+            View v = (View)sender;
+            if (null == v)
+            {
+                return;
+            }
+
+            if(null != CurrentView)
+            {
+                UpdateButtonStatus(CurrentView, ViewStates.Invisible);
+            }
+            CurrentView = v;
+            UpdateButtonStatus(CurrentView, ViewStates.Visible);
+        }
+
         private MainActivity mainActivity = null;
     }
 }
