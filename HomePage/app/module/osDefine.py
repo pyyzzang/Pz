@@ -18,11 +18,12 @@ import threading;
 import time;
 from urllib.parse import urlparse;
 from ..Define import Define;
-import datetime;
+import datetime
 import smtplib
 from email.mime.text import MIMEText
 import os, threading
 from django.http import HttpResponse
+
 
 class PlayMode:
     File = 0;
@@ -372,6 +373,11 @@ class osDefine:
     @staticmethod
     def CPUTemp(request):
         return HttpResponse(osDefine.CPUTempStr());
+
+    @staticmethod
+    def IsWorkTime():
+        currentTime = datetime.datetime.now();
+        return (10 < currentTime.hour and currentTime.hour < 24);
 
 
 

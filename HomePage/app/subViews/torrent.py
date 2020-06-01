@@ -10,7 +10,7 @@ from ..module.osDefine import osDefine;
 from ..module.DBExecute import SQLalchemy;
 from ..FCM.FCM import FCM;
 from urllib.parse import unquote
-from datetime import datetime
+
 from ..Data.TorrentInfo import TorrentInfos;
 from ..Data.TorrentInfo import torrentInfo;
 from django.shortcuts import render;
@@ -25,9 +25,8 @@ class torrent:
         osDefine.Logger("Title : " + title);
         TorrentInfos.updateTorrentInfo(title);
 
-        currentTime = datetime.now();
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
-        if (10 < currentTime.hour and currentTime.hour < 24):
+        if (True == osDefine.IsWorkTime()):
             addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
         osDefine.Logger("ExecuteCommand : " + addCmd);
         os.system(addCmd);
