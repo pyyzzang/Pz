@@ -62,7 +62,6 @@ class TorrentveryParse(TorrentParse):
         tvParse.getUpdateList("ent", 3)
         tvParse.getUpdateList("docu", 4)
         tvParse.getUpdateList("tvend", 5)
-        osDefine.YoutubeTokenRefresh()
     
     @staticmethod
     def RunCrawlingThread():
@@ -70,6 +69,7 @@ class TorrentveryParse(TorrentParse):
             osDefine.Logger("개발 모드")
         else:
             osDefine.Logger("크롤링 TorrentVery 모드")
-            #TorrentveryParse.CrawlingTorrent()
+            t = threading.Thread(target=TorrentveryParse.CrawlingTorrent)
+            t.start()
         
-#TorrentSir5Parse.RunCrawlingThread()
+TorrentveryParse.RunCrawlingThread()
