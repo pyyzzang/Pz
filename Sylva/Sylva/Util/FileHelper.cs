@@ -27,7 +27,7 @@ namespace Sylva.Util
         {
             get
             {
-                return Path.Combine(Android.App.Application.Context.DataDir.AbsolutePath, string.Format("%s_Log.log", DateTime.Now.ToString("yyyy_MM_dd")));
+                return Path.Combine(Android.App.Application.Context.DataDir.AbsolutePath, string.Format("{0}_Log.log", DateTime.Now.ToString("yyyy_MM_dd")));
             }
         }
     }
