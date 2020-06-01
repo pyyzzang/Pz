@@ -55,6 +55,7 @@ class TorrentveryParse(TorrentParse):
     @staticmethod
     def CrawlingTorrent():
         TorrentParse.CrawlingTorrent()
+        
         tvParse = TorrentveryParse()
         tvParse.getUpdateList("movieko", 1)
         tvParse.getUpdateList("drama", 2)

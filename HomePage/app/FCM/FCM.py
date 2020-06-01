@@ -119,7 +119,7 @@ class FCM:
 
     @staticmethod
     def UpdateMsgStatus(request):
-        value = osDefine.getParameter(request)
+        value = osDefine.getParameter(request, "Value")
         connection = SQLalchemy.GetDBConnection()
         query = "delete FCM where MsgGUID='%s'" % value
         osDefine.Logger(query)
