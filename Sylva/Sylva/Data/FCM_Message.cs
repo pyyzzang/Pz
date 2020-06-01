@@ -61,7 +61,7 @@ namespace Sylva.Data
         }
     }
 
-    public class FCM_Message
+    public class FCM_Message : Java.Lang.Object
     {
         protected string _Date = string.Empty;
         protected string _Body = string.Empty;

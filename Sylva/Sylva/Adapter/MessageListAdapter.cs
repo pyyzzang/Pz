@@ -35,14 +35,17 @@ namespace Sylva.Data
             this.AddReceiveMsg(new FCM_Message(__remoteMsg));
         }
 
-        public void AddReceiveMsg(FCM_Message __addMsg)
+        public void AddReceiveMsg(FCM_Message __addMsg, bool __isAdd = true)
         {
-            if (true == _FCM_List.ExistFCM(__addMsg))
+            if(true == __isAdd)
             {
-                return;
+                _FCM_List.Insert(0, __addMsg);
+                mainActivity.Noti(__addMsg.Date, __addMsg.Body);
             }
-
-            _FCM_List.Insert(0, __addMsg);
+            else
+            {
+                _FCM_List.Remove(__addMsg);
+            }
             MainHandler.Post(new System.Action(Update));
             _FCM_List.SaveFile();
         }
@@ -52,8 +55,6 @@ namespace Sylva.Data
             this.Clear();
             this.AddAll(_FCM_List);
             this.NotifyDataSetChanged();
-
-            mainActivity.Noti(_FCM_List[0].Date, _FCM_List[0].Body);
         }
 
         public MessageListAdapter(MainActivity __mainActivity) : base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
@@ -84,14 +85,33 @@ namespace Sylva.Data
             }
 
             v.Click += V_Click;
+            v.Tag = msg;
             
             txtViewDate.Tag = v;
             txtViewBody.Tag = v;
 
             txtViewDate.Click += TxtView_Click;
             txtViewBody.Click += TxtView_Click;
-            
+
+            Button btnDelete = (Button)v.FindViewById(Resource.Id.btnDelete);
+            btnDelete.Tag = v;
+            btnDelete.Click += BtnDelete_Click;
+
+
             return v;
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if(null == CurrentView)
+            {
+                return;
+            }
+
+            UpdateButtonStatus(CurrentView, ViewStates.Invisible);
+            FCM_Message msg = (FCM_Message)CurrentView.Tag;
+            AddReceiveMsg(msg, false);
+            CurrentView = null;
         }
 
         private void TxtView_Click(object sender, EventArgs e)
@@ -117,15 +137,10 @@ namespace Sylva.Data
             View v = (View)sender;
             if (null == v)
             {
-                TextView txtView = (TextView)sender;
-                if(null == txtView)
-                {
-                    return;
-                }
-                v = (View)txtView.Parent;
+                return;
             }
 
-            if(null != CurrentView)
+            if (null != CurrentView)
             {
                 UpdateButtonStatus(CurrentView, ViewStates.Invisible);
             }
