@@ -377,7 +377,8 @@ class osDefine:
     @staticmethod
     def IsWorkTime():
         currentTime = datetime.datetime.now();
-        return (10 < currentTime.hour and currentTime.hour < 24);
+        workingTime = (10 < currentTime.hour and currentTime.hour < 24)
+        return workingTime;
 
 
 

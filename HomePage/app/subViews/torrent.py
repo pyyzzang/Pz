@@ -26,7 +26,7 @@ class torrent:
         TorrentInfos.updateTorrentInfo(title);
 
         addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -s";
-        if (True == osDefine.IsWorkTime()):
+        if (False == osDefine.IsWorkTime()):
             addCmd = "sudo transmission-remote -a \"" + magnetUrl + "\" -n \"pi\":\"cndwn5069()\" -S";
         osDefine.Logger("ExecuteCommand : " + addCmd);
         os.system(addCmd);
