@@ -68,10 +68,11 @@ namespace Sylva.Data
             FCM_Message msg = _FCM_List[position];
             if (v == null) // no view to re-use, create new
                 v = mainActivity.LayoutInflater.Inflate(Resource.Layout.MessageLayout, null);
+
+            TextView txtViewDate = (TextView)v.FindViewById(Resource.Id.txtDate);
+            TextView txtViewBody = (TextView)v.FindViewById(Resource.Id.txtBody);
             if (null != msg)
             {
-                TextView txtViewDate = (TextView)v.FindViewById(Resource.Id.txtDate);
-                TextView txtViewBody = (TextView)v.FindViewById(Resource.Id.txtBody);
                 if (txtViewBody != null)
                 {
                     txtViewBody.Text = msg.Body;
@@ -83,8 +84,24 @@ namespace Sylva.Data
             }
 
             v.Click += V_Click;
+            
+            txtViewDate.Tag = v;
+            txtViewBody.Tag = v;
 
+            txtViewDate.Click += TxtView_Click;
+            txtViewBody.Click += TxtView_Click;
+            
             return v;
+        }
+
+        private void TxtView_Click(object sender, EventArgs e)
+        {
+            TextView view = sender as TextView;
+            if(null == view)
+            {
+                return;
+            }
+            V_Click(view.Tag, null);
         }
 
         private View CurrentView { get; set; }
@@ -100,7 +117,12 @@ namespace Sylva.Data
             View v = (View)sender;
             if (null == v)
             {
-                return;
+                TextView txtView = (TextView)sender;
+                if(null == txtView)
+                {
+                    return;
+                }
+                v = (View)txtView.Parent;
             }
 
             if(null != CurrentView)
