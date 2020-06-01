@@ -27,6 +27,14 @@
 	height:40px;
 }
 
+#Transmission{
+	background-image : url("../Image/Transmission.jpg");
+	background-position: center;
+	background-repeat: no-repeat;
+	width:40px;
+	height:40px;
+}
+
 #Torrent{
 	background-image : url("../Image/Torrent.png");
 	background-position: center;

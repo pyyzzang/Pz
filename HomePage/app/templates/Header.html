@@ -7,6 +7,7 @@
     <input type='button' id="MoveVideoPage" onclick='MoveHomePage();'></input>
     <input type='button' onclick='MoveTorrentPage();' id="Torrent"></input>
     <input type='button' onclick='OpenSetting();' id="Setting"></input>
+    <input type='button' onclick='Transmission();' id="Transmission"></input>
     <label name="CPU_Temp" id="CPU_Temp">{{CPUTemp}}°C</label>
 </div>
 
@@ -14,6 +15,10 @@
     setInterval(UpdateTemp, 1000);
     function MoveHomePage(){
         location.href = '/Home';
+    }
+
+    function Transmission(){
+        location.href = "http://192.168.219.102:9091/transmission/web/";
     }
 
     function UpdateTemp(){
