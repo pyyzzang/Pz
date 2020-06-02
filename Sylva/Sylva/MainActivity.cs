@@ -1,22 +1,12 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Gms.Ads;
-using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.Design.Widget;
 using Android.Support.V4.App;
 using Android.Support.V7.App;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
-using Newtonsoft.Json;
 using Sylva.Data;
 using Sylva.Util;
 
@@ -40,16 +30,103 @@ namespace Sylva
 
             ListView msgListView = FindViewById<ListView>(Resource.Id.MsgListView);
             msgListView.Adapter = MsgListAdapter;
-            
 
+            Thread t = new Thread(new ThreadStart(InitView));
+            t.Start();
+
+            InitPlayerLayout();
+        }
+
+        private void InitPlayerLayout()
+        {
+            Button btnBack = FindViewById<Button>(Resource.Id.Back);
+            btnBack.Click += BtnBack_Click;
+
+            Button btnReplay = FindViewById<Button>(Resource.Id.Replay);
+            btnReplay.Click += BtnBack_Click;
+
+            Button btnPause = FindViewById<Button>(Resource.Id.Pause);
+            btnPause.Click += BtnBack_Click;
+
+            Button btnStop = FindViewById<Button>(Resource.Id.Stop);
+            btnStop.Click += BtnBack_Click;
+
+            Button btnSkip = FindViewById<Button>(Resource.Id.Skip);
+            btnSkip.Click += BtnBack_Click;
+
+        }
+
+        private void BtnBack_Click(object sender, System.EventArgs e)
+        {
+            Button btn = sender as Button;
+            if(null == btn)
+            {
+                return;
+            }
+            string url = string.Format("{0}/Play/{1}","{0}", btn.Text.ToString());
+            HttpUtil.SendMessage(url);
+        }
+
+        private static string CurFileNameUrl { get { return "{0}/Play/CurFileName"; } }
+        
+        private void InitView()
+        {
             CurrentMainActivity = this;
             NotiServiceCreat();
 
-            Android.Gms.Ads.MobileAds.Initialize(ApplicationContext, this.Resources.GetString(Resource.String.AdMobID));
-            adsView = (AdView)FindViewById(Resource.Id.adView);
-            adsView.AdListener = new SylvaAdListener();
-            AdRequest request = new AdRequest.Builder().Build();
-            adsView.LoadAd(request);
+            //광고
+            //Android.Gms.Ads.MobileAds.Initialize(ApplicationContext, this.Resources.GetString(Resource.String.AdMobID));
+            //adsView = (AdView)FindViewById(Resource.Id.adView);
+            //adsView.AdListener = new SylvaAdListener();
+            //AdRequest request = new AdRequest.Builder().Build();
+            //adsView.LoadAd(request);
+
+            Thread CurPlayerUpdate = new Thread(CurPlayerUpdateThread);
+            CurPlayerUpdate.Start();
+        }
+
+        Handler _MainHandler = null;
+        Handler MainHandler
+        {
+            get
+            {
+                if (null == _MainHandler)
+                    _MainHandler = new Handler(Looper.MainLooper);
+                return _MainHandler;
+            }
+        }
+
+        private void CurPlayerUpdateThread()
+        {
+            while(true)
+            {
+                MainHandler.Post(UpdateTitle);
+                Thread.Sleep(1000);
+            }
+        }
+
+        private string CurFileName
+        {
+            get
+            {
+                return HttpUtil.SendMessage(CurFileNameUrl);
+            }
+        }
+
+        private void UpdateTitle()
+        {
+            LinearLayout curPlayer = FindViewById<LinearLayout>(Resource.Id.CurPlayer);
+            if (true == string.IsNullOrEmpty(CurFileName))
+            {
+                curPlayer.Visibility = ViewStates.Gone;
+            }
+            else
+            {
+                curPlayer.Visibility = ViewStates.Visible; 
+            }
+            
+            TextView title = FindViewById<TextView>(Resource.Id.Title);
+            title.Text = CurFileName;
         }
 
         protected override void OnResume()

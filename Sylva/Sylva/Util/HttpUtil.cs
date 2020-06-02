@@ -33,7 +33,16 @@ namespace Sylva.Util
         {
             ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
             WebClient client = new WebClient();
-            byte[] downloadByte = client.UploadValues(string.Format(__Url, ServerUrl), __isPost ? "POST" : "GET", __param);
+            byte[] downloadByte;
+            if (null == __param)
+            {
+                return client.DownloadString(string.Format(__Url, ServerUrl));
+            }
+            else
+            {
+                downloadByte = client.UploadValues(string.Format(__Url, ServerUrl), __isPost ? "POST" : "GET", __param);
+            }
+            
             return Encoding.UTF8.GetString(downloadByte);
         }
 

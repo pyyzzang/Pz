@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Android.App;
+using Android.Graphics;
 using Android.OS;
 using Android.Support.V4.App;
 using Android.Views;
 using Android.Widget;
 using Firebase.Messaging;
 using Java.Interop;
+using Newtonsoft.Json;
+using Sylva.Util;
 using static Android.Views.View;
 
 namespace Sylva.Data
 {
     public class MessageListAdapter : ArrayAdapter
     {
-        FCM_List _FCM_List
-        {
-            get { return Sylva.Data.FCM_List.GetFCMList(); }
-        }
-
+        
         Handler _MainHandler = null;
         Handler MainHandler
         {
@@ -37,36 +38,37 @@ namespace Sylva.Data
 
         public void AddReceiveMsg(FCM_Message __addMsg, bool __isAdd = true)
         {
-            if(true == __isAdd)
-            {
-                _FCM_List.Insert(0, __addMsg);
-                mainActivity.Noti(__addMsg.Date, __addMsg.Body);
-            }
-            else
-            {
-                _FCM_List.Remove(__addMsg);
-            }
-            MainHandler.Post(new System.Action(Update));
-            _FCM_List.SaveFile();
+            mainActivity.Noti(__addMsg.Date, __addMsg.Body);
         }
 
         public void Update()
         {
             this.Clear();
-            this.AddAll(_FCM_List);
+            this.AddAll(CurVideoList);
             this.NotifyDataSetChanged();
         }
 
         public MessageListAdapter(MainActivity __mainActivity) : base(__mainActivity, Android.Resource.Layout.SimpleListItem1)
         {
             mainActivity = __mainActivity;
-            this.AddAll(_FCM_List);
+            MainHandler.Post(new System.Action(Update));
+        }
+
+        private static string GetVideoList { get { return "{0}/API?API=GetVideoList"; } }
+        private List<FileItem> CurVideoList
+        {
+            get
+            {
+                string fileList = HttpUtil.SendMessage(GetVideoList);
+                Newtonsoft.Json.Linq.JArray jArray = (Newtonsoft.Json.Linq.JArray)JsonConvert.DeserializeObject(fileList);
+                return jArray.ToObject<List<FileItem>>();
+            }
         }
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
             View v = convertView;
-            FCM_Message msg = _FCM_List[position];
+            FileItem msg = CurVideoList.ElementAt(position);
             if (v == null) // no view to re-use, create new
                 v = mainActivity.LayoutInflater.Inflate(Resource.Layout.MessageLayout, null);
 
@@ -76,27 +78,29 @@ namespace Sylva.Data
             {
                 if (txtViewBody != null)
                 {
-                    txtViewBody.Text = msg.Body;
+                    txtViewBody.Text = msg.FileName;
                 }
                 if (null != txtViewDate)
                 {
-                    txtViewDate.Text = msg.Date;
+                    txtViewDate.Text = msg.Title;
                 }
             }
 
             v.Click += V_Click;
-            v.Tag = msg;
+            if(0 == position%2)
+            {
+                v.SetBackgroundColor(new Color(0xd3, 0xd3, 0xd3));
+            }
+            else
+            {
+                v.SetBackgroundColor(new Color(0xff, 0xff, 0xff));
+            }
             
             txtViewDate.Tag = v;
             txtViewBody.Tag = v;
 
             txtViewDate.Click += TxtView_Click;
             txtViewBody.Click += TxtView_Click;
-
-            Button btnDelete = (Button)v.FindViewById(Resource.Id.btnDelete);
-            btnDelete.Tag = v;
-            btnDelete.Click += BtnDelete_Click;
-
 
             return v;
         }
@@ -108,7 +112,7 @@ namespace Sylva.Data
                 return;
             }
 
-            UpdateButtonStatus(CurrentView, ViewStates.Invisible);
+            UpdateButtonLayoutStatus(CurrentView, ViewStates.Invisible);
             FCM_Message msg = (FCM_Message)CurrentView.Tag;
             AddReceiveMsg(msg, false);
             CurrentView = null;
@@ -126,10 +130,10 @@ namespace Sylva.Data
 
         private View CurrentView { get; set; }
 
-        private void UpdateButtonStatus(View __view , ViewStates __states)
+        private void UpdateButtonLayoutStatus(View __view , ViewStates __states)
         {
-            Button btn = __view.FindViewById<Button>(Resource.Id.btnDelete);
-            btn.Visibility = __states;
+            LinearLayout PlayerLayout = (LinearLayout)__view.FindViewById(Resource.Id.PlayerLayout);
+            PlayerLayout.Visibility = __states;
         }
 
         private void V_Click(object sender, EventArgs e)
@@ -142,10 +146,10 @@ namespace Sylva.Data
 
             if (null != CurrentView)
             {
-                UpdateButtonStatus(CurrentView, ViewStates.Invisible);
+                UpdateButtonLayoutStatus(CurrentView, ViewStates.Gone);
             }
             CurrentView = v;
-            UpdateButtonStatus(CurrentView, ViewStates.Visible);
+            UpdateButtonLayoutStatus(CurrentView, ViewStates.Visible);
         }
 
         private MainActivity mainActivity = null;
