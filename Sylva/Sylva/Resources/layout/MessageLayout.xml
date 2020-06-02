@@ -25,37 +25,52 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="8"
-            android:id="@+id/Displaylayer">
-
-            <TextView
-                android:text=""
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:id="@+id/txtBody"
-                android:maxLines="4"
-                android:gravity="left"
-                android:inputType="textMultiLine"
-                android:singleLine="false"
-                android:layout_marginBottom="0.0dp" />
+            android:id="@+id/ItemLayout">
             
-                <TextView
-                android:text=""
-                android:layout_width="match_parent"
-                android:layout_height="0px"
-                android:layout_weight="1"
-                android:id="@+id/txtDate"
-                android:layout_marginBottom="0.0dp" />
-        
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:minWidth="25px"
+                    android:minHeight="25px"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/Displaylayer">
+
+                    <TextView
+                        android:text=""
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeTextType="uniform"
+                        android:id="@+id/txtBody"
+                        android:maxLines="4"
+                        android:gravity="left"
+                        android:inputType="textMultiLine"
+                        android:singleLine="false"
+                        android:layout_marginBottom="0.0dp" />
+
+                    <TextView
+                        android:text=""
+                        android:layout_width="match_parent"
+                        android:layout_height="0px"
+                        android:layout_weight="1"
+                        android:id="@+id/txtDate"
+                        android:layout_marginBottom="0.0dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                android:orientation="horizontal"
+                android:minWidth="25px"
+                android:minHeight="25px"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="8"
+                android:visibility="gone"
+                android:id="@+id/PlayerLayout">
+                    
+                </LinearLayout>
+
         </LinearLayout>
 
-        <Button
-            android:text="button"
-            android:layout_width="100dp"
-            android:layout_height="49.0dp"
-            android:layout_weight="2"
-            android:id="@+id/btnDelete"
-            android:visibility="invisible" />
+        
 
     </LinearLayout>
 </LinearLayout>
