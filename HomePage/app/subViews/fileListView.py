@@ -11,12 +11,13 @@ from ..Data.PlayInfo import PlayInfos
 from .playView import playView
 from django.shortcuts import render
 import uuid
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 
 class FileInfo:
     def __init__(self, filePath, dir, request):
         self.filePath = filePath
         self.dir = dir
-        self.request = request
         self.fileName, self.ext = os.path.splitext(filePath)
         
         self.encodeName = osDefine.Base64Encoding(self.getUrlPath())
@@ -29,7 +30,7 @@ class FileInfo:
             title = self.filePath
         self.title = title
 
-        self.link = self.getLink()
+        self.link = self.getLink(request);
     
     def setPlayInfo(self, playInfo):
         self.playInfo = playInfo
@@ -57,7 +58,7 @@ class FileInfo:
         if(-1 != self.dir.find(osDefine.LocalFilePath())):
             return self.dir.replace(osDefine.LocalFilePath(), '') + self.filePath
         return self.filePath
-    def getLink(self):
+    def getLink(self, request):
         if("" == self.filePath):
             localFilePath = osDefine.LocalFilePath()
             parentPath = self.dir.replace(localFilePath, "")
@@ -66,14 +67,26 @@ class FileInfo:
             
             osPath = osDefine.Base64Encoding(splitParentPath)
             if("/" != splitParentPath):
-                return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file=" + osPath + "'"
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Home'"
+                return "location.href='" + osDefine.getRunIp(request) + "/Home?file=" + osPath + "'"
+            return "location.href='" + osDefine.getRunIp(request) + "/Home'"
         if True == self.isDirectory() :
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Home?file="+ self.getEncodingFileName() + "'"
+            return "location.href='" + osDefine.getRunIp(request) + "/Home?file="+ self.getEncodingFileName() + "'"
         else:
-            return "location.href='" + osDefine.getRunIp(self.request) + "/Play?file=" + self.getEncodingFileName() + "'"
+            return "location.href='" + osDefine.getRunIp(request) + "/Play?file=" + self.getEncodingFileName() + "'"
 
 class fileListView(object):
+
+    @staticmethod
+    def GetFileList(request):
+        requestFolder = osDefine.getParameter(request, "file");
+        if(None == requestFolder):
+            requestFolder = "";
+        requestFolder = osDefine.Base64Decoding(requestFolder);
+        osDefine.Logger("requestFolder : " + requestFolder);
+        fileItems = fileListView.getVideoList(requestFolder, request)
+        dumpString = json.dumps(fileItems, indent=4, default=lambda o: o.__dict__)
+        return dumpString;
+
     @staticmethod
     def getViewList(request):
 
@@ -99,7 +112,7 @@ class fileListView(object):
         localFilePath = osDefine.LocalFilePath()
         fileCount = 0      
         fileInfoList = [] 
-        findDir = localFilePath + dirPath
+        findDir = localFilePath + dirPath + "/"
         infos = PlayInfos.GetPlayInfos()
         for file in os.listdir(findDir):
                 info = FileInfo(file, findDir, request)

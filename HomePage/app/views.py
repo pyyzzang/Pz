@@ -93,6 +93,7 @@ def API(request):
             "SkipVideo":osDefine.SkipVideo,
             "DeleteTorrentInfo":TorrentInfos.DeleteTorrentInfo,
             "CPUTemp":osDefine.CPUTemp,
+            "GetVideoList":fileListView.GetFileList,
         }; 
         executeFunc = switcher.get(request.GET.get("API"));
     except Exception as e:
