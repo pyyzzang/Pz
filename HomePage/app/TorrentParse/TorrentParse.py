@@ -28,7 +28,7 @@ class TorrentParse:
         pass;
 
     def reTryCount(self):
-        return 20;
+        return 5;
     
     def isMP4(self, soup):
         pass;
