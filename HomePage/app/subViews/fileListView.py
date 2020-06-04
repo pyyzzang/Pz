@@ -121,13 +121,10 @@ class fileListView(object):
                     logInfo = infos.getPlayInfo(file)
                     if("" != logInfo):
                         osDefine.Logger(logInfo.getProgressValue())
-                        
-                    info.setPlayInfo(infos.getPlayInfo(file))
-
+                    info.setPlayInfo(infos.getPlayInfo(info.getUrlPath()))
         fileInfoList.sort()
 
         if( "" != dirPath):
-            osDefine.Logger("DirPath : " + dirPath)
             parentInfo = FileInfo("", findDir, request)
             fileInfoList.insert(0,parentInfo)
         return fileInfoList
