@@ -12,6 +12,8 @@ from ..Data.TorrentInfo import TorrentInfos
 from ..subViews.torrent import torrent
 import sys
 from ..module.Task import Task
+import cfscrape
+
 class TorrentParse(Task):
     def __init__(self):
         os.system("sudo killall -9 chromedriver")
@@ -75,13 +77,14 @@ class TorrentParse(Task):
         index = int(self.getMeta("%s" % param))
         url = self.getUrl()
         url = url % (param, index)
-        response = requests.get(url)
+        scraper = cfscrape.create_scraper()
+        response = scraper.get(url)
         if(200 != response.status_code):
             osDefine.Logger("URL : + " + url + " response.status_code : " + str(response.status_code))
             osDefine.Logger("response.text : + " + response.text)
             return
 
-        soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
         redirectUrl = self.isRedirect(soup)        
         osDefine.Logger(response.text)
         osDefine.Logger(redirectUrl)
@@ -139,7 +142,9 @@ class TorrentParse(Task):
             finally:
                 index = index + 1
                 url = self.getUrl() % (param, index)
-                response = requests.get(url)
+                response =scraper.get(url)
+                if(200 != response.status_code):
+                    return
                 soup = BeautifulSoup(response.text, 'html.parser')
 
                 redirectUrl = self.isRedirect(soup)        
@@ -148,7 +153,7 @@ class TorrentParse(Task):
                     osDefine.Logger(response.text)
                     url = self.getRedirectUrl(redirectUrl)
                     response = requests.get(url)
-                    soup = BeautifulSoup(response.text, 'html.parser')
+                    soup = BeautifulSoup(response.content.decode('utf-8'), 'html.parser')
                     osDefine.Logger(response.text)
                 
         return log
