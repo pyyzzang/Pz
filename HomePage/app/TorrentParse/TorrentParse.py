@@ -11,8 +11,8 @@ from ..Data.TorrentInfo import torrentInfo
 from ..Data.TorrentInfo import TorrentInfos
 from ..subViews.torrent import torrent
 import sys
-
-class TorrentParse:
+from ..module.Task import Task
+class TorrentParse(Task):
     def __init__(self):
         os.system("sudo killall -9 chromedriver")
         os.system("sudo killall -9 chromium-browse")
@@ -28,7 +28,7 @@ class TorrentParse:
         pass
 
     def reTryCount(self):
-        return 5
+        return 2
     
     def isMP4(self, soup):
         pass
@@ -51,9 +51,10 @@ class TorrentParse:
 
     def isRedirect(self, soup):
         script = soup.find("script")
+        osDefine.Logger(script.string)
         if(None == script):
             return ""
-        if("window.location.href =" in script.string):
+        if(None != script.string and "window.location.href =" in script.string):
             tmp1 = script.string.replace(" window.location.href =\"", "")
             tmp2 = tmp1.replace("\"", "")
             return tmp2
@@ -75,8 +76,12 @@ class TorrentParse:
         url = self.getUrl()
         url = url % (param, index)
         response = requests.get(url)
-        soup = BeautifulSoup(response.text, 'html.parser')
+        if(200 != response.status_code):
+            osDefine.Logger("URL : + " + url + " response.status_code : " + str(response.status_code))
+            osDefine.Logger("response.text : + " + response.text)
+            return
 
+        soup = BeautifulSoup(response.text, 'html.parser')
         redirectUrl = self.isRedirect(soup)        
         osDefine.Logger(response.text)
         osDefine.Logger(redirectUrl)
@@ -164,7 +169,3 @@ class TorrentParse:
         except Exception as e:
             osDefine.Logger(e)
         return False
-    
-    @staticmethod
-    def CrawlingTorrent():
-        FCM.SendFireBaseThread()

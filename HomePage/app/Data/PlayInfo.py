@@ -90,7 +90,10 @@ class PlayInfos(object):
         saveInfos = PlayInfos([])
         if (True == os.path.isfile(PlayInfos.UserInfo)):
             with open(PlayInfos.UserInfo, "r") as filePlayInfo:
-                saveInfos = PlayInfos.from_json(json.load(filePlayInfo))
+                try:
+                    saveInfos = PlayInfos.from_json(json.load(filePlayInfo))
+                except Exception as e:
+                    print(e)
         return saveInfos
 
     @classmethod

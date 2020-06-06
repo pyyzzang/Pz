@@ -4,8 +4,7 @@ from requests import post
 import time
 import threading
 import requests
-from .TorrentSir5Parse import TorrentSir5Parse
-
+from ..module.Task import Task
 
 
 class TorrentveryParse(TorrentParse):
@@ -44,18 +43,23 @@ class TorrentveryParse(TorrentParse):
         return selectQuery
 
     def getBaseUrl(self):
-        return "https://torrentvery2.com"
+        return "https://torrentdia.com"
     
     def getUrl(self):
-        return 'https://torrentvery2.com/torrent_%s/%s'
+        return self.getBaseUrl() + '/torrent_%s/%s'
     
     def getUpdateQuery(self):
         return "update meta set value='%s' where name='Very_%sindex'"
 
+    def Run(self):
+        self.getUpdateList("movieko", 1)
+        self.getUpdateList("drama", 2)
+        self.getUpdateList("ent", 3)
+        self.getUpdateList("docu", 4)
+        self.getUpdateList("tvend", 5)
+
     @staticmethod
     def CrawlingTorrent():
-        TorrentParse.CrawlingTorrent()
-        
         tvParse = TorrentveryParse()
         tvParse.getUpdateList("movieko", 1)
         tvParse.getUpdateList("drama", 2)
@@ -71,5 +75,5 @@ class TorrentveryParse(TorrentParse):
             osDefine.Logger("크롤링 TorrentVery 모드")
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent)
             t.start()
-        
-TorrentveryParse.RunCrawlingThread()
+
+Task.AppendTask(TorrentveryParse())

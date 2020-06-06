@@ -8,6 +8,7 @@ from ..Data.TorrentInfo import torrentInfo
 from .TorrentParse import TorrentParse
 import threading
 import time
+from ..module.Task import Task
 
 class TorrentSir5Parse(TorrentParse):
     def __init__(self):
@@ -44,23 +45,10 @@ class TorrentSir5Parse(TorrentParse):
     def getBaseUrl(self):
         return "https://torrentsir5.com"
 
-    @staticmethod
-    def CrawlingTorrent():
-        TorrentParse.CrawlingTorrent()
-        
-        tsParse = TorrentSir5Parse()
+    def Run(self):
         #tsParse.getUpdateList("movie", 1)
-        tsParse.getUpdateList("drama", 2)
-        tsParse.getUpdateList("entertain", 3)
-        tsParse.getUpdateList("tv", 4)
-            
-    staticmethod
-    def RunCrawlingThread():
-        if(True == osDefine.getIsDev()):
-            osDefine.Logger("TorrentSir5 개발 모드")
-        else:
-            osDefine.Logger("크롤링 TorrentSir 모드")
-            t = threading.Thread(target=TorrentSir5Parse.CrawlingTorrent)
-            t.start()
+        self.getUpdateList("drama", 2)
+        self.getUpdateList("entertain", 3)
+        self.getUpdateList("tv", 4)
 
-TorrentSir5Parse.RunCrawlingThread()
+Task.AppendTask(TorrentSir5Parse());
