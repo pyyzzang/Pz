@@ -12,6 +12,7 @@ using Android.Widget;
 using Firebase.Messaging;
 using Java.Interop;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Sylva.Util;
 using static Android.Views.View;
 
@@ -61,7 +62,12 @@ namespace Sylva.Data
             {
                 string fileList = HttpUtil.SendMessage(GetVideoList);
                 Newtonsoft.Json.Linq.JArray jArray = (Newtonsoft.Json.Linq.JArray)JsonConvert.DeserializeObject(fileList);
-                return jArray.ToObject<List<FileItem>>();
+                List<FileItem> retList = new List<FileItem>();
+                foreach (JToken jToken in jArray)
+                {
+                    retList.Add(new FileItem(jToken));
+                }
+                return retList;                
             }
         }
 
@@ -72,7 +78,7 @@ namespace Sylva.Data
             if (v == null) // no view to re-use, create new
                 v = mainActivity.LayoutInflater.Inflate(Resource.Layout.MessageLayout, null);
 
-            TextView txtViewDate = (TextView)v.FindViewById(Resource.Id.txtDate);
+            TextView txtViewDate = (TextView)v.FindViewById(Resource.Id.txtBody);
             TextView txtViewBody = (TextView)v.FindViewById(Resource.Id.txtBody);
             if (null != msg)
             {
@@ -87,7 +93,7 @@ namespace Sylva.Data
             }
 
             v.Click += V_Click;
-            if(0 == position%2)
+            if (0 == position%2)
             {
                 v.SetBackgroundColor(new Color(0xd3, 0xd3, 0xd3));
             }
@@ -102,7 +108,29 @@ namespace Sylva.Data
             txtViewDate.Click += TxtView_Click;
             txtViewBody.Click += TxtView_Click;
 
+            Button playButton = v.FindViewById<Button>(Resource.Id.Play);
+            playButton.Tag = msg;
+            playButton.Click += PlayButton_Click;
+
             return v;
+        }
+
+        private static string PlayVideoUrl { get { return "{0}/Play?file={1}"; } }
+        private void PlayButton_Click(object sender, EventArgs e)
+        {
+            Button btn = sender as Button;
+            if(null == btn)
+            {
+                return;
+            }
+            FileItem item = btn.Tag as FileItem;
+            if(null == item)
+            {
+                return;
+            }
+
+            string playUrl = string.Format(PlayVideoUrl, "{0}", item.EncodeName);
+            HttpUtil.SendMessage(playUrl);
         }
 
         private void BtnDelete_Click(object sender, EventArgs e)
