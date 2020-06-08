@@ -76,4 +76,4 @@ class TorrentveryParse(TorrentParse):
             t = threading.Thread(target=TorrentveryParse.CrawlingTorrent)
             t.start()
 
-Task.AppendTask(TorrentveryParse())
+#Task.AppendTask(TorrentveryParse())
