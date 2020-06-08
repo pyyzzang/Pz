@@ -16,6 +16,7 @@ import cfscrape
 
 class TorrentParse(Task):
     def __init__(self):
+        Task.__init__(self)
         os.system("sudo killall -9 chromedriver")
         os.system("sudo killall -9 chromium-browse")
 
