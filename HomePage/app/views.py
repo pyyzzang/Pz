@@ -12,12 +12,14 @@ from .subViews.playView import playView
 from .subViews.playerMove import playerMove
 from .subViews.torrent import torrent
 from .subViews.testView import testView
-from .subViews.Settings import Settings;
+from .subViews.Settings import Settings
 from .FCM.FCM import FCM
-from .module.osDefine import osDefine;
+from .module.osDefine import osDefine
 from django.http import HttpResponse
-from .TorrentParse.TorrentveryParse import TorrentveryParse;
-from .Data.TorrentInfo import TorrentInfos;
+from .TorrentParse.TorrentveryParse import TorrentveryParse
+from .TorrentParse.TorrentSir5Parse import TorrentSir5Parse
+
+from .Data.TorrentInfo import TorrentInfos
 
 import inspect;
 
@@ -85,7 +87,6 @@ def API(request):
     value = "";
     try:
         switcher={
-            "CrawlingTorrent":TorrentveryParse.CrawlingTorrent,
             "SearchYoutube":YoutubeView.SearchYoutube,
             "SendFCM":FCM.SendFireBase,
             "UpdateMsgStatus":FCM.UpdateMsgStatus,

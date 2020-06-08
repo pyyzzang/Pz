@@ -37,18 +37,18 @@ class TorrentSir5Parse(TorrentParse):
         return selectQuery
 
     def getUrl(self):
-        return 'https://torrentsir5.com/bbs/board.php?bo_table=%s&wr_id=%s'
+        return self.getBaseUrl() + 'bbs/board.php?bo_table=%s&wr_id=%s'
 
     def getUpdateQuery(self):
         return "update meta set value='%s' where name='Ts_%sindex'"
     
     def getBaseUrl(self):
-        return "https://torrentsir5.com"
+        return "https://torrentsir7.com/"
 
     def Run(self):
-        #tsParse.getUpdateList("movie", 1)
+        self.getUpdateList("movie", 2)
         self.getUpdateList("drama", 2)
         self.getUpdateList("entertain", 3)
         self.getUpdateList("tv", 4)
 
-Task.AppendTask(TorrentSir5Parse());
+Task.AppendTask(TorrentSir5Parse())
