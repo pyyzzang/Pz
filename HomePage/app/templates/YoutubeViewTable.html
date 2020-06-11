@@ -1,10 +1,9 @@
 <div id='SearchDiv'>
     <input type='text' id='txtSearch' />
-    <input type='button' id='btnSearch' value='검색'/>
-</div>
-<script type='text/javascript'>
-    $(function(){
-        $("#btnSearch").click(function(){
+    <input type='button' id='btnSearch' OnClick="SearchClick()" value='검색'/>
+
+    <script type='text/javascript'>
+        function SearchClick(){
             searchValue = document.getElementById('txtSearch').value;
             jsonData = {'API' : 'SearchYoutube', 'Value' : searchValue};
             $.ajax({
@@ -22,10 +21,9 @@
                     Youtubeview.innerHTML = data;
                 }
             });
-        })
-    })
+        }
     </script>
-
+</div>
     <div id='YoutubeTableDiv'>
         <table id="YoutubeTable">
             <thead>
