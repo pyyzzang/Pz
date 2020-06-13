@@ -98,7 +98,10 @@ class YoutubeView:
         
         jsPath = "https://youtube.com" + jsonString.assets["js"];
         if("url" not in retFormat.keys()):
-            retFormat["url"] = Cipher.getCipher(retFormat["cipher"], jsPath);
+            try:
+                retFormat["url"] = Cipher.getCipher(retFormat["cipher"], jsPath);
+            except Exception as e:
+                retFormat["url"] = Cipher.getCipher(retFormat["signatureCipher"], jsPath);
 
         return retFormat;
 
