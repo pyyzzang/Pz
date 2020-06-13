@@ -46,7 +46,7 @@ class TorrentSir5Parse(TorrentParse):
         return "https://torrentsir7.com/"
 
     def Run(self):
-        self.getUpdateList("movie", 2)
+        self.getUpdateList("movie", 1)
         self.getUpdateList("drama", 2)
         self.getUpdateList("entertain", 3)
         self.getUpdateList("tv", 4)
