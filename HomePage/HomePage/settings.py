@@ -229,9 +229,7 @@ LOGGING = {
 #0 5,11 * * 0,3 : 매주 일요일과 수요일 새벽 5시와 밤 11시.
 
 CRONJOBS = [
-    ('* 0 * * 0,7', 'app.cron.TorrentAllPause.TorrentAllPause'),
-    ('0 5 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
-    ('* 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
-    ('* 19 * * *', 'app.cron.TorrentAllPause.TorrentAllPause'),
-    ('10 5 * * *', 'app.cron.CronTab.ServerRun'),    #서버 실행
+    ('0 0 * * *', 'app.cron.CronTab.PcReboot'),    #reboot
+    ('10 0 * * *', 'app.cron.TorrentAllStart.TorrentAllStart'),
+    ('0 8 * * *', 'app.cron.CronTab.ServerRun'),    #서버 실행
 ]
