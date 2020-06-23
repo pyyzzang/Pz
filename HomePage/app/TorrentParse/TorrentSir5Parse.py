@@ -13,19 +13,26 @@ from ..module.Task import Task
 class TorrentSir5Parse(TorrentParse):
     def __init__(self):
         TorrentParse.__init__(self)
+        osDefine.Logger("TorrentSir5Parse +")
     
     def __del__(self):
         TorrentParse.__del__(self)
     
-    def getMagnet(self,soup):
+    def getMagnet(self, soup):
         retMagnet = ""
-        for magnetUrl in soup.find_all("a"):
-            if None != magnetUrl.get("href") and True == magnetUrl.get("href").startswith("magnet:?"):
-                return magnetUrl.get("href")
+        for magnetUrl in soup.find_all("li", class_="list-group-item en font-14 break-word"):
+            for content in magnetUrl:
+                try:
+                    if(True == content.string.startswith("magnet:")):
+                        return content.string
+                except Exception as e:
+                    print(e)
         return retMagnet
-    def getTitle(self,soup):
-        for title in soup.find_all("title"):
-            return title.text
+        
+
+    def getTitle(self, soup):
+        title = soup.find('h3', class_="panel-title")
+        return title.text
     
     def isMP4(self, soup):
         for title in soup.find_all("h3", class_="panel-title"):
@@ -43,7 +50,7 @@ class TorrentSir5Parse(TorrentParse):
         return "update meta set value='%s' where name='Ts_%sindex'"
     
     def getBaseUrl(self):
-        return "https://torrentsir7.com/"
+        return "https://torrentsir8.com/"
 
     def Run(self):
         self.getUpdateList("movie", 1)
