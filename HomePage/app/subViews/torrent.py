@@ -76,9 +76,15 @@ class torrent:
         if "" == Binary:
             Binary = magnet;
             base64Magnet = osDefine.Base64Encoding(Binary);
+
+        torrent.torrentInsertDB(title, base64Magnet, genre)
+
+    @staticmethod
+    def torrentInsertDB(title, manget, genre):
+        
         
         session = DBExecute.GetDBConnection();
-        query = "select * from Torrent where magnetUrl='%s'" % (base64Magnet);
+        query = "select * from Torrent where magnetUrl='%s'" % (manget);
         osDefine.Logger("selectQuery : " + query);
         rows = session.QueryExecute(query);
         row = rows.fetchone();
