@@ -52,6 +52,13 @@ class TorrentParse(Task):
     def getBaseUrl(self):
         pass
 
+    def getTitle(self, soup):
+        pass
+    def getMagnet(self, soup):
+        pass
+    def getTorrentFile(self, soup):
+        pass
+
     def isRedirect(self, soup):
         script = soup.find("script")
         osDefine.Logger(script.string)
@@ -114,7 +121,7 @@ class TorrentParse(Task):
                 f.write(response.text)
                 f.close()
 
-                if("" == title or "" == magnet):
+                if("" == title and "" == magnet):
                     raise Exception("Title and Magnet Empty")
 
                 osDefine.Logger("IsMp4 : " + str(self.isMP4(soup) ))
