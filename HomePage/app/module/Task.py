@@ -37,7 +37,7 @@ class Task():
         while(True):
             if(None == Task.StartTask):
                 return
-            Task.StartTask.Run()
+            #Task.StartTask.Run()
             time.sleep(3)
 
     def __init__(self):
