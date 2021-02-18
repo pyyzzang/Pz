@@ -30,7 +30,7 @@ class FileInfo:
             title = self.filePath
         self.title = title
 
-        self.link = self.getLink(request);
+        self.link = self.getLink(request)
     
     def setPlayInfo(self, playInfo):
         self.playInfo = playInfo
@@ -78,20 +78,20 @@ class fileListView(object):
 
     @staticmethod
     def GetFileList(request):
-        requestFolder = osDefine.getParameter(request, "file");
+        requestFolder = osDefine.getParameter(request, "file")
         if(None == requestFolder):
-            requestFolder = "";
-        requestFolder = osDefine.Base64Decoding(requestFolder);
-        osDefine.Logger("requestFolder : " + requestFolder);
+            requestFolder = ""
+        requestFolder = osDefine.Base64Decoding(requestFolder)
+        osDefine.Logger("requestFolder : " + requestFolder)
         fileItems = fileListView.getVideoList(requestFolder, request)
         dumpString = json.dumps(fileItems, indent=4, default=lambda o: o.__dict__)
-        return dumpString;
+        return dumpString
 
     @staticmethod
     def getViewList(request):
 
         if("" == osDefine.YoutubeToken):
-            retHttp = "<script>window.location.href='" + osDefine.getRunIp(request) + "/YoutubeRedirect';</script>"
+            retHttp = "<script>window.location.href='" + osDefine.getRunIp(request) + "/YoutubeRedirect'</script>"
             osDefine.Logger(retHttp)
             return HttpResponse(retHttp)
 
