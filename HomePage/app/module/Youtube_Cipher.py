@@ -1,8 +1,8 @@
-from .osDefine import osDefine;
+from .osDefine import osDefine
 from typing import List, Tuple, Dict, Callable, Any, Optional
-import re;
+import re
 from urllib.parse import unquote
-from  requests import get;
+from  requests import get
 from itertools import chain
 
 def regex_search(pattern: str, string: str, group: int) -> str:
@@ -26,7 +26,7 @@ def regex_search(pattern: str, string: str, group: int) -> str:
 
     print("matched regex search: %s", pattern)
 
-    return results.group(group);
+    return results.group(group)
 
 def get_initial_function_name(js: str) -> str:
     """Extract the name of the function responsible for computing the signature.
@@ -79,8 +79,8 @@ def get_transform_plan(js: str) -> List[str]:
     'DE.kT(a,21)']
     """
     name = re.escape(str(get_initial_function_name(js)))
-    pattern = r"%s=function\(\w\){[a-z=\.\(\"\)]*;(.*);(?:.+)}" % name
-    return regex_search(pattern, js, group=1).split(";")
+    pattern = r"%s=function\(\w\){[a-z=\.\(\"\)]*(.*)(?:.+)}" % name
+    return regex_search(pattern, js, group=1).split("")
 
 def get_transform_object(js: str, var: str) -> List[str]:
     """Extract the "transform object".
@@ -101,14 +101,14 @@ def get_transform_object(js: str, var: str) -> List[str]:
     >>> get_transform_object(js, 'DE')
     ['AJ:function(a){a.reverse()}',
     'VR:function(a,b){a.splice(0,b)}',
-    'kT:function(a,b){var c=a[0];a[0]=a[b%a.length];a[b]=c}']
+    'kT:function(a,b){var c=a[0]a[0]=a[b%a.length]a[b]=c}']
 
     """
-    pattern = r"var %s={(.*?)};" % re.escape(var)
+    pattern = r"var %s={(.*?)}" % re.escape(var)
     regex = re.compile(pattern, flags=re.DOTALL)
     transform_match = regex.search(js)
     if not transform_match:
-        print('raise RegexMatchError(caller="get_transform_object", pattern=pattern)');
+        print('raise RegexMatchError(caller="get_transform_object", pattern=pattern)')
 
     return transform_match.group(1).replace("\n", " ").split(", ")
 
@@ -154,7 +154,7 @@ def swap(arr: List, b: int):
 
     .. code-block:: javascript
 
-       function(a, b) { var c=a[0];a[0]=a[b%a.length];a[b]=c }
+       function(a, b) { var c=a[0]a[0]=a[b%a.length]a[b]=c }
 
     **Example**:
 
@@ -176,11 +176,11 @@ def map_functions(js_func: str) -> Callable:
         (r"{\w\.reverse\(\)}", reverse),
         # function(a,b){a.splice(0,b)}
         (r"{\w\.splice\(0,\w\)}", splice),
-        # function(a,b){var c=a[0];a[0]=a[b%a.length];a[b]=c}
-        (r"{var\s\w=\w\[0\];\w\[0\]=\w\[\w\%\w.length\];\w\[\w\]=\w}", swap),
-        # function(a,b){var c=a[0];a[0]=a[b%a.length];a[b%a.length]=c}
+        # function(a,b){var c=a[0]a[0]=a[b%a.length]a[b]=c}
+        (r"{var\s\w=\w\[0\]\w\[0\]=\w\[\w\%\w.length\]\w\[\w\]=\w}", swap),
+        # function(a,b){var c=a[0]a[0]=a[b%a.length]a[b%a.length]=c}
         (
-            r"{var\s\w=\w\[0\];\w\[0\]=\w\[\w\%\w.length\];\w\[\w\%\w.length\]=\w}",
+            r"{var\s\w=\w\[0\]\w\[0\]=\w\[\w\%\w.length\]\w\[\w\%\w.length\]=\w}",
             swap,
         ),
     )
@@ -188,7 +188,7 @@ def map_functions(js_func: str) -> Callable:
     for pattern, fn in mapper:
         if re.search(pattern, js_func):
             return fn
-    print('raise RegexMatchError(caller="map_functions", pattern="multiple")    ');
+    print('raise RegexMatchError(caller="map_functions", pattern="multiple")    ')
 
 def get_transform_map(js: str, var: str) -> Dict:
     """Build a transform function lookup.
@@ -216,20 +216,20 @@ class Cipher:
 
     @staticmethod
     def getCipher(c, jsPath):
-        ciphers = c.split("&");
+        ciphers = c.split("&")
 
-        sValue = "";
-        sUrl = "";
+        sValue = ""
+        sUrl = ""
         
         for cipher in ciphers:
             if(True == cipher.startswith("s=")):
-                sValue = unquote(cipher.replace("s=", ""));
+                sValue = unquote(cipher.replace("s=", ""))
             elif(True == cipher.startswith("url=")):
-                sUrl = unquote(cipher.replace("url=", ""));
-        c = Cipher(get(jsPath).text);
-        url = sUrl + "&sig=" + c.get_signature(sValue);
-        osDefine.Logger("Url : " + url);
-        return url;
+                sUrl = unquote(cipher.replace("url=", ""))
+        c = Cipher(get(jsPath).text)
+        url = sUrl + "&sig=" + c.get_signature(sValue)
+        osDefine.Logger("Url : " + url)
+        return url
 
     def __init__(self, js: str):
         self.transform_plan: List[str] = get_transform_plan(js)
@@ -257,7 +257,7 @@ class Cipher:
         """
         parse_match = self.js_func_regex.search(js_func)
         if not parse_match:
-            print('raise RegexMatchError(caller="parse_function", pattern="js_func_regex")');
+            print('raise RegexMatchError(caller="parse_function", pattern="js_func_regex")')
         fn_name, fn_arg = parse_match.groups()
         return fn_name, int(fn_arg)
 

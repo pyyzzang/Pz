@@ -41,7 +41,7 @@ class FCM:
             firebase_admin.initialize_app(FCM.cred)
 
         connection = SQLalchemy.GetDBConnection()
-        query = "select info.token, fcm.Title, fcm.Content, fcm.SendTime, fcm.MsgGUID from FCM as fcm, UserInfo as info where fcm.Id = info.id;"
+        query = "select info.token, fcm.Title, fcm.Content, fcm.SendTime, fcm.MsgGUID from FCM as fcm, UserInfo as info where fcm.Id = info.id"
         rows = connection.QueryExecute(query)
         osDefine.Logger(query)
 

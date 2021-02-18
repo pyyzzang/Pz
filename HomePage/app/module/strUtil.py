@@ -9,7 +9,7 @@ class strUtil:
     @staticmethod
     def init():
         strUtil.titlePattern = '.+.E\d+'
-        strUtil.similarTitlePattern = "[ ㄱ-ㅣ가-힣]+";
+        strUtil.similarTitlePattern = "[ ㄱ-ㅣ가-힣]+"
 
     @staticmethod
     def isMatchTitle(title):
@@ -49,20 +49,20 @@ class strUtil:
         regulText = re.compile(pattern)
         result = regulText.findall(text)
         if(0 != len(result)):
-            return result[0];
-        return default;
+            return result[0]
+        return default
     
     @staticmethod
     def getSeason(text):
-        season = strUtil.getRegularText(text, "S\d\d");
-        return strUtil.getRegularText(season, "\d\d");
+        season = strUtil.getRegularText(text, "S\d\d")
+        return strUtil.getRegularText(season, "\d\d")
 
     @staticmethod
     def getEpisode(text):
-        episode = strUtil.getRegularText(text, "E\d{2,6}|\d{2,6}회|E.\d{2,6}");
-        return strUtil.getRegularText(text, "\d{2,6}");
+        episode = strUtil.getRegularText(text, "E\d{2,6}|\d{2,6}회|E.\d{2,6}")
+        return strUtil.getRegularText(text, "\d{2,6}")
     
     @staticmethod
     def getDate(text):
-        date = strUtil.getRegularText(text, "['\.',' ']\d{4,6}\.");
-        return strUtil.getRegularText(date, "\d{4,6}");
+        date = strUtil.getRegularText(text, "['\.',' ']\d{4,6}\.")
+        return strUtil.getRegularText(date, "\d{4,6}")

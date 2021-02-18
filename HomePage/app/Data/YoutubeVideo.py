@@ -150,9 +150,9 @@ class AdaptiveFormat():
 class StreamingData():
     def __init__(self, expiresInSeconds, formats, adaptiveFormats):
         self.expiresInSeconds = expiresInSeconds
-        #public List<Format> formats { get; set; }
+        #public List<Format> formats { get set }
         self.formats = formats
-        #public List<AdaptiveFormat> adaptiveFormats { get; set; }
+        #public List<AdaptiveFormat> adaptiveFormats { get set }
         self.adaptiveFormats = adaptiveFormats
 
 class PlayerAdParams():
@@ -255,7 +255,7 @@ class Run():
 
 class AddSubtitlesText():
     def __init__(self, runs):
-        #public List<Run> runs { get; set; }
+        #public List<Run> runs { get set }
         self.runs = runs
 
 class NoSubtitlesText():
@@ -296,7 +296,7 @@ class CaptionTrack():
 
 class AudioTrack():
     def __init__(self, captionTrackIndices):
-        #public List<int> captionTrackIndices { get; set; }
+        #public List<int> captionTrackIndices { get set }
         self.captionTrackIndices = captionTrackIndices
 
 class LanguageName():
@@ -306,7 +306,7 @@ class LanguageName():
 class TranslationLanguage():
     def __init__(self, languageCode, languageName):
         self.languageCode = languageCode
-        #public LanguageName languageName { get; set; }
+        #public LanguageName languageName { get set }
         self.languageName = languageName
 
 class WebCommandMetadata2():
@@ -316,7 +316,7 @@ class WebCommandMetadata2():
 
 class CommandMetadata2():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata2 webCommandMetadata { get; set; }
+        #public WebCommandMetadata2 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class UrlEndpoint2():
@@ -326,20 +326,20 @@ class UrlEndpoint2():
 class NavigationEndpoint2():
     def __init__(self, clickTrackingParams, commandMetadata, urlEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata2 commandMetadata { get; set; }
+        #public CommandMetadata2 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public UrlEndpoint2 urlEndpoint { get; set; }
+        #public UrlEndpoint2 urlEndpoint { get set }
         self.urlEndpoint = urlEndpoint
 
 class Run2():
     def __init__(self, text, navigationEndpoint):
         self.text = text
-        #public NavigationEndpoint2 navigationEndpoint { get; set; }
+        #public NavigationEndpoint2 navigationEndpoint { get set }
         self.navigationEndpoint = navigationEndpoint
 
 class AddSubtitlesText2():
     def __init__(self, runs):
-        #public List<Run2> runs { get; set; }
+        #public List<Run2> runs { get set }
         self.runs = runs
 
 class NoSubtitlesText2():
@@ -352,35 +352,35 @@ class PromoSubtitlesText2():
 
 class CaptionsMetadataRenderer2():
     def __init__(self, addSubtitlesText, noSubtitlesText, promoSubtitlesText):
-        #public AddSubtitlesText2 addSubtitlesText { get; set; }
+        #public AddSubtitlesText2 addSubtitlesText { get set }
         self.addSubtitlesText = addSubtitlesText
-        #public NoSubtitlesText2 noSubtitlesText { get; set; }
+        #public NoSubtitlesText2 noSubtitlesText { get set }
         self.noSubtitlesText = noSubtitlesText
-        #public PromoSubtitlesText2 promoSubtitlesText { get; set; }
+        #public PromoSubtitlesText2 promoSubtitlesText { get set }
         self.promoSubtitlesText = promoSubtitlesText
 
 class Contribute2():
     def __init__(self, captionsMetadataRenderer):
-        #public CaptionsMetadataRenderer2 captionsMetadataRenderer { get; set; }
+        #public CaptionsMetadataRenderer2 captionsMetadataRenderer { get set }
         self.captionsMetadataRenderer = captionsMetadataRenderer
 
 class PlayerCaptionsTracklistRenderer():
     def __init__(self, captionTracks, audioTracks, translationLanguages, defaultAudioTrackIndex, contribute):
-        #public List<CaptionTrack> captionTracks { get; set; }
+        #public List<CaptionTrack> captionTracks { get set }
         self.captionTracks = captionTracks
-        #public List<AudioTrack> audioTracks { get; set; }
+        #public List<AudioTrack> audioTracks { get set }
         self.audioTracks = audioTracks
-        #public List<TranslationLanguage> translationLanguages { get; set; }
+        #public List<TranslationLanguage> translationLanguages { get set }
         self.translationLanguages = translationLanguages
         self.defaultAudioTrackIndex = defaultAudioTrackIndex
-        #public Contribute2 contribute { get; set; }
+        #public Contribute2 contribute { get set }
         self.contribute = contribute
 
 class Captions():
     def __init__(self, playerCaptionsRenderer, playerCaptionsTracklistRenderer):
-        #public PlayerCaptionsRenderer playerCaptionsRenderer { get; set; }
+        #public PlayerCaptionsRenderer playerCaptionsRenderer { get set }
         self.playerCaptionsRenderer = playerCaptionsRenderer
-        #public PlayerCaptionsTracklistRenderer playerCaptionsTracklistRenderer { get; set; }
+        #public PlayerCaptionsTracklistRenderer playerCaptionsTracklistRenderer { get set }
         self.playerCaptionsTracklistRenderer = playerCaptionsTracklistRenderer
 
 class Thumbnail2():
@@ -391,7 +391,7 @@ class Thumbnail2():
 
 class Thumbnail():
     def __init__(self, thumbnails):
-        #public List<Thumbnail2> thumbnails { get; set; }
+        #public List<Thumbnail2> thumbnails { get set }
         self.thumbnails = thumbnails
 
 class VideoDetails():
@@ -401,13 +401,13 @@ class VideoDetails():
         self.videoId = videoId
         self.title = title
         self.lengthSeconds = lengthSeconds
-        #public List<string> keywords { get; set; }
+        #public List<string> keywords { get set }
         self.keywords = keywords
         self.channelId = channelId
         self.isOwnerViewing = isOwnerViewing
         self.shortDescription = shortDescription
         self.isCrawlable = isCrawlable
-        #public Thumbnail thumbnail { get; set; }
+        #public Thumbnail thumbnail { get set }
         self.thumbnail = thumbnail
         self.averageRating = averageRating
         self.allowRatings = allowRatings
@@ -425,7 +425,7 @@ class Thumbnail3():
 
 class Watermark():
     def __init__(self, thumbnails):
-        #public List<Thumbnail3> thumbnails { get; set; }
+        #public List<Thumbnail3> thumbnails { get set }
         self.thumbnails = thumbnails
 
 class WebCommandMetadata3():
@@ -436,7 +436,7 @@ class WebCommandMetadata3():
 
 class CommandMetadata3():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata3 webCommandMetadata { get; set; }
+        #public WebCommandMetadata3 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class BrowseEndpoint():
@@ -445,7 +445,7 @@ class BrowseEndpoint():
 
 class NavigationEndpoint3():
     def __init__(self, clickTrackingParams, commandMetadata, browseEndpoint):
-        #public string clickTrackingParams { get; set; }
+        #public string clickTrackingParams { get set }
         self.clickTrackingParams = clickTrackingParams
         self.commandMetadata = commandMetadata
         self.browseEndpoint = browseEndpoint
@@ -456,7 +456,7 @@ class Run3():
 
 class ButtonText():
     def __init__(self, runs):
-        #public List<Run3> runs { get; set; }
+        #public List<Run3> runs { get set }
         self.runs = runs
 
 class Run4():
@@ -465,7 +465,7 @@ class Run4():
 
 class SubscribedButtonText():
     def __init__(self, runs):
-        #public List<Run4> runs { get; set; }
+        #public List<Run4> runs { get set }
         self.runs = runs
 
 class Run5():
@@ -474,7 +474,7 @@ class Run5():
 
 class UnsubscribedButtonText():
     def __init__(self, runs):
-        #public List<Run5> runs { get; set; }
+        #public List<Run5> runs { get set }
         self.runs = runs
 
 class Run6():
@@ -483,7 +483,7 @@ class Run6():
 
 class UnsubscribeButtonText():
     def __init__(self, runs):
-        #public List<Run6> runs { get; set; }
+        #public List<Run6> runs { get set }
         self.runs = runs
 
 class WebCommandMetadata4():
@@ -494,30 +494,30 @@ class WebCommandMetadata4():
 
 class CommandMetadata4():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata4 webCommandMetadata { get; set; }
+        #public WebCommandMetadata4 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class SubscribeEndpoint():
     def __init__(self, channelIds, params):
-        #public List<string> channelIds { get; set; };
+        #public List<string> channelIds { get set }
         self.channelIds = channelIds
         self.params = params
 
 class UnsubscribeEndpoint():
     def __init__(self, channelIds, params):
-        #public List<string> channelIds { get; set; }
+        #public List<string> channelIds { get set }
         self.channelIds = channelIds
         self.params = params
 
 class ServiceEndpoint():
     def __init__(self, clickTrackingParams, commandMetadata, 
     subscribeEndpoint, unsubscribeEndpoint):
-        self.clickTrackingParams = clickTrackingParams;
-        #public CommandMetadata4 commandMetadata { get; set; }
+        self.clickTrackingParams = clickTrackingParams
+        #public CommandMetadata4 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public SubscribeEndpoint subscribeEndpoint { get; set; }
+        #public SubscribeEndpoint subscribeEndpoint { get set }
         self.subscribeEndpoint = subscribeEndpoint
-        #public UnsubscribeEndpoint unsubscribeEndpoint { get; set; }
+        #public UnsubscribeEndpoint unsubscribeEndpoint { get set }
         self.unsubscribeEndpoint = unsubscribeEndpoint
 
 class WebCommandMetadata5():
@@ -526,7 +526,7 @@ class WebCommandMetadata5():
 
 class CommandMetadata5():
     def __init__(self):
-        #public WebCommandMetadata5 webCommandMetadata { get; set; }
+        #public WebCommandMetadata5 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class WebNavigationEndpointData():
@@ -536,37 +536,37 @@ class WebNavigationEndpointData():
 class SignInEndpoint():
     def __init__(self, clickTrackingParams, commandMetadata, webNavigationEndpointData):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata5 commandMetadata { get; set; }
+        #public CommandMetadata5 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public WebNavigationEndpointData webNavigationEndpointData { get; set; }
+        #public WebNavigationEndpointData webNavigationEndpointData { get set }
         self.webNavigationEndpointData = webNavigationEndpointData
 
 class SubscribeButtonRenderer():
     def __init__(self, buttonText, subscribed, enabled, type, channelId, showPreferences,
     subscribedButtonText, unsubscribedButtonText, trackingParams, unsubscribeButtonText,
     serviceEndpoints, signInEndpoint):
-        #public ButtonText buttonText { get; set; }
+        #public ButtonText buttonText { get set }
         self.buttonText = buttonText
         self.subscribed = subscribed
         self.enabled = enabled
         self.type = type
         self.channelId = channelId
         self.showPreferences = showPreferences
-        #public SubscribedButtonText subscribedButtonText { get; set; }
+        #public SubscribedButtonText subscribedButtonText { get set }
         self.subscribedButtonText = subscribedButtonText
-        #public UnsubscribedButtonText unsubscribedButtonText { get; set; }
+        #public UnsubscribedButtonText unsubscribedButtonText { get set }
         self.unsubscribedButtonText = unsubscribedButtonText
         self.trackingParams = trackingParams
-        #public UnsubscribeButtonText unsubscribeButtonText { get; set; }
+        #public UnsubscribeButtonText unsubscribeButtonText { get set }
         self.unsubscribeButtonText = unsubscribeButtonText
-        #public List<ServiceEndpoint> serviceEndpoints { get; set; }
+        #public List<ServiceEndpoint> serviceEndpoints { get set }
         self.serviceEndpoints = serviceEndpoints
-        #public SignInEndpoint signInEndpoint { get; set; }
+        #public SignInEndpoint signInEndpoint { get set }
         self.signInEndpoint = signInEndpoint
 
 class SubscribeButton():
     def __init__(self, subscribeButtonRenderer):
-        #public SubscribeButtonRenderer subscribeButtonRenderer { get; set; }
+        #public SubscribeButtonRenderer subscribeButtonRenderer { get set }
         self.subscribeButtonRenderer = subscribeButtonRenderer
 
 class FeaturedChannel():
@@ -574,30 +574,30 @@ class FeaturedChannel():
     navigationEndpoint, channelName, subscribeButton):
         self.startTimeMs = startTimeMs
         self.endTimeMs = endTimeMs
-        #public Watermark watermark { get; set; }
+        #public Watermark watermark { get set }
         self.watermark = watermark
         self.trackingParams = trackingParams
-        #public NavigationEndpoint3 navigationEndpoint { get; set; }
+        #public NavigationEndpoint3 navigationEndpoint { get set }
         self.navigationEndpoint = navigationEndpoint
         self.channelName = channelName
-        #public SubscribeButton subscribeButton { get; set; }
+        #public SubscribeButton subscribeButton { get set }
         self.subscribeButton = subscribeButton
 
 class PlayerAnnotationsExpandedRenderer():
     def __init__(self, featuredChannel, allowSwipeDismiss, annotationId):
-        #public FeaturedChannel featuredChannel { get; set; }
+        #public FeaturedChannel featuredChannel { get set }
         self.featuredChannel = featuredChannel
         self.allowSwipeDismiss = allowSwipeDismiss
         self.annotationId = annotationId
 
 class Annotation():
     def __init__(self, playerAnnotationsExpandedRenderer):
-        #public PlayerAnnotationsExpandedRenderer playerAnnotationsExpandedRenderer { get; set; }
+        #public PlayerAnnotationsExpandedRenderer playerAnnotationsExpandedRenderer { get set }
         self.playerAnnotationsExpandedRenderer = playerAnnotationsExpandedRenderer
 
 class AudioConfig():
     def __init__(self, loudnessDb, perceptualLoudnessDb, enablePerFormatLoudness):
-        self.loudnessDb = loudnessDb;
+        self.loudnessDb = loudnessDb
         self.perceptualLoudnessDb = perceptualLoudnessDb
         self.enablePerFormatLoudness = enablePerFormatLoudness
 
@@ -613,16 +613,16 @@ class DynamicReadaheadConfig():
 
 class MediaCommonConfig():
     def __init__(self, dynamicReadaheadConfig):
-        #public DynamicReadaheadConfig dynamicReadaheadConfig { get; set; }
+        #public DynamicReadaheadConfig dynamicReadaheadConfig { get set }
         self.dynamicReadaheadConfig = dynamicReadaheadConfig
 
 class PlayerConfig():
     def __init__(self, audioConfig, streamSelectionConfig, mediaCommonConfig):
-        #public AudioConfig audioConfig { get; set; }
+        #public AudioConfig audioConfig { get set }
         self.audioConfig = audioConfig
-        #public StreamSelectionConfig streamSelectionConfig { get; set; }
+        #public StreamSelectionConfig streamSelectionConfig { get set }
         self.streamSelectionConfig = streamSelectionConfig
-        #public MediaCommonConfig mediaCommonConfig { get; set; }
+        #public MediaCommonConfig mediaCommonConfig { get set }
         self.mediaCommonConfig = mediaCommonConfig
 
 class PlayerStoryboardSpecRenderer():
@@ -631,8 +631,8 @@ class PlayerStoryboardSpecRenderer():
 
 class Storyboards():
     def __init__(self, playerStoryboardSpecRenderer):
-        #public PlayerStoryboardSpecRenderer playerStoryboardSpecRenderer { get; set; }
-        self.playerStoryboardSpecRenderer = playerStoryboardSpecRenderer;
+        #public PlayerStoryboardSpecRenderer playerStoryboardSpecRenderer { get set }
+        self.playerStoryboardSpecRenderer = playerStoryboardSpecRenderer
 
 class Thumbnail5():
     def __init__(self, url, width, height):
@@ -642,7 +642,7 @@ class Thumbnail5():
 
 class Thumbnail4():
     def __init__(self, thumbnails):
-        #public List<Thumbnail5> thumbnails { get; set; }
+        #public List<Thumbnail5> thumbnails { get set }
         self.thumbnails = thumbnails
 
 class Embed():
@@ -665,20 +665,20 @@ class PlayerMicroformatRenderer():
     def __init__(self, thumbnail, embed, title, description, lengthSeconds, ownerProfileUrl,
     ownerGplusProfileUrl, externalChannelId, isFamilySafe, availableCountries, isUnlisted,
     hasYpcMetadata, viewCount, category, publishDate, ownerChannelName, uploadDate):
-        #public Thumbnail4 thumbnail { get; set; }
+        #public Thumbnail4 thumbnail { get set }
         self.thumbnail = thumbnail
-        #public Embed embed { get; set; }
+        #public Embed embed { get set }
         self.embed = embed
-        #public Title title { get; set; }
+        #public Title title { get set }
         self.title = title
-        #public Description description { get; set; }
+        #public Description description { get set }
         self.description = description
         self.lengthSeconds = lengthSeconds
         self.ownerProfileUrl = ownerProfileUrl
         self.ownerGplusProfileUrl = ownerGplusProfileUrl
         self.externalChannelId = externalChannelId
         self.isFamilySafe = isFamilySafe
-        #public List<string> availableCountries { get; set; }
+        #public List<string> availableCountries { get set }
         self.availableCountries = availableCountries
         self.isUnlisted = isUnlisted
         self.hasYpcMetadata = hasYpcMetadata
@@ -690,7 +690,7 @@ class PlayerMicroformatRenderer():
 
 class Microformat():
     def __init__(self, playerMicroformatRenderer):
-        #public PlayerMicroformatRenderer playerMicroformatRenderer { get; set; }
+        #public PlayerMicroformatRenderer playerMicroformatRenderer { get set }
         self.playerMicroformatRenderer = playerMicroformatRenderer
 
 class Message():
@@ -699,7 +699,7 @@ class Message():
 
 class SimpleCardTeaserRenderer():
     def __init__(self, message, trackingParams, prominent, logVisibilityUpdates):
-        #public Message message { get; set; }
+        #public Message message { get set }
         self.message = message
         self.trackingParams = trackingParams
         self.prominent = prominent
@@ -707,7 +707,7 @@ class SimpleCardTeaserRenderer():
 
 class Teaser():
     def __init__(self, simpleCardTeaserRenderer):
-        #public SimpleCardTeaserRenderer simpleCardTeaserRenderer { get; set; }
+        #public SimpleCardTeaserRenderer simpleCardTeaserRenderer { get set }
         self.simpleCardTeaserRenderer = simpleCardTeaserRenderer
 
 class Thumbnail6():
@@ -718,7 +718,7 @@ class Thumbnail6():
 
 class VideoThumbnail():
     def __init__(self, thumbnails):
-        #public List<Thumbnail6> thumbnails { get; set; }
+        #public List<Thumbnail6> thumbnails { get set }
         self.thumbnails = thumbnails
 
 class AccessibilityData():
@@ -727,12 +727,12 @@ class AccessibilityData():
 
 class Accessibility():
     def __init__(self, accessibilityData):
-        #public AccessibilityData accessibilityData { get; set; }
+        #public AccessibilityData accessibilityData { get set }
         self.accessibilityData = accessibilityData
 
 class LengthString():
     def __init__(self, accessibility, simpleText):
-        #public Accessibility accessibility { get; set; }
+        #public Accessibility accessibility { get set }
         self.accessibility = accessibility
         self.simpleText = simpleText
 
@@ -756,7 +756,7 @@ class WebCommandMetadata6():
 
 class CommandMetadata6():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata6 webCommandMetadata { get; set; }
+        #public WebCommandMetadata6 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class WatchEndpoint():
@@ -766,30 +766,30 @@ class WatchEndpoint():
 class Action():
     def __init__(self, clickTrackingParams, commandMetadata, watchEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata6 commandMetadata { get; set; }
+        #public CommandMetadata6 commandMetadata { get set }
         self.commandMetadata = commandMetadata
         self.watchEndpoint = watchEndpoint
 
 class VideoInfoCardContentRenderer():
     def __init__(self, videoThumbnail, lengthString, videoTitle, channelName,
     viewCountText, action, trackingParams):
-        #public VideoThumbnail videoThumbnail { get; set; }
+        #public VideoThumbnail videoThumbnail { get set }
         self.videoThumbnail = videoThumbnail
-        #public LengthString lengthString { get; set; }
+        #public LengthString lengthString { get set }
         self.lengthString = lengthString
-        #public VideoTitle videoTitle { get; set; }
+        #public VideoTitle videoTitle { get set }
         self.videoTitle = videoTitle
-        #public ChannelName channelName { get; set; }
+        #public ChannelName channelName { get set }
         self.channelName = channelName
-        #public ViewCountText viewCountText { get; set; }
+        #public ViewCountText viewCountText { get set }
         self.viewCountText = viewCountText
-        #public Action action { get; set; }
+        #public Action action { get set }
         self.action = action
         self.trackingParams = trackingParams
 
 class Content():
     def __init__(self, videoInfoCardContentRenderer):
-        #public VideoInfoCardContentRenderer videoInfoCardContentRenderer { get; set; }
+        #public VideoInfoCardContentRenderer videoInfoCardContentRenderer { get set }
         self.videoInfoCardContentRenderer = videoInfoCardContentRenderer
 
 class CueRange():
@@ -805,18 +805,18 @@ class InfoCardIconRenderer():
 
 class Icon():
     def __init__(self, infoCardIconRenderer):
-        #public InfoCardIconRenderer infoCardIconRenderer { get; set; }
+        #public InfoCardIconRenderer infoCardIconRenderer { get set }
         self.infoCardIconRenderer = infoCardIconRenderer
 
 class CardRenderer():
     def __init__(self, teaser, content, cueRanges, icon, trackingParams, cardId, feature):
-        #public Teaser teaser { get; set; }
+        #public Teaser teaser { get set }
         self.teaser = teaser
-        #public Content content { get; set; }
+        #public Content content { get set }
         self.content = content
-        #public List<CueRange> cueRanges { get; set; }
+        #public List<CueRange> cueRanges { get set }
         self.cueRanges = cueRanges
-        #public Icon icon { get; set; }
+        #public Icon icon { get set }
         self.icon = icon
         self.trackingParams = trackingParams
         self.cardId = cardId
@@ -824,7 +824,7 @@ class CardRenderer():
 
 class Card():
     def __init__(self, cardRenderer):
-        #public CardRenderer cardRenderer { get; set; }
+        #public CardRenderer cardRenderer { get set }
         self.cardRenderer = cardRenderer
 
 class HeaderText():
@@ -837,7 +837,7 @@ class InfoCardIconRenderer2():
 
 class Icon2():
     def __init__(self, infoCardIconRenderer):
-        #public InfoCardIconRenderer2 infoCardIconRenderer { get; set; }
+        #public InfoCardIconRenderer2 infoCardIconRenderer { get set }
         self.infoCardIconRenderer = infoCardIconRenderer
 
 class InfoCardIconRenderer3():
@@ -846,19 +846,19 @@ class InfoCardIconRenderer3():
 
 class CloseButton():
     def __init__(self, infoCardIconRenderer):
-        #public InfoCardIconRenderer3 infoCardIconRenderer { get; set; }
+        #public InfoCardIconRenderer3 infoCardIconRenderer { get set }
         self.infoCardIconRenderer = infoCardIconRenderer
 
 class CardCollectionRenderer():
     def __init__(self, cards, headerText, icon, closeButton, 
     trackingParams, allowTeaserDismiss, logIconVisibilityUpdates):
-        #public List<Card> cards { get; set; }
+        #public List<Card> cards { get set }
         self.cards = cards
-        #public HeaderText headerText { get; set; }
+        #public HeaderText headerText { get set }
         self.headerText = headerText
-        #public Icon2 icon { get; set; }
+        #public Icon2 icon { get set }
         self.icon = icon
-        #public CloseButton closeButton { get; set; }
+        #public CloseButton closeButton { get set }
         self.closeButton = closeButton
         self.trackingParams = trackingParams
         self.allowTeaserDismiss = allowTeaserDismiss
@@ -866,7 +866,7 @@ class CardCollectionRenderer():
 
 class Cards():
     def __init__(self, cardCollectionRenderer):
-        #public CardCollectionRenderer cardCollectionRenderer { get; set; }
+        #public CardCollectionRenderer cardCollectionRenderer { get set }
         self.cardCollectionRenderer = cardCollectionRenderer
 
 class BotguardData():
@@ -877,18 +877,18 @@ class BotguardData():
 class PlayerAttestationRenderer():
     def __init__(self, challenge, botguardData):
         self.challenge = challenge
-        #public BotguardData botguardData { get; set; }
+        #public BotguardData botguardData { get set }
         self.botguardData = botguardData
 
 class Attestation():
     def __init__(self, playerAttestationRenderer):
-        #public PlayerAttestationRenderer playerAttestationRenderer { get; set; }
+        #public PlayerAttestationRenderer playerAttestationRenderer { get set }
         self.playerAttestationRenderer = playerAttestationRenderer
 
 class TriggerCriteria():
     def __init__(self, connectionWhitelists, joinLatencySeconds, rebufferTimeSeconds,
     watchTimeWindowSeconds, refractorySeconds):
-        #public List<string> connectionWhitelists { get; set; }
+        #public List<string> connectionWhitelists { get set }
         self.connectionWhitelists = connectionWhitelists
         self.joinLatencySeconds = joinLatencySeconds
         self.rebufferTimeSeconds = rebufferTimeSeconds
@@ -902,7 +902,7 @@ class Run7():
 
 class Text():
     def __init__(self, runs):
-        #public List<Run7> runs { get; set; }
+        #public List<Run7> runs { get set }
         self.runs = runs
 
 class WebCommandMetadata7():
@@ -912,7 +912,7 @@ class WebCommandMetadata7():
 
 class CommandMetadata7():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata7 webCommandMetadata { get; set; }
+        #public WebCommandMetadata7 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class UrlEndpoint3():
@@ -923,9 +923,9 @@ class UrlEndpoint3():
 class Endpoint():
     def __init__(self, clickTrackingParams, commandMetadata, urlEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata7 commandMetadata { get; set; }
+        #public CommandMetadata7 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public UrlEndpoint3 urlEndpoint { get; set; }
+        #public UrlEndpoint3 urlEndpoint { get set }
         self.urlEndpoint = urlEndpoint
 
 class VideoQualityPromoCloseRenderer():
@@ -934,24 +934,24 @@ class VideoQualityPromoCloseRenderer():
 
 class CloseButton2():
     def __init__(self, videoQualityPromoCloseRenderer):
-        #public VideoQualityPromoCloseRenderer videoQualityPromoCloseRenderer { get; set; }
+        #public VideoQualityPromoCloseRenderer videoQualityPromoCloseRenderer { get set }
         self.videoQualityPromoCloseRenderer = videoQualityPromoCloseRenderer
 
 class VideoQualityPromoRenderer():
     def __init__(self, triggerCriteria, text, endpoint, trackingParams, closeButton):
-        #public TriggerCriteria triggerCriteria { get; set; }
+        #public TriggerCriteria triggerCriteria { get set }
         self.triggerCriteria = triggerCriteria
-        #public Text text { get; set; }
+        #public Text text { get set }
         self.text = text
-        #public Endpoint endpoint { get; set; }
+        #public Endpoint endpoint { get set }
         self.endpoint = endpoint
         self.trackingParams = trackingParams
-        #public CloseButton2 closeButton { get; set; }
+        #public CloseButton2 closeButton { get set }
         self.closeButton = closeButton
 
 class VideoQualityPromoSupportedRenderers():
     def __init__(self, videoQualityPromoRenderer):
-        #public VideoQualityPromoRenderer videoQualityPromoRenderer { get; set; }
+        #public VideoQualityPromoRenderer videoQualityPromoRenderer { get set }
         self.videoQualityPromoRenderer = videoQualityPromoRenderer
 
 class Run8():
@@ -960,7 +960,7 @@ class Run8():
 
 class MessageText():
     def __init__(self, runs):
-        #public List<Run8> runs { get; set; }
+        #public List<Run8> runs { get set }
         self.runs = runs
 
 class Run9():
@@ -969,7 +969,7 @@ class Run9():
 
 class Text2():
     def __init__(self, runs):
-        #public List<Run9> runs { get; set; }
+        #public List<Run9> runs { get set }
         self.runs = runs
 
 class WebCommandMetadata8():
@@ -980,36 +980,36 @@ class WebCommandMetadata8():
 
 class CommandMetadata8():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata8 webCommandMetadata { get; set; }
+        #public WebCommandMetadata8 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class BrowseEndpoint2():
     def __init__(self, browseId, params):
         self.browseId = browseId
-        #public string @params { get; set; }
+        #public string @params { get set }
         self.params = params
 
 class NavigationEndpoint4():
     def __init__(self, clickTrackingParams, commandMetadata, browseEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata8 commandMetadata { get; set; }
+        #public CommandMetadata8 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public BrowseEndpoint2 browseEndpoint { get; set; }
+        #public BrowseEndpoint2 browseEndpoint { get set }
         self.browseEndpoint = browseEndpoint
 
 class ButtonRenderer():
     def __init__(self, style, size, text, navigationEndpoint, trackingParams):
         self.style = style
         self.size = size
-        #public Text2 text { get; set; }
+        #public Text2 text { get set }
         self.text = text
-        #public NavigationEndpoint4 navigationEndpoint { get; set; }
+        #public NavigationEndpoint4 navigationEndpoint { get set }
         self.navigationEndpoint = navigationEndpoint
         self.trackingParams = trackingParams
 
 class ActionButton():
     def __init__(self, buttonRenderer):
-        #public ButtonRenderer buttonRenderer { get; set; }
+        #public ButtonRenderer buttonRenderer { get set }
         self.buttonRenderer = buttonRenderer
 
 class Run10():
@@ -1018,7 +1018,7 @@ class Run10():
 
 class Text3():
     def __init__(self, runs):
-        #public List<Run10> runs { get; set; }
+        #public List<Run10> runs { get set }
         self.runs = runs
 
 class WebCommandMetadata9():
@@ -1029,7 +1029,7 @@ class WebCommandMetadata9():
 
 class CommandMetadata9():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata9 webCommandMetadata { get; set; }
+        #public WebCommandMetadata9 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class UiActions():
@@ -1039,30 +1039,30 @@ class UiActions():
 class FeedbackEndpoint():
     def __init__(self, feedbackToken, uiActions):
         self.feedbackToken = feedbackToken
-        #public UiActions uiActions { get; set; }
+        #public UiActions uiActions { get set }
         self.uiActions = uiActions
 
 class ServiceEndpoint2():
     def __init__(self, clickTrackingParams, commandMetadata, feedbackEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata9 commandMetadata { get; set; }
+        #public CommandMetadata9 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public FeedbackEndpoint feedbackEndpoint { get; set; }
+        #public FeedbackEndpoint feedbackEndpoint { get set }
         self.feedbackEndpoint = feedbackEndpoint
 
 class ButtonRenderer2():
     def __init__(self, style, size, text, serviceEndPoint, trackingParams):
         self.style = style
         self.size = size
-        #public Text3 text { get; set; }
+        #public Text3 text { get set }
         self.text = text
-        #public ServiceEndpoint2 serviceEndpoint { get; set; }
+        #public ServiceEndpoint2 serviceEndpoint { get set }
         self.serviceEndpoint = serviceEndpoint
         self.trackingParams = trackingParams
 
 class DismissButton():
     def __init__(self, buttonRenderer):
-        #public ButtonRenderer2 buttonRenderer { get; set; }
+        #public ButtonRenderer2 buttonRenderer { get set }
         self.buttonRenderer = buttonRenderer
 
 class WebCommandMetadata10():
@@ -1073,7 +1073,7 @@ class WebCommandMetadata10():
 
 class CommandMetadata10():
     def __init__(self, webCommandMetadata):
-        #public WebCommandMetadata10 webCommandMetadata { get; set; }
+        #public WebCommandMetadata10 webCommandMetadata { get set }
         self.webCommandMetadata = webCommandMetadata
 
 class UiActions2():
@@ -1083,15 +1083,15 @@ class UiActions2():
 class FeedbackEndpoint2():
     def __init__(self, feedbackToken, uiActions):
         self.feedbackToken = feedbackToken
-        #public UiActions2 uiActions { get; set; }
+        #public UiActions2 uiActions { get set }
         self.uiActions = uiActions
 
 class ImpressionEndpoint():
     def __init__(self, clickTrackingParams, commandMetadata, feedbackEndpoint):
         self.clickTrackingParams = clickTrackingParams
-        #public CommandMetadata10 commandMetadata { get; set; }
+        #public CommandMetadata10 commandMetadata { get set }
         self.commandMetadata = commandMetadata
-        #public FeedbackEndpoint2 feedbackEndpoint { get; set; }
+        #public FeedbackEndpoint2 feedbackEndpoint { get set }
         self.feedbackEndpoint = feedbackEndpoint
 
 class Run11():
@@ -1100,35 +1100,35 @@ class Run11():
 
 class MessageTitle():
     def __init__(self, runs):
-        #public List<Run11> runs { get; set; }
+        #public List<Run11> runs { get set }
         self.runs = runs
 
 class MealbarPromoRenderer():
     def __init__(self, messageTexts, actionButton, dismissButton, triggerCondition,
     style, trackingParams, impressionEndpoints, isVisible, messageTitle):
-        #public List<MessageText> messageTexts { get; set; }
+        #public List<MessageText> messageTexts { get set }
         self.messageTexts = messageTexts
-        #public ActionButton actionButton { get; set; }
+        #public ActionButton actionButton { get set }
         self.actionButton = actionButton
-        #public DismissButton dismissButton { get; set; }
+        #public DismissButton dismissButton { get set }
         self.dismissButton = dismissButton
         self.triggerCondition = triggerCondition
         self.style = style
         self.trackingParams = trackingParams
-        #public List<ImpressionEndpoint> impressionEndpoints { get; set; }
+        #public List<ImpressionEndpoint> impressionEndpoints { get set }
         self.impressionEndpoints = impressionEndpoints
         self.isVisible = isVisible
-        #public MessageTitle messageTitle { get; set; }
+        #public MessageTitle messageTitle { get set }
         self.messageTitle = messageTitle
 
 class Messages():
     def __init__(self, mealbarPromoRenderer):
-        #public MealbarPromoRenderer mealbarPromoRenderer { get; set; }
+        #public MealbarPromoRenderer mealbarPromoRenderer { get set }
         self.mealbarPromoRenderer = mealbarPromoRenderer
 
 class AdPlacements():
     def __init__(self, adPlacementRenderer):
-        #public AdPlacementRenderer adPlacementRenderer { get; set; }
+        #public AdPlacementRenderer adPlacementRenderer { get set }
         self.adPlacementRenderer = adPlacementRenderer
 
 class PlayabilityStatus():
@@ -1148,42 +1148,42 @@ class PlayerResponse():
     captions = "", videoDetails = "", annotations = "", playerConfig = "", storyboards = "", microformat = "",
     cards = "", trackingParams = "", attestation = "", videoQualityPromoSupportedRenderers = "", messages = "", adPlacements = "", endscreen = "",
     responseContext = ""):
-        #public PlayabilityStatus playabilityStatus { get; set; }
+        #public PlayabilityStatus playabilityStatus { get set }
         self.playabilityStatus = playabilityStatus
-        #public StreamingData streamingData { get; set; }
+        #public StreamingData streamingData { get set }
         self.streamingData = streamingData
-        #public List<PlayerAd> playerAds { get; set; }
+        #public List<PlayerAd> playerAds { get set }
         self.playerAds = playerAds
-        #public PlaybackTracking playbackTracking { get; set; }
+        #public PlaybackTracking playbackTracking { get set }
         self.playbackTracking = playbackTracking
-        #public Captions captions { get; set; }
+        #public Captions captions { get set }
         self.captions = captions
-        #public VideoDetails videoDetails { get; set; }
+        #public VideoDetails videoDetails { get set }
         self.videoDetails = videoDetails
-        #public List<Annotation> annotations { get; set; }
+        #public List<Annotation> annotations { get set }
         self.annotations = annotations
-        #public PlayerConfig playerConfig { get; set; }
+        #public PlayerConfig playerConfig { get set }
         self.playerConfig = playerConfig
-        #public Storyboards storyboards { get; set; }
+        #public Storyboards storyboards { get set }
         self.storyboards = storyboards
-        #public Microformat microformat { get; set; }
+        #public Microformat microformat { get set }
         self.microformat = microformat
-        #public Cards cards { get; set; }
+        #public Cards cards { get set }
         self.cards = cards
         self.trackingParams = trackingParams
-        #public Attestation attestation { get; set; }
+        #public Attestation attestation { get set }
         self.attestation = attestation
-        #public VideoQualityPromoSupportedRenderers videoQualityPromoSupportedRenderers { get; set; }
+        #public VideoQualityPromoSupportedRenderers videoQualityPromoSupportedRenderers { get set }
         self.videoQualityPromoSupportedRenderers = videoQualityPromoSupportedRenderers
-        #public List<Message2> messages { get; set; }
+        #public List<Message2> messages { get set }
         self.messages = messages
-        #public List<AdPlacement> adPlacements { get; set; }
+        #public List<AdPlacement> adPlacements { get set }
         self.adPlacements = adPlacements
         self.endscreen = endscreen
 
 class RootObject():
     def __init__(self, player_response):
-        #public PlayerResponse player_response { get; set; }
+        #public PlayerResponse player_response { get set }
         self.player_response = player_response
 
 class Assets():
@@ -1220,9 +1220,9 @@ class Args():
 
 class AdPlacementRenderer():
     def __init__(self, config, renderer, trackingParams):
-            #public Config config { get; set; }
+            #public Config config { get set }
             self.config = config
-            #public Renderer renderer { get; set; }
+            #public Renderer renderer { get set }
             self.renderer = renderer
             self.trackingParams = trackingParams
 
