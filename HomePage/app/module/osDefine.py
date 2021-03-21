@@ -5,6 +5,7 @@ import base64
 import enum
 import re
 
+import requests
 from requests import get
 from omxplayer.player import OMXPlayer
 from requests import post
@@ -183,8 +184,6 @@ class osDefine:
         else:
             osDefine.playTitle = osDefine.playFileName
             
-        osDefine.Logger("title : " + title)
-        osDefine.Logger("osDefine.playTitle : " + osDefine.playTitle)
         osDefine.currentPlayer.stopEvent += lambda _: osDefine.PlayerInit()
         osDefine.currentPlayer.exitEvent += lambda _, exit_code: osDefine.ExitEvent(exit_code)
         
@@ -347,6 +346,7 @@ class osDefine:
                 'refresh_token': osDefine.YoutubeToken}
             
             response = post("https://accounts.google.com/o/oauth2/token", data)
+
             osDefine.Logger(response.text)
     
     @staticmethod

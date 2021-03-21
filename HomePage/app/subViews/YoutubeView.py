@@ -31,13 +31,10 @@ class YoutubeSearchType(Enum):
     @staticmethod
     def getTypeUrl(type, token):
         typeDict = {
-            YoutubeSearchType.Search: "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s",
-            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&maxResults=50",
+            YoutubeSearchType.Search: "https://www.googleapis.com/youtube/v3/search?part=snippet&regionCode=kr&q=%s",
+            YoutubeSearchType.MostPopular: "https://www.googleapis.com/youtube/v3/videos?chart=mostPopular&part=snippet&regionCode=kr&maxResults=50",
             YoutubeSearchType.Activities: "https://www.googleapis.com/youtube/v3/activities?regionCode=KR&part=contentDetails,snippet&home=true&maxResults=50",
             YoutubeSearchType.Subscript: "Search"}
-
-        if(YoutubeSearchType.MostPopular == type):
-            return typeDict[type]
         return typeDict[type] + "&access_token=" + token
 
 
@@ -49,7 +46,8 @@ class YoutubeView:
         decoded_videos = videos(**json.loads(downloadString.content.decode('utf-8')))
         retList = []
         for item in decoded_videos.items:
-            retList.append(Item.getItem(item))
+            addItem = Item.getItem(item)
+            retList.append(addItem)
         return retList
     @staticmethod
     def play(youtubeId, title):
@@ -61,7 +59,7 @@ class YoutubeView:
     def getPlayUrl(youtubeId):
         youtubeStr = get("https://www.youtube.com/watch?v=" + youtubeId)
         baseYoutube = youtubeStr.text
-        scripts = baseYoutube.split("ytplayer.config =")[1].strip()
+        scripts = baseYoutube.split("ytplayer.config=")[1].strip()
 
         index = 0
         count = 0
@@ -82,7 +80,7 @@ class YoutubeView:
             index = index + 1
 
         config = scripts[0:index + 1]
-        osDefine.Logger("Index : " + str(index))
+        osDefine.Logger("config : " + str(config))
 
         jsonString = YoutubeRoot(**json.loads(config))
         root = PlayerResponse(**json.loads(jsonString.args["player_response"]))
@@ -132,11 +130,9 @@ class YoutubeView:
     def SearchYoutube(request):
         try:
             searchValue = osDefine.getParameter(request, "Value")
-            if(None == searchValue or "" == searchValue):
-                searchUrl = YoutubeSearchType.getTypeUrl(YoutubeSearchType.MostPopular, osDefine.YoutubeToken)    
-            else:
-                searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyBdo9wdVW-g0b57kN4rrATTY7PHNs8ytR8&regionCode=kr&q=%s" % searchValue
-            osDefine.Logger(searchUrl)
+            #osDefine.Logger("searchValue : " + searchValue)
+            searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&key=AIzaSyAgScQJA23SuzIbwP3zmDfuSJ4plmRk13M&regionCode=kr&q=%s" % searchValue
+            osDefine.Logger("searchUrl : " + searchUrl)
             youtubeItems = YoutubeView.getYoutubeVideos(searchUrl)
             context = {"YoutubeItems" : youtubeItems}
             return render(request, "YoutubeViewTable.html", context)
@@ -149,7 +145,7 @@ class YoutubeView:
         code = ""
         try:
             code = request.GET.get("code")
-            if(None == code):            
+            if(True):            
                 oAuthUrl = "https://accounts.google.com/o/oauth2/auth?client_id=%s&redirect_uri=%s/YoutubeRedirect&response_type=code&scope=https://www.googleapis.com/auth/youtube" % (osDefine.YoutubeClientId, osDefine.getRunIp(request))
                 http = "<script>location.href=\"" + oAuthUrl + "\"</script>"
                 return HttpResponse(http)
@@ -162,8 +158,11 @@ class YoutubeView:
                 'redirect_uri': '%s/YoutubeRedirect' % osDefine.getRunIp(request)}
             res = requests.post("https://accounts.google.com/o/oauth2/token", data=data)
             acceseToken = AccessToken(**json.loads(res.text))
-            osDefine.Logger("res.text : " + res.text)
             osDefine.YoutubeToken = acceseToken.access_token
+            
+            osDefine.Logger("res.text : " + res.text)
+            osDefine.Logger("osDefine.YoutubeToken : " + osDefine.YoutubeToken)
+
             redirectUrl = osDefine.getRunIp(request)
 
             return HttpResponse("<script>location.href=\"" + redirectUrl + "\"</script>")

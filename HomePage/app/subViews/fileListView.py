@@ -90,11 +90,6 @@ class fileListView(object):
     @staticmethod
     def getViewList(request):
 
-        if("" == osDefine.YoutubeToken):
-            retHttp = "<script>window.location.href='" + osDefine.getRunIp(request) + "/YoutubeRedirect'</script>"
-            osDefine.Logger(retHttp)
-            return HttpResponse(retHttp)
-
         fileListView.deleteEmptyFolder()
         try:
             requestFile = osDefine.Base64Decoding(request.GET["file"])

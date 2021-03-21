@@ -39,7 +39,9 @@ class playView(object):
         else :
             filePath = request.GET.get("youtube", "")
             title = osDefine.Base64Decoding(request.GET.get("title", ""))
-            osDefine.Logger("title : " + title)    
+            youtube = osDefine.Base64Decoding(request.GET.get("youtube", ""))
+            osDefine.Logger("filePath : " + filePath)
+            osDefine.Logger("youtue : " + youtube)
             YoutubeView.play(filePath, title)
         #return playView.getPlayView(request)
         folder = os.path.dirname(filePath)

@@ -96,7 +96,6 @@ class TorrentInfos(object):
         addInfo = torrentInfo(title)
         for info in self.infos:
             if(True == info.getSimilar(addInfo)):
-                osDefine.Logger("title : " + title + " info.FullName : " + info.getFullName())
                 info.incrementCount()
                 return info
         if(True == isCrate):

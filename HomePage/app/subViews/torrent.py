@@ -136,9 +136,6 @@ class torrent:
         magnetUrl = request.POST.get("magnetUrl")
         title = request.POST.get("Title")
 
-        osDefine.Logger("magnetUrl : " + magnetUrl)
-        osDefine.Logger("title : " + title)
-
         session = DBExecute.GetDBConnection()
         updateQuery = "update Torrent set title='" + title + "' where magnetUrl='" + magnetUrl +"'"
         osDefine.Logger("UpdateQuery : " + updateQuery)

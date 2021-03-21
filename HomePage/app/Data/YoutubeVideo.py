@@ -1250,7 +1250,6 @@ class Item(object):
         elif("youtube#activity" == kind):
             retItem = Item_Activiti(videoItem)
         else:
-            osDefine.Logger("else")
             retItem = Item(videoItem)
         return retItem
 

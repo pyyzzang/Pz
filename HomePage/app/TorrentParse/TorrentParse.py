@@ -129,9 +129,6 @@ class TorrentParse(Task):
                 if(True == self.isMP4(soup) 
                     and False == TorrentParse.existsEqualsTorrent(title, genre)):
 
-                    osDefine.Logger("title : " + str(title))
-                    osDefine.Logger("magnet : " + str(magnet))
-                    
                     torrent.torrentInsert(None, title, magnet, genre)
                     #유사한 토렌트 파일인 경우 메시지 전달 및 다운로드 받도록 해야 함.
                     if(None != infos.findSimilarTorrintInfo(title)):
