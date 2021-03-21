@@ -980,3 +980,4 @@ HomePage/Data/TorrentInfo
 HomePage/log/*
 nohup.out
 HomePage/app/static/Tmp/*
+node_modules/qs/.nycrc
